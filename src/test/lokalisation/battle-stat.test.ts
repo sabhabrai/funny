@@ -1,6 +1,6 @@
 import {beforeAll, describe, expect, it} from "vitest";
-import { getBattleStatName, getBattleStatLevelChangeDescription } from "#app/data/battle-stat.js";
-import { BattleStat } from "#app/data/battle-stat.js";
+import { getBattleStatName, getBattleStatLevelChangeDescription , BattleStat } from "#app/data/battle-stat.js";
+
 import { pokemonInfo as enPokemonInfo } from "#app/locales/en/pokemon-info.js";
 import { battle as enBattleStat } from "#app/locales/en/battle.js";
 import { pokemonInfo as dePokemonInfo } from "#app/locales/de/pokemon-info.js";
