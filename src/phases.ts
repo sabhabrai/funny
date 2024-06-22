@@ -5,7 +5,7 @@ import { allMoves, applyMoveAttrs, BypassSleepAttr, ChargeAttr, applyFilteredMov
 import { Mode } from "./ui/ui";
 import { Command } from "./ui/command-ui-handler";
 import { Stat } from "./data/pokemon-stat";
-import { BerryModifier, ContactHeldItemTransferChanceModifier, EnemyAttackStatusEffectChanceModifier, EnemyPersistentModifier, EnemyStatusEffectHealChanceModifier, EnemyTurnHealModifier, ExpBalanceModifier, ExpBoosterModifier, ExpShareModifier, ExtraModifierModifier, FlinchChanceModifier, HealingBoosterModifier, HitHealModifier, LapsingPersistentModifier, MapModifier, Modifier, MultipleParticipantExpBonusModifier, PersistentModifier, PokemonExpBoosterModifier, PokemonHeldItemModifier, PokemonInstantReviveModifier, SwitchEffectTransferModifier, TempBattleStatBoosterModifier, TurnHealModifier, TurnHeldItemTransferModifier, MoneyMultiplierModifier, MoneyInterestModifier, IvScannerModifier, LapsingPokemonHeldItemModifier, PokemonMultiHitModifier, PokemonMoveAccuracyBoosterModifier, overrideModifiers, overrideHeldItems, BypassSpeedChanceModifier, TurnStatusEffectModifier } from "./modifier/modifier";
+import { BerryModifier, ContactHeldItemTransferChanceModifier, EnemyAttackStatusEffectChanceModifier, EnemyPersistentModifier, EnemyStatusEffectHealChanceModifier, EnemyTurnHealModifier, ExpBalanceModifier, ExpBoosterModifier, ExpShareModifier, ExtraModifierModifier, FlinchChanceModifier, HealingBoosterModifier, HitHealModifier, LapsingPersistentModifier, MapModifier, Modifier, MultipleParticipantExpBonusModifier, PersistentModifier, PokemonExpBoosterModifier, PokemonHeldItemModifier, PokemonInstantReviveModifier, SwitchEffectTransferModifier, TempBattleStatBoosterModifier, TurnHealModifier, TurnHeldItemTransferModifier, MoneyMultiplierModifier, MoneyInterestModifier, IvScannerModifier, LapsingPokemonHeldItemModifier, PokemonMultiHitModifier, PokemonMoveAccuracyBoosterModifier, overrideModifiers, overrideHeldItems, BypassSpeedChanceModifier, TurnStatusEffectModifier, StatsBoostWithRestriction } from "./modifier/modifier";
 import PartyUiHandler, { PartyOption, PartyUiMode } from "./ui/party-ui-handler";
 import { doPokeballBounceAnim, getPokeballAtlasKey, getPokeballCatchMultiplier, getPokeballTintColor, PokeballType } from "./data/pokeball";
 import { CommonAnim, CommonBattleAnim, MoveAnim, initMoveAnim, loadMoveAnimAssets } from "./data/battle-anims";
@@ -1214,6 +1214,7 @@ export class PostSummonPhase extends PokemonPhase {
       pokemon.status.turnCount = 0;
     }
     this.scene.arena.applyTags(ArenaTrapTag, pokemon);
+    this.scene.applyModifiers(StatsBoostWithRestriction, pokemon.isPlayer(), pokemon);
     applyPostSummonAbAttrs(PostSummonAbAttr, pokemon).then(() => this.end());
   }
 }
@@ -1973,12 +1974,18 @@ export class CommandPhase extends FieldPhase {
         this.scene.ui.setMode(Mode.MESSAGE);
 
         // Decides between a Disabled, Not Implemented, or No PP translation message
-        const errorMessage =
-            playerPokemon.summonData.disabledMove === move.moveId ? "battle:moveDisabled" :
-              move.getName().endsWith(" (N)") ? "battle:moveNotImplemented" : "battle:moveNoPP";
+        let errorMessage = "battle:moveNoPP";
+        if (playerPokemon.summonData.disabledMove === move.moveId) {
+          errorMessage = "battle:moveDisabled";
+        } else if (move.getName().endsWith(" (N)")) {
+          errorMessage = "battle:moveNotImplemented";
+        } else if (move.getMove().pp === 0) {
+          errorMessage = "battle:moveNoPP";
+        } else if (playerPokemon.summonData.attack_move_restriction) {
+          errorMessage = "battle:assaultVestRestriction";
+        }
         const moveName = move.getName().replace(" (N)", ""); // Trims off the indicator
-
-        this.scene.ui.showText(i18next.t(errorMessage, { moveName: moveName }), null, () => {
+        this.scene.ui.showText(i18next.t(errorMessage, { defaultValue: "", moveName: moveName }), null, () => {
           this.scene.ui.clearText();
           this.scene.ui.setMode(Mode.FIGHT, this.fieldIndex);
         }, null, true);
@@ -2560,7 +2567,8 @@ export class MovePhase extends BattlePhase {
   }
 
   canMove(): boolean {
-    return this.pokemon.isActive(true) && this.move.isUsable(this.pokemon, this.ignorePp) && !!this.targets.length;
+    // params followUp is added for the dancer case with assault vest
+    return this.pokemon.isActive(true) && this.move.isUsable(this.pokemon, this.ignorePp, this.followUp) && !!this.targets.length;
   }
 
   /**Signifies the current move should fail but still use PP */

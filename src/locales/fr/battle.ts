@@ -54,6 +54,7 @@ export const battle: SimpleTranslationEntries = {
   "escapeVerbFlee": "la fuite",
   "notDisabled": "La capacité {{moveName}}\nde {{pokemonName}} n’est plus sous entrave !",
   "skipItemQuestion": "Êtes-vous sûr·e de ne pas vouloir prendre d’objet ?",
+  "assaultVestRestriction": "La veste de combat empêche l'utilisation de toute capacités non offensives.",
   "eggHatching": "Hein ?",
   "ivScannerUseQuestion": "Utiliser le Scanner d’IV sur {{pokemonName}} ?",
   "wildPokemonWithAffix": "{{pokemonName}} sauvage",

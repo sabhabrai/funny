@@ -215,6 +215,7 @@ export const modifierType: ModifierTypeTranslationEntries = {
 
     "TOXIC_ORB": { name: "Toxik-Orb", description: "Dieser bizarre Orb vergiftet seinen Träger im Kampf schwer." },
     "FLAME_ORB": { name: "Heiß-Orb", description: "Dieser bizarre Orb fügt seinem Träger im Kampf Verbrennungen zu." },
+    "ASSAULT_VEST": { name: "Offensivweste", description: "Erhöht die Spezial-Verteidigung des Trägers um 50%, aber der Träger kann keine Status-Attacken mehr einsetzen. Ausnahme: Egotrip" },
 
     "BATON": { name: "Stab", description: "Ermöglicht das Weitergeben von Effekten beim Wechseln von Pokémon, wodurch auch Fallen umgangen werden." },
 

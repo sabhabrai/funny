@@ -53,6 +53,7 @@ export const battle: SimpleTranslationEntries = {
   "escapeVerbSwitch": "切换",
   "escapeVerbFlee": "逃跑",
   "notDisabled": "{{moveName}} 不再被禁用！",
+  "assaultVestRestriction": "因为突击背心而无法使用变化招式！",
   "skipItemQuestion": "你确定要跳过拾取道具吗？",
   "eggHatching": "咦？",
   "ivScannerUseQuestion": "对 {{pokemonName}} 使用个体值扫描仪？",

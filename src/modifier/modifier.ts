@@ -26,6 +26,7 @@ import { Command } from "#app/ui/command-ui-handler.js";
 
 import { allMoves } from "#app/data/move.js";
 import { Abilities } from "#app/enums/abilities.js";
+import {ModifierOverride} from "../overrides";
 
 export type ModifierPredicate = (modifier: Modifier) => boolean;
 
@@ -897,6 +898,37 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(pokemon: Pokemon): integer {
     return 4;
+  }
+}
+
+export class StatsBoostWithRestriction extends PokemonHeldItemModifier {
+  protected stat: Stat;
+  constructor (type: ModifierType, pokemonId: integer, stackCount?: integer) {
+    super(type, pokemonId, stackCount);
+    this.stat = Stat.SPDEF;
+  }
+  matchType(_modifier: Modifier): boolean {
+    return _modifier instanceof StatsBoostWithRestriction;
+  }
+  getMaxHeldItemCount(pokemon: Pokemon): number {
+    return 1;
+  }
+  clone(): PersistentModifier {
+    return new StatsBoostWithRestriction(this.type, this.pokemonId, this.stackCount);
+  }
+  apply(args: any[]): boolean {
+    const targetPokemon = args[0];
+    const active = args[1] as boolean;
+    if (active === false) {
+      targetPokemon.summonData.attack_move_restriction = false;
+      return true;
+    }
+    if (targetPokemon.summonData && !targetPokemon.summonData.attack_move_restriction) {
+      targetPokemon.stats[this.stat] *= 1.5;
+      targetPokemon.summonData.attack_move_restriction = true;
+      return true;
+    }
+    return false;
   }
 }
 
@@ -2417,6 +2449,11 @@ export function overrideModifiers(scene: BattleScene, player: boolean = true): v
  */
 export function overrideHeldItems(scene: BattleScene, pokemon: Pokemon, player: boolean = true): void {
   const heldItemsOverride = player ? Overrides.STARTING_HELD_ITEMS_OVERRIDE : Overrides.OPP_HELD_ITEMS_OVERRIDE;
+  addModifierToPokemon(heldItemsOverride, scene, pokemon);
+}
+
+export function addModifierToPokemon(modifierNames: ModifierOverride[], scene: BattleScene, pokemon: Pokemon, player: boolean = true): void {
+  const heldItemsOverride = modifierNames;
   if (!heldItemsOverride || heldItemsOverride.length === 0 || !scene) {
     return;
   } // if no override, do nothing
