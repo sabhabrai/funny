@@ -13,6 +13,7 @@ import { GameDataType } from "#enums/game-data-type";
 
 export enum MenuOptions {
   GAME_SETTINGS,
+  RUN_INFO,
   ACHIEVEMENTS,
   STATS,
   VOUCHERS,
@@ -47,10 +48,7 @@ export default class MenuUiHandler extends MessageUiHandler {
   constructor(scene: BattleScene, mode?: Mode) {
     super(scene, mode);
 
-    this.ignoredMenuOptions = !bypassLogin
-      ? [ ]
-      : [ MenuOptions.LOG_OUT ];
-    this.menuOptions = Utils.getEnumKeys(MenuOptions).map(m => parseInt(MenuOptions[m]) as MenuOptions).filter(m => !this.ignoredMenuOptions.includes(m));
+    this.updateMenuOptions();
   }
 
   setup() {
@@ -69,7 +67,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     menuMessageText.setWordWrapWidth(1224);
     menuMessageText.setOrigin(0, 0);
 
-    this.optionSelectText = addTextObject(this.scene, 0, 0, this.menuOptions.map(o => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"), TextStyle.WINDOW, { maxLines: this.menuOptions.length });
+    this.optionSelectText = addTextObject(this.scene, 0, 0, this.getOptionSelectTextContents(), TextStyle.WINDOW, { maxLines: this.menuOptions.length });
     this.optionSelectText.setLineSpacing(12);
 
     this.menuBg = addWindow(this.scene, (this.scene.game.canvas.width / 6) - (this.optionSelectText.displayWidth + 25), 0, this.optionSelectText.displayWidth + 23, (this.scene.game.canvas.height / 6) - 2);
@@ -247,6 +245,8 @@ export default class MenuUiHandler extends MessageUiHandler {
   show(args: any[]): boolean {
     super.show(args);
 
+    this.updateMenuOptions();
+
     this.menuContainer.setVisible(true);
     this.setCursor(0);
 
@@ -269,16 +269,18 @@ export default class MenuUiHandler extends MessageUiHandler {
 
     if (button === Button.ACTION) {
       let adjustedCursor = this.cursor;
-      for (const imo of this.ignoredMenuOptions) {
+      for (const imo of this.ignoredMenuOptions.sort()) {
         if (adjustedCursor >= imo) {
           adjustedCursor++;
-        } else {
-          break;
         }
       }
       switch (adjustedCursor) {
       case MenuOptions.GAME_SETTINGS:
         ui.setOverlayMode(Mode.SETTINGS);
+        success = true;
+        break;
+      case MenuOptions.RUN_INFO:
+        ui.setOverlayMode(Mode.RUN_INFO);
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:
@@ -421,5 +423,28 @@ export default class MenuUiHandler extends MessageUiHandler {
       this.cursorObj.destroy();
     }
     this.cursorObj = null;
+  }
+
+  updateMenuOptions() {
+    this.ignoredMenuOptions = [];
+
+    if (bypassLogin) {
+      this.ignoredMenuOptions.push(MenuOptions.LOG_OUT);
+    }
+
+    if (this.scene.getParty().length === 0) {
+      this.ignoredMenuOptions.push(MenuOptions.RUN_INFO);
+    }
+
+    this.menuOptions = Utils.getEnumKeys(MenuOptions).map(m => parseInt(MenuOptions[m]) as MenuOptions).filter(m => !this.ignoredMenuOptions.includes(m));
+
+    if (this.optionSelectText) {
+      this.optionSelectText.setText(this.getOptionSelectTextContents());
+      this.optionSelectText.setMaxLines(this.menuOptions.length);
+    }
+  }
+
+  getOptionSelectTextContents() {
+    return this.menuOptions.map(o => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n");
   }
 }

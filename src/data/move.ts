@@ -1096,7 +1096,7 @@ export class RecoilAttr extends MoveEffectAttr {
       return false;
     }
 
-    user.damageAndUpdate(recoilDamage, HitResult.OTHER, false, true, true);
+    user.damageAndUpdate(recoilDamage, user, HitResult.OTHER, false, true, true);
     user.scene.queueMessage(getPokemonMessage(user, " is hit\nwith recoil!"));
     user.turnData.damageTaken += recoilDamage;
 
@@ -1128,8 +1128,7 @@ export class SacrificialAttr extends MoveEffectAttr {
    * @returns true if the function succeeds
    **/
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    user.damageAndUpdate(user.hp, HitResult.OTHER, false, true, true);
-	  user.turnData.damageTaken += user.hp;
+	  user.turnData.damageTaken += user.damageAndUpdate(user.hp, user, HitResult.OTHER, false, true, true);
 
     return true;
   }
@@ -1166,8 +1165,7 @@ export class SacrificialAttrOnHit extends MoveEffectAttr {
       return false;
     }
 
-    user.damageAndUpdate(user.hp, HitResult.OTHER, false, true, true);
-    user.turnData.damageTaken += user.hp;
+	  user.turnData.damageTaken += user.damageAndUpdate(user.hp, user, HitResult.OTHER, false, true, true);
 
     return true;
   }
@@ -1208,7 +1206,7 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
     // Check to see if the Pokemon has an ability that blocks non-direct damage
     applyAbAttrs(BlockNonDirectDamageAbAttr, user, cancelled);
     if (!cancelled.value) {
-      user.damageAndUpdate(Math.ceil(user.getMaxHp()/2), HitResult.OTHER, false, true, true);
+      user.damageAndUpdate(Math.ceil(user.getMaxHp()/2), user, HitResult.OTHER, false, true, true);
       user.scene.queueMessage(getPokemonMessage(user, " cut its own HP to power up its move!")); // Queue recoil message
     }
     return true;
@@ -2092,7 +2090,7 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   }
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    return user.scene.arena.trySetWeather(this.weatherType, true);
+    return user.scene.arena.trySetWeather(this.weatherType, user.id);
   }
 
   getCondition(): MoveConditionFunc {
@@ -2111,7 +2109,7 @@ export class ClearWeatherAttr extends MoveEffectAttr {
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
     if (user.scene.arena.weather?.weatherType === this.weatherType) {
-      return user.scene.arena.trySetWeather(WeatherType.NONE, true);
+      return user.scene.arena.trySetWeather(WeatherType.NONE, user.id);
     }
 
     return false;
@@ -2462,7 +2460,7 @@ export class HalfHpStatMaxAttr extends StatChangeAttr {
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      const damage = user.damageAndUpdate(Math.floor(user.getMaxHp() / 2), HitResult.OTHER, false, true);
+      const damage = user.damageAndUpdate(Math.floor(user.getMaxHp() / 2), user, HitResult.OTHER, false, true);
       if (damage) {
         user.scene.damageNumberHandler.add(user, damage);
       }
@@ -2492,7 +2490,7 @@ export class CutHpStatBoostAttr extends StatChangeAttr {
 
   apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      const damage = user.damageAndUpdate(Math.floor(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
+      const damage = user.damageAndUpdate(Math.floor(user.getMaxHp() / this.cutRatio), user, HitResult.OTHER, false, true);
       if (damage) {
         user.scene.damageNumberHandler.add(user, damage);
       }
@@ -2612,7 +2610,7 @@ export class HpSplitAttr extends MoveEffectAttr {
           user.scene.damageNumberHandler.add(user, healing, HitResult.HEAL);
         }
       } else if (user.hp > hpValue) {
-        const damage = user.damage(user.hp - hpValue, true);
+        const damage = user.damage(user.hp - hpValue, user, true);
         if (damage) {
           user.scene.damageNumberHandler.add(user, damage);
         }
@@ -2625,7 +2623,7 @@ export class HpSplitAttr extends MoveEffectAttr {
           user.scene.damageNumberHandler.add(user, healing, HitResult.HEAL);
         }
       } else if (target.hp > hpValue) {
-        const damage = target.damage(target.hp - hpValue, true);
+        const damage = target.damage(target.hp - hpValue, user, true);
         if (damage) {
           target.scene.damageNumberHandler.add(target, damage);
         }
@@ -3782,7 +3780,7 @@ const crashDamageFunc = (user: Pokemon, move: Move) => {
     return false;
   }
 
-  user.damageAndUpdate(Math.floor(user.getMaxHp() / 2), HitResult.OTHER, false, true);
+  user.damageAndUpdate(Math.floor(user.getMaxHp() / 2), user, HitResult.OTHER, false, true);
   user.scene.queueMessage(getPokemonMessage(user, " kept going\nand crashed!"));
   user.turnData.damageTaken += Math.floor(user.getMaxHp() / 2);
 
@@ -3995,7 +3993,7 @@ export class CurseAttr extends MoveEffectAttr {
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
-      user.damageAndUpdate(curseRecoilDamage, HitResult.OTHER, false, true, true);
+      user.damageAndUpdate(curseRecoilDamage, user, HitResult.OTHER, false, true, true);
       user.scene.queueMessage(
         i18next.t("battle:battlerTagsCursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),

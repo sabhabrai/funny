@@ -938,7 +938,7 @@ export class EncounterPhase extends BattlePhase {
     }
 
     if (!this.loaded) {
-      this.scene.arena.trySetWeather(getRandomWeatherType(this.scene.arena), false);
+      this.scene.arena.trySetWeather(getRandomWeatherType(this.scene.arena));
     }
 
     const enemyField = this.scene.getEnemyField();
@@ -1180,7 +1180,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
       }
     }
 
-    this.scene.arena.trySetWeather(getRandomWeatherType(this.scene.arena), false);
+    this.scene.arena.trySetWeather(getRandomWeatherType(this.scene.arena));
 
     for (const pokemon of this.scene.getParty().filter(p => p.isOnField())) {
       applyAbAttrs(PostBiomeChangeAbAttr, pokemon, null);
@@ -1864,6 +1864,13 @@ export class TurnInitPhase extends FieldPhase {
       }
     });
 
+    // Begin tracking assists after CheckSwitchPhase to avoid crediting leads that are immediately swapped out (in encounters)
+    for (const enemyPokemon of this.scene.getEnemyField()) {
+      for (const playerPokemon of this.scene.getPlayerField()) {
+        enemyPokemon.battleData.creditAssistOnFaintToPokemonIds.add(playerPokemon.id);
+      }
+    }
+
     //this.scene.pushPhase(new MoveAnimTestPhase(this.scene));
     this.scene.eventTarget.dispatchEvent(new TurnInitEvent());
 
@@ -2444,11 +2451,17 @@ export class TurnEndPhase extends FieldPhase {
     this.scene.arena.lapseTags();
 
     if (this.scene.arena.weather && !this.scene.arena.weather.lapse()) {
-      this.scene.arena.trySetWeather(WeatherType.NONE, false);
+      this.scene.arena.trySetWeather(WeatherType.NONE);
     }
 
     if (this.scene.arena.terrain && !this.scene.arena.terrain.lapse()) {
       this.scene.arena.trySetTerrain(TerrainType.NONE, false);
+    }
+
+    for (const enemyPokemon of this.scene.getEnemyField()) {
+      for (const playerPokemon of this.scene.getPlayerField()) {
+        enemyPokemon.battleData.creditAssistOnFaintToPokemonIds.add(playerPokemon.id);
+      }
     }
 
     this.end();
@@ -3426,7 +3439,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
           const damage = Math.ceil(pokemon.getMaxHp() / 16);
 
           this.scene.queueMessage(getWeatherDamageMessage(this.weather.weatherType, pokemon));
-          pokemon.damageAndUpdate(damage, HitResult.EFFECTIVE, false, false, true);
+          pokemon.damageAndUpdate(damage, pokemon.scene.getPokemonById(this.weather.sourceId), HitResult.EFFECTIVE, false, false, true);
         };
 
         this.executeForAll((pokemon: Pokemon) => {
@@ -3491,6 +3504,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
   }
 
   start() {
+    super.start();
+
     const pokemon = this.getPokemon();
     if (pokemon?.isActive(true) && pokemon.status && pokemon.status.isPostTurn()) {
       pokemon.status.incrementTurn();
@@ -3514,7 +3529,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         }
         if (damage) {
           // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
-          this.scene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage, false, true));
+          this.scene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage, pokemon.scene.getPokemonById(pokemon.status.sourceId), false, true));
           pokemon.updateInfo();
         }
         new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(this.scene, () => this.end());
@@ -4183,6 +4198,8 @@ export class GameOverPhase extends BattlePhase {
           }
 
           const clear = (endCardPhase?: EndCardPhase) => {
+            this.scene.unshiftPhase(new EndRunInfoPhase(this.scene));
+
             if (newClear) {
               this.handleUnlocks();
             }
@@ -4301,6 +4318,17 @@ export class EndCardPhase extends Phase {
         this.end();
       }, null, true);
     });
+  }
+}
+
+export class EndRunInfoPhase extends Phase {
+  constructor(scene: BattleScene) {
+    super(scene);
+  }
+
+  start(): void {
+    super.start();
+    this.scene.ui.setOverlayMode(Mode.RUN_INFO);
   }
 }
 
@@ -4686,7 +4714,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
       const healAmount = new Utils.NumberHolder(Math.floor(this.hpHealed * hpRestoreMultiplier.value));
       if (healAmount.value < 0) {
-        pokemon.damageAndUpdate(healAmount.value * -1, HitResult.HEAL as DamageResult);
+        pokemon.damageAndUpdate(healAmount.value * -1, pokemon, HitResult.HEAL as DamageResult);
         healAmount.value = 0;
       }
       // Prevent healing to full if specified (in case of healing tokens so Sturdy doesn't cause a softlock)

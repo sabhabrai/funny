@@ -81,6 +81,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public status: Status;
   public friendship: integer;
   public metLevel: integer;
+  public metWave: integer;
   public metBiome: Biome | -1;
   public luck: integer;
   public pauseEvolutions: boolean;
@@ -100,6 +101,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
   public battleData: PokemonBattleData;
   public battleSummonData: PokemonBattleSummonData;
   public turnData: PokemonTurnData;
+  public runData: PokemonRunData;
 
   public fieldPosition: FieldPosition;
 
@@ -158,6 +160,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.status = dataSource.status;
       this.friendship = dataSource.friendship !== undefined ? dataSource.friendship : this.species.baseFriendship;
       this.metLevel = dataSource.metLevel || 5;
+      this.metWave = dataSource.metWave || 0;
       this.luck = dataSource.luck;
       this.metBiome = dataSource.metBiome;
       this.pauseEvolutions = dataSource.pauseEvolutions;
@@ -169,6 +172,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       this.fusionVariant = dataSource.fusionVariant || 0;
       this.fusionGender = dataSource.fusionGender;
       this.fusionLuck = dataSource.fusionLuck;
+      this.runData = dataSource.runData;
     } else {
       this.id = Utils.randSeedInt(4294967296);
       this.ivs = ivs || Utils.getIvsFromId(this.id);
@@ -199,6 +203,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.friendship = species.baseFriendship;
       this.metLevel = level;
+      this.metWave = scene.currentBattle ? scene.currentBattle.waveIndex : 0;
       this.metBiome = scene.currentBattle ? scene.arena.biomeType : -1;
       this.pokerus = false;
 
@@ -215,6 +220,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.luck = (this.shiny ? this.variant + 1 : 0) + (this.fusionShiny ? this.fusionVariant + 1 : 0);
       this.fusionLuck = this.luck;
+      this.runData = new PokemonRunData();
     }
 
     this.generateName();
@@ -1958,7 +1964,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
              * We explicitly require to ignore the faint phase here, as we want to show the messages
              * about the critical hit and the super effective/not very effective messages before the faint phase.
              */
-          damage.value = this.damageAndUpdate(damage.value, result as DamageResult, isCritical, oneHitKo, oneHitKo, true);
+          damage.value = this.damageAndUpdate(damage.value, source, result as DamageResult, isCritical, oneHitKo, oneHitKo, true);
           this.turnData.damageTaken += damage.value;
           if (isCritical) {
             this.scene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
@@ -2030,7 +2036,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return result;
   }
 
-  damage(damage: integer, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
+  damage(damage: integer, sourcePokemon?: Pokemon, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
     if (this.isFainted()) {
       return 0;
     }
@@ -2053,18 +2059,62 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     damage = Math.min(damage, this.hp);
 
     this.hp = this.hp - damage;
-    if (this.isFainted() && !ignoreFaintPhase) {
-      this.scene.unshiftPhase(new FaintPhase(this.scene, this.getBattlerIndex(), preventEndure));
-      this.resetSummonData();
+
+    const isSelfDamage = (sourcePokemon?.id === this.id);
+
+    //console.log("Run info: processing damage: " + sourcePokemon?.name + " -> " + this.name);
+
+    if (damage > 0) {
+      if (this.isPlayer()) {
+        this.runData.damageTaken += damage;
+        //console.log("Run info: " + this.name + " took damage: " + damage);
+      }
+
+      if (sourcePokemon && !isSelfDamage) {
+        if (sourcePokemon.isPlayer()) {
+          sourcePokemon.runData.damageDealt += damage;
+          //console.log("Run info: " + sourcePokemon.name + " dealt damage: " + damage);
+        }
+
+        if (!this.isPlayer()) {
+          this.battleData.creditAssistOnFaintToPokemonIds.add(sourcePokemon.id);
+        }
+      }
+    }
+
+    if (this.isFainted()) {
+      if (this.isPlayer()) {
+        this.runData.faints += 1;
+        //console.log("Run info: " + this.name + " died");
+      }
+
+      if (sourcePokemon && !isSelfDamage && sourcePokemon.isPlayer()) {
+        sourcePokemon.runData.knockouts += 1;
+        //console.log("Run info: " + sourcePokemon.name + " got a kill");
+      }
+
+      // Ignore self-assists and don't grant sourcePokemon an assist since it's probably already been awarded a kill
+      for (const pokemonId of [...this.battleData.creditAssistOnFaintToPokemonIds].filter(id => (id !== this.id && id !== sourcePokemon?.id))) {
+        const assistantPokemon = this.scene.getPokemonById(pokemonId);
+        if (assistantPokemon && assistantPokemon.isPlayer()) {
+          assistantPokemon.runData.assists += 1;
+          //console.log("Run info: " + assistantPokemon.name + " got an assist");
+        }
+      }
+
+      if (!ignoreFaintPhase) {
+        this.scene.unshiftPhase(new FaintPhase(this.scene, this.getBattlerIndex(), preventEndure));
+        this.resetSummonData();
+      }
     }
 
     return damage;
   }
 
-  damageAndUpdate(damage: integer, result?: DamageResult, critical: boolean = false, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
+  damageAndUpdate(damage: integer, sourcePokemon: Pokemon, result?: DamageResult, critical: boolean = false, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
     const damagePhase = new DamagePhase(this.scene, this.getBattlerIndex(), damage, result as DamageResult, critical);
     this.scene.unshiftPhase(damagePhase);
-    damage = this.damage(damage, ignoreSegments, preventEndure, ignoreFaintPhase);
+    damage = this.damage(damage, sourcePokemon, ignoreSegments, preventEndure, ignoreFaintPhase);
     // Damage amount may have changed, but needed to be queued before calling damage function
     damagePhase.updateAmount(damage);
     return damage;
@@ -2539,7 +2589,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     }
 
-    this.status = new Status(effect, 0, statusCureTurn?.value);
+    this.status = new Status(effect, 0, statusCureTurn?.value, sourcePokemon?.id);
 
     if (effect !== StatusEffect.FAINT) {
       this.scene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
@@ -2974,7 +3024,10 @@ export class PlayerPokemon extends Pokemon {
 
     if (!dataSource) {
       this.generateAndPopulateMoveset();
+    } else {
+      this.runData = dataSource.runData;
     }
+
     this.generateCompatibleTms();
   }
 
@@ -3290,6 +3343,12 @@ export class PlayerPokemon extends Pokemon {
       this.fusionVariant = pokemon.variant;
       this.fusionGender = pokemon.gender;
       this.fusionLuck = pokemon.luck;
+
+      this.runData.knockouts += pokemon.runData.knockouts;
+      this.runData.assists += pokemon.runData.assists;
+      this.runData.faints += pokemon.runData.faints;
+      this.runData.damageDealt += pokemon.runData.damageDealt;
+      this.runData.damageTaken += pokemon.runData.damageTaken;
 
       this.scene.validateAchv(achvs.SPLICE);
       this.scene.gameData.gameStats.pokemonFused++;
@@ -3658,7 +3717,7 @@ export class EnemyPokemon extends Pokemon {
     return 0;
   }
 
-  damage(damage: integer, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
+  damage(damage: integer, sourcePokemon?: Pokemon, ignoreSegments: boolean = false, preventEndure: boolean = false, ignoreFaintPhase: boolean = false): integer {
     if (this.isFainted()) {
       return 0;
     }
@@ -3696,7 +3755,7 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    const ret = super.damage(damage, ignoreSegments, preventEndure, ignoreFaintPhase);
+    const ret = super.damage(damage, sourcePokemon, ignoreSegments, preventEndure, ignoreFaintPhase);
 
     if (this.isBoss()) {
       if (ignoreSegments) {
@@ -3800,6 +3859,7 @@ export class EnemyPokemon extends Pokemon {
     if (party.length < 6) {
       this.pokeball = pokeballType;
       this.metLevel = this.level;
+      this.metWave = this.scene.currentBattle.waveIndex;
       this.metBiome = this.scene.arena.biomeType;
       const newPokemon = this.scene.addPlayerPokemon(this.species, this.level, this.abilityIndex, this.formIndex, this.gender, this.shiny, this.variant, this.ivs, this.nature, this);
       party.push(newPokemon);
@@ -3859,6 +3919,7 @@ export class PokemonBattleData {
   public berriesEaten: BerryType[] = [];
   public abilitiesApplied: Abilities[] = [];
   public abilityRevealed: boolean = false;
+  public creditAssistOnFaintToPokemonIds: Set<integer> = new Set();
 }
 
 export class PokemonBattleSummonData {
@@ -3877,6 +3938,14 @@ export class PokemonTurnData {
   public currDamageDealt: integer = 0;
   public damageTaken: integer = 0;
   public attacksReceived: AttackMoveResult[] = [];
+}
+
+export class PokemonRunData {
+  public knockouts: integer = 0;
+  public assists: integer = 0;
+  public faints: integer = 0;
+  public damageDealt: integer = 0;
+  public damageTaken: integer = 0;
 }
 
 export enum AiType {

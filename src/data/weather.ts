@@ -25,10 +25,12 @@ export enum WeatherType {
 export class Weather {
   public weatherType: WeatherType;
   public turnsLeft: integer;
+  public sourceId?: integer;
 
-  constructor(weatherType: WeatherType, turnsLeft?: integer) {
+  constructor(weatherType: WeatherType, turnsLeft?: integer, sourceId?: integer) {
     this.weatherType = weatherType;
     this.turnsLeft = !this.isImmutable() ? turnsLeft || 0 : 0;
+    this.sourceId = sourceId;
   }
 
   lapse(): boolean {

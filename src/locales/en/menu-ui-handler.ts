@@ -2,6 +2,7 @@ import { SimpleTranslationEntries } from "#app/interfaces/locales";
 
 export const menuUiHandler: SimpleTranslationEntries = {
   "GAME_SETTINGS": "Game Settings",
+  "RUN_INFO": "Run Info",
   "ACHIEVEMENTS": "Achievements",
   "STATS": "Stats",
   "VOUCHERS": "Vouchers",
