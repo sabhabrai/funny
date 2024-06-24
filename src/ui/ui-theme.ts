@@ -55,14 +55,14 @@ export function addWindow(scene: BattleScene, x: number, y: number, width: numbe
      */
     const maskRect = new Phaser.GameObjects.Rectangle(
       scene,
-      6*(x  - (mergeMaskLeft ? 2 : 0) - (maskOffsetX || 0)),
-      6*(y + (mergeMaskTop ? 2 : 0) + (maskOffsetY || 0)),
+      scene.resolutionScale*(x  - (mergeMaskLeft ? 2 : 0) - (maskOffsetX || 0)),
+      scene.resolutionScale*(y + (mergeMaskTop ? 2 : 0) + (maskOffsetY || 0)),
       width - (mergeMaskLeft ? 2 : 0),
       height - (mergeMaskTop ? 2 : 0),
       0xffffff
     );
     maskRect.setOrigin(0);
-    maskRect.setScale(6);
+    maskRect.setScale(scene.resolutionScale);
     const mask = maskRect.createGeometryMask();
     window.setMask(mask);
   }

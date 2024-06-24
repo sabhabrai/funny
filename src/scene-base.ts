@@ -1,6 +1,14 @@
 export const legacyCompatibleImages: string[] = [];
 
+let resolutionScale = parseInt(localStorage.getItem("resolutionScale"));
+if (!resolutionScale) {
+  localStorage.setItem("resolutionScale", "6");
+  resolutionScale = 6;
+}
+
 export class SceneBase extends Phaser.Scene {
+  public resolutionScale: integer = resolutionScale;
+
   /**
    * Since everything is scaled up by 6 by default using the game.canvas is annoying
    * Until such point that we use the canvas normally, this will be easier than

@@ -40,10 +40,10 @@ export default class GameChallengesUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.challengesContainer = this.scene.add.container(1, -(this.scene.game.canvas.height / 6) + 1);
+    this.challengesContainer = this.scene.add.container(1, -(this.scene.game.canvas.height / this.scene.resolutionScale) + 1);
     this.challengesContainer.setName("challenges");
 
-    this.challengesContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width / 6, this.scene.game.canvas.height / 6), Phaser.Geom.Rectangle.Contains);
+    this.challengesContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width / this.scene.resolutionScale, this.scene.game.canvas.height / this.scene.resolutionScale), Phaser.Geom.Rectangle.Contains);
 
     const bgOverlay = this.scene.add.rectangle(-1, -1, this.scene.scaledCanvas.width, this.scene.scaledCanvas.height, 0x424242, 0.8);
     bgOverlay.setName("rect-challenge-overlay");
@@ -51,7 +51,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.challengesContainer.add(bgOverlay);
 
     // TODO: Change this back to /9 when adding in difficulty
-    const headerBg = addWindow(this.scene, 0, 0, (this.scene.game.canvas.width / 6), 24);
+    const headerBg = addWindow(this.scene, 0, 0, (this.scene.game.canvas.width / this.scene.resolutionScale), 24);
     headerBg.setName("window-header-bg");
     headerBg.setOrigin(0, 0);
 
@@ -72,11 +72,11 @@ export default class GameChallengesUiHandler extends UiHandler {
     // difficultyName.setOrigin(0, 0);
     // difficultyName.setPositionRelative(difficultyBg, difficultyBg.width - difficultyName.displayWidth - 8, 4);
 
-    this.optionsBg = addWindow(this.scene, 0, headerBg.height, (this.scene.game.canvas.width / 9), (this.scene.game.canvas.height / 6) - headerBg.height - 2);
+    this.optionsBg = addWindow(this.scene, 0, headerBg.height, (this.scene.game.canvas.width / (this.scene.resolutionScale*1.5)), (this.scene.game.canvas.height / this.scene.resolutionScale) - headerBg.height - 2);
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
-
-    const descriptionBg = addWindow(this.scene, 0, headerBg.height, (this.scene.game.canvas.width / 18) - 2, (this.scene.game.canvas.height / 6) - headerBg.height - 26);
+    
+    const descriptionBg = addWindow(this.scene, 0, headerBg.height, (this.scene.game.canvas.width / (this.scene.resolutionScale*3)) - 2, (this.scene.game.canvas.height / this.scene.resolutionScale) - headerBg.height - 26);
     descriptionBg.setName("window-desc-bg");
     descriptionBg.setOrigin(0, 0);
     descriptionBg.setPositionRelative(this.optionsBg, this.optionsBg.width, 0);

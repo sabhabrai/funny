@@ -62,9 +62,9 @@ export default class MenuUiHandler extends MessageUiHandler {
       wikiUrl = `https://wiki.pokerogue.net/${lang}:start`;
     }
 
-    this.menuContainer = this.scene.add.container(1, -(this.scene.game.canvas.height / 6) + 1);
+    this.menuContainer = this.scene.add.container(1, -(this.scene.game.canvas.height / this.scene.resolutionScale) + 1);
     this.menuContainer.setName("menu");
-    this.menuContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width / 6, this.scene.game.canvas.height / 6), Phaser.Geom.Rectangle.Contains);
+    this.menuContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, this.scene.game.canvas.width / this.scene.resolutionScale, this.scene.game.canvas.height / this.scene.resolutionScale), Phaser.Geom.Rectangle.Contains);
 
     this.menuOverlay = new Phaser.GameObjects.Rectangle(this.scene, -1, -1, this.scene.scaledCanvas.width, this.scene.scaledCanvas.height, 0xffffff, 0.3);
     this.menuOverlay.setName("menu-overlay");
@@ -79,7 +79,7 @@ export default class MenuUiHandler extends MessageUiHandler {
     this.optionSelectText = addTextObject(this.scene, 0, 0, this.menuOptions.map(o => `${i18next.t(`menuUiHandler:${MenuOptions[o]}`)}`).join("\n"), TextStyle.WINDOW, { maxLines: this.menuOptions.length });
     this.optionSelectText.setLineSpacing(12);
 
-    this.menuBg = addWindow(this.scene, (this.scene.game.canvas.width / 6) - (this.optionSelectText.displayWidth + 25), 0, this.optionSelectText.displayWidth + 23, (this.scene.game.canvas.height / 6) - 2);
+    this.menuBg = addWindow(this.scene, (this.scene.game.canvas.width / this.scene.resolutionScale) - (this.optionSelectText.displayWidth + 25), 0, this.optionSelectText.displayWidth + 23, (this.scene.game.canvas.height / this.scene.resolutionScale) - 2);
     this.menuBg.setOrigin(0, 0);
 
     this.optionSelectText.setPositionRelative(this.menuBg, 14, 6);
