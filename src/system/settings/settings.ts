@@ -96,7 +96,8 @@ export const SettingKeys = {
   Master_Volume: "MASTER_VOLUME",
   BGM_Volume: "BGM_VOLUME",
   SE_Volume: "SE_VOLUME",
-  Music_Preference: "MUSIC_PREFERENCE"
+  Music_Preference: "MUSIC_PREFERENCE",
+  Canvas_Scale: "CANVAS_SCALE"
 };
 
 /**
@@ -489,6 +490,13 @@ export const Setting: Array<Setting> = [
     type: SettingType.DISPLAY
   },
   {
+    key: SettingKeys.Canvas_Scale,
+    label: "Canvas Scale",
+    options: new Array(10).fill(null).map((_, i) => `${(i + 1) * 10}%`).reverse(),
+    default: 0,
+    type: SettingType.DISPLAY
+  },
+  {
     key: SettingKeys.Master_Volume,
     label: i18next.t("settings:masterVolume"),
     options: VOLUME_OPTIONS,
@@ -678,6 +686,12 @@ export function setSetting(scene: BattleScene, setting: string, value: integer):
     break;
   case SettingKeys.Type_Hints:
     scene.typeHints = Setting[index].options[value].value === "On";
+    break;
+  case SettingKeys.Canvas_Scale:
+    const appDiv = document.getElementById("app");
+    if (appDiv) {
+      appDiv.style.height = Setting[index].options[value];
+    }
     break;
   case SettingKeys.Language:
     if (value) {
