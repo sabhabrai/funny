@@ -2386,6 +2386,68 @@ export class EnemyFusionChanceModifier extends EnemyPersistentModifier {
 }
 
 /**
+ * Modifiers which affect the multiplier for Balls when catching Pokemon
+ * @extends PersistentModifier
+ */
+export class BallEffectivenessModifier extends PersistentModifier {
+  /**
+   * Calculates a Poke Ball multiplier based on a given {@linkcode BattleScene}
+   * @param scene {@linkcode BattleScene} used to calculate against
+   * @returns the calculated multiplier
+   */
+  public static getMultiplier(scene: BattleScene): number {
+    return 1;
+  }
+
+  /** alias for the static method {@linkcode getMultiplier} */
+  public getMultiplier = BallEffectivenessModifier.getMultiplier;
+
+  constructor(type: ModifierType, stackCount?: integer) {
+    super(type, stackCount);
+  }
+
+  match(modifier: Modifier): boolean {
+    return modifier instanceof BallEffectivenessModifier;
+  }
+
+  clone(): BallEffectivenessModifier {
+    return new BallEffectivenessModifier(this.type, this.stackCount);
+  }
+
+  apply(args: any[]): boolean {
+    return true;
+  }
+
+  getMaxStackCount(scene: BattleScene): integer {
+    return 1;
+  }
+}
+
+/**
+ * Buffs the multiplier for Balls on the first turn of battle
+ * @extends BallEffectivenessModifier
+ */
+export class QuickBallModifier extends BallEffectivenessModifier {
+  public static getMultiplier(scene: BattleScene): number {
+    return scene.currentBattle.turn === 1 ? 2 : 1; // Only works on the first turn of battle
+  }
+
+  public getMultiplier = QuickBallModifier.getMultiplier;
+}
+
+/**
+ * Buffs the multiplier for Balls the longer the battle goes on for
+ * @extends BallEffectivenessModifier
+ */
+export class TimerBallModifier extends BallEffectivenessModifier {
+  public static getMultiplier(scene: BattleScene): number {
+    return Math.min(1 + 0.05 * (scene.currentBattle.turn - 1), 1.5); // Increases the multiplier each turn up to a cap
+  }
+
+  public getMultiplier = TimerBallModifier.getMultiplier;
+}
+
+/**
  * Uses override from overrides.ts to set PersistentModifiers for starting a new game
  * @param scene current BattleScene
  * @param player is this for player for enemy
