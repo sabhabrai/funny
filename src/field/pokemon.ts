@@ -754,6 +754,9 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.stats[s] = value;
     }
+    if (this.getTag(BattlerTagType.POWER_TRICK)) {
+      [this.stats[Stat.ATK], this.stats[Stat.DEF]] = [this.stats[Stat.DEF], this.stats[Stat.ATK]];
+    }
   }
 
   getNature(): Nature {
@@ -2239,6 +2242,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this instanceof PlayerPokemon && source.summonData.battleStats.find(bs => bs === 6)) {
       this.scene.validateAchv(achvs.TRANSFER_MAX_BATTLE_STAT);
     }
+    this.calculateStats();
     this.updateInfo();
   }
 
@@ -2641,6 +2645,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       this.summonDataPrimer = null;
     }
+    this.calculateStats();
     this.updateInfo();
   }
 

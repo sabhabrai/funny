@@ -131,5 +131,6 @@ export const battle: SimpleTranslationEntries = {
   "battlerTagsSaltCuredOnAdd": "{{pokemonNameWithAffix}} wurde eingepökelt!",
   "battlerTagsSaltCuredLapse": "{{pokemonNameWithAffix}} wurde durch {{moveName}} verletzt!",
   "battlerTagsCursedOnAdd": "{{pokemonNameWithAffix}} nimmt einen Teil seiner KP und legt einen Fluch auf {{pokemonName}}!",
-  "battlerTagsCursedLapse": "{{pokemonNameWithAffix}} wurde durch den Fluch verletzt!"
+  "battlerTagsCursedLapse": "{{pokemonNameWithAffix}} wurde durch den Fluch verletzt!",
+  "battlerTagsPowerTrickApply": "{{pokemonNameWithAffix}} tauscht den Wert seines Angriffs mit dem seiner Verteidigung!"
 } as const;
