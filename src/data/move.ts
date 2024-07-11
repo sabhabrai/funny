@@ -3889,8 +3889,12 @@ export class DisableMoveAttr extends MoveEffectAttr {
 }
 
 export class FrenzyAttr extends MoveEffectAttr {
-  constructor() {
+  private min: number;
+  private max: number;
+  constructor(min: number = 2, max: number = 3) {
     super(true, MoveEffectTrigger.HIT, false, true);
+    this.min = min-1;
+    this.max = max-1;
   }
 
   canApply(user: Pokemon, target: Pokemon, move: Move, args: any[]) {
@@ -3904,7 +3908,7 @@ export class FrenzyAttr extends MoveEffectAttr {
 
     if (!user.getMoveQueue().length) {
       if (!user.getTag(BattlerTagType.FRENZY)) {
-        const turnCount = user.randSeedIntRange(1, 2);
+        const turnCount = user.randSeedIntRange(this.min, this.max);
         new Array(turnCount).fill(null).map(() => user.getMoveQueue().push({ move: move.id, targets: [ target.getBattlerIndex() ], ignorePP: true }));
         user.addTag(BattlerTagType.FRENZY, 1, move.id, user.id);
       } else {
@@ -3926,6 +3930,18 @@ export const frenzyMissFunc: UserMoveConditionFunc = (user: Pokemon, move: Move)
 
   return true;
 };
+
+export class UproarMessage extends MoveEffectAttr {
+  constructor() {
+    super();
+  }
+  apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+    user.scene.queueMessage(i18next.t("battle:battlerTagsUproar", {
+      pokemonNameWithAffix: getPokemonNameWithAffix(user),
+    }));
+    return true;
+  }
+}
 
 export class AddBattlerTagAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
@@ -6360,6 +6376,10 @@ export function initMoves() {
       .attr(FlinchAttr)
       .condition(new FirstMoveCondition()),
     new AttackMove(Moves.UPROAR, Type.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
+      .attr(UproarMessage)
+      .attr(FrenzyAttr, 3, 3)
+      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(MissEffectAttr, frenzyMissFunc)
       .ignoresVirtual()
       .soundBased()
       .target(MoveTarget.RANDOM_NEAR_ENEMY)
