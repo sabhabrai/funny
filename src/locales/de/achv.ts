@@ -264,6 +264,14 @@ export const PGMachv: AchievementTranslationEntries = {
   "MONO_FAIRY": {
     name: "Ein ewiges Abenteuer!",
   },
+  "NUZLOCKE_REGULAR": {
+    "name": "Unbezwingbar",
+    "description": "Schließe die reguläre Nuzlocke-Herausforderung ab.",
+  },
+  "NUZLOCKE_HARDCORE": {
+    "name": "Wie?",
+    "description": "Schließe die Hardcore-Nuzlocke-Herausforderung ab.",
+  },
 } as const;
 
 // Achievement translations for the when the player character is female
@@ -373,5 +381,7 @@ export const PGFachv: AchievementTranslationEntries = {
   "MONO_DRAGON": PGMachv.MONO_DRAGON,
   "MONO_DARK": PGMachv.MONO_DARK,
   "MONO_FAIRY": PGMachv.MONO_FAIRY,
+  "NUZLOCKE_REGULAR": PGMachv.NUZLOCKE_REGULAR,
+  "NUZLOCKE_HARDCORE": PGMachv.NUZLOCKE_HARDCORE,
 } as const;
 

@@ -264,6 +264,14 @@ export const PGMachv: AchievementTranslationEntries = {
   "MONO_FAIRY": {
     name: "Hey! Listen!",
   },
+  "NUZLOCKE_REGULAR": {
+    name: "Unfaintable",
+    description: "Complete the regular nuzlocke challenge.",
+  },
+  "NUZLOCKE_HARDCORE": {
+    name: "How?",
+    description: "Complete the hardcore nuzlocke challenge.",
+  },
   "FRESH_START": {
     name: "First Try!",
     description: "Complete the fresh start challenge."

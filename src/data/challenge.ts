@@ -2,7 +2,7 @@ import * as Utils from "../utils";
 import i18next from "i18next";
 import { defaultStarterSpecies, DexAttrProps, GameData } from "#app/system/game-data.js";
 import PokemonSpecies, { getPokemonSpecies, getPokemonSpeciesForm, speciesStarters } from "./pokemon-species";
-import Pokemon, { PokemonMove } from "#app/field/pokemon.js";
+import Pokemon, { EnemyPokemon, PokemonMove } from "#app/field/pokemon.js";
 import { BattleType, FixedBattleConfig } from "#app/battle.js";
 import Trainer, { TrainerVariant } from "#app/field/trainer.js";
 import { GameMode } from "#app/game-mode.js";
@@ -10,6 +10,7 @@ import { Type } from "./type";
 import { Challenges } from "#enums/challenges";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import { ModifierTypeOption } from "#app/modifier/modifier-type.js";
 import { Nature } from "./nature";
 import { Moves } from "#app/enums/moves.js";
 import { TypeColor, TypeShadow } from "#app/enums/color.js";
@@ -52,6 +53,31 @@ export enum ChallengeType {
    * @see {@link Challenge.applyFixedBattle}
   */
   FIXED_BATTLES,
+  /**
+   * Checks if the heal phase should be run
+   * @see {@link Challenge.applyNoHealPhase}
+  */
+  NO_HEAL_PHASE,
+  /**
+   * Checks if the shop item is blacklisted
+   * @see {@link Challenge.applyShopItemBlacklist}
+  */
+  SHOP_ITEM_BLACKLIST,
+  /**
+   * Checks if the random item is blacklisted
+   * @see {@link Challenge.applyRandomItemBlacklist}
+  */
+  RANDOM_ITEM_BLACKLIST,
+  /**
+   * Checks if the cought pokemon can be add to the team
+   * @see {@link Challenge.applyAddPokemonToParty}
+  */
+  ADD_POKEMON_TO_PARTY,
+  /**
+   * Checks if the move is blacklisted
+   * @see {@link Challenge.applyMoveBlacklist}
+  */
+  MOVE_BLACKLIST,
   /**
    * Modifies what level the AI pokemon are. UNIMPLEMENTED.
    */
@@ -388,6 +414,56 @@ export abstract class Challenge {
    * @returns {@link boolean} Whether this function did anything.
    */
   applyMoveWeight(pokemon: Pokemon, moveSource: MoveSourceType, move: Moves, level: Utils.IntegerHolder): boolean {
+    return false;
+  }
+
+  /**
+   * An apply function for NO_HEAL_PHASE challenges. Derived classes should alter this.
+   * @param applyHealPhase {@link Utils.BooleanHolder} Whether it should apply the heal phase.
+   * @returns {@link boolean} Whether this function did anything.
+   */
+  applyNoHealPhase(applyHealPhase: Utils.BooleanHolder): boolean {
+    return false;
+  }
+
+  /**
+   * An apply function for SHOP_ITEM_BLACKLIST challenges. Derived classes should alter this.
+   * @param shopItem {@link ModifierTypeOption} The shop item.
+   * @param isValid {@link Utils.BooleanHolder} Whether this item is valid for this challenge.
+   * @returns {@link boolean} Whether this function did anything.
+   */
+  applyShopItemBlacklist(shopItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean {
+    return false;
+  }
+
+  /**
+   * An apply function for RANDOM_ITEM_BLACKLIST challenges. Derived classes should alter this.
+   * @param randomItem {@link ModifierTypeOption} The random item.
+   * @param isValid {@link Utils.BooleanHolder} Whether this item is valid for this challenge.
+   * @returns {@link boolean} Whether this function did anything.
+   */
+  applyRandomItemBlacklist(randomItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean {
+    return false;
+  }
+
+  /**
+   * An apply function for ADD_POKEMON_TO_PARTY challenges. Derived classes should alter this.
+   * @param pokemon {@link EnemyPokemon} The pokemon cought.
+   * @param waveIndex {@link number} Current wave index.
+   * @param canBeAddToParty {@link Utils.BooleanHolder} Whether this pokemon can be added to the party.
+   * @returns {@link boolean} Whether this function did anything.
+   */
+  applyAddPokemonToParty(pokemon: EnemyPokemon, waveIndex: number, canBeAddToParty: Utils.BooleanHolder): boolean {
+    return false;
+  }
+
+  /**
+   * An apply function for MOVE_BLACKLIST challenges. Derived classes should alter this.
+   * @param move {@link PokemonMove} The move thats tryed to be used.
+   * @param moveCanBeUsed {@link Utils.BooleanHolder} Whether this move can be used.
+   * @returns {@link boolean} Whether this function did anything.
+   */
+  applyMoveBlacklist(move: PokemonMove, moveCanBeUsed: Utils.BooleanHolder): boolean {
     return false;
   }
 }
@@ -738,6 +814,68 @@ export class LowerStarterPointsChallenge extends Challenge {
   }
 }
 
+export class NuzlockeChallenge extends Challenge {
+  constructor() {
+    super(Challenges.NUZLOCKE, 2);
+  }
+
+  applyNoHealPhase(applyHealPhase: Utils.BooleanHolder): boolean {
+    if (this.value === 1) {
+      return false;
+    }
+    applyHealPhase.value = false;
+    return true;
+  }
+
+  applyRandomItemBlacklist(randomItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean {
+    const randomItemBlackList = ["modifierType:ModifierType.REVIVE", "modifierType:ModifierType.MAX_REVIVE", "modifierType:ModifierType.SACRED_ASH", "modifierType:ModifierType.REVIVER_SEED"];
+
+    isValid.value = !randomItemBlackList.includes(randomItem.type.localeKey);
+    return true;
+  }
+
+  applyShopItemBlacklist(shopItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean {
+    const shopItemBlackList = ["modifierType:ModifierType.REVIVE", "modifierType:ModifierType.MAX_REVIVE", "modifierType:ModifierType.SACRED_ASH", "modifierType:ModifierType.REVIVER_SEED"];
+
+    isValid.value = !shopItemBlackList.includes(shopItem.type.localeKey);
+    return true;
+  }
+
+  applyAddPokemonToParty(pokemon: EnemyPokemon, waveIndex: number, canBeAddToParty: Utils.BooleanHolder): boolean {
+    canBeAddToParty.value = waveIndex % 10 === 1;
+    return true;
+  }
+
+  applyMoveBlacklist(move: PokemonMove, moveCanBeUsed: Utils.BooleanHolder): boolean {
+    const moveBlacklist = [Moves.REVIVAL_BLESSING];
+    moveCanBeUsed.value = !moveBlacklist.includes(move.moveId);
+    return true;
+  }
+
+  applyStarterChoice(pokemon: PokemonSpecies, valid: Utils.BooleanHolder, dexAttr: DexAttrProps, soft?: boolean): boolean {
+    if (this.value === 1) {
+      return false;
+    }
+    valid.value = !pokemon.legendary && !pokemon.mythical && !pokemon.subLegendary;
+    return true;
+  }
+
+  /**
+   * @overrides
+   */
+  getDifficulty(): number {
+    return this.value > 0 ? 1 : 0;
+  }
+
+
+  static loadChallenge(source: NuzlockeChallenge | any): NuzlockeChallenge {
+    const newChallenge = new NuzlockeChallenge();
+    newChallenge.value = source.value;
+    newChallenge.severity = source.severity;
+    return newChallenge;
+  }
+}
+
 /**
  * Apply all challenges that modify starter choice.
  * @param gameMode {@link GameMode} The current gameMode
@@ -850,6 +988,51 @@ export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType
  * @returns True if any challenge was successfully applied.
  */
 export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.MOVE_WEIGHT, pokemon: Pokemon, moveSource: MoveSourceType, move: Moves, weight: Utils.IntegerHolder): boolean;
+/**
+ * Apply all challenges that modify if the heal phase should be applied.
+ * @param gameMode {@link GameMode} The current gameMode
+ * @param challengeType {@link ChallengeType} ChallengeType.NO_HEAL_PHASE
+ * @param applyHealPhase {@link Utils.BooleanHolder} Whether it should apply the heal phase. Default is true. Set to false if heal phase should not be applied.
+ * @returns True if any challenge was successfully applied.
+ */
+export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.NO_HEAL_PHASE, applyHealPhase: Utils.BooleanHolder): boolean;
+/**
+ * Apply all challenges that modify if this shop item can be bought.
+ * @param gameMode {@link GameMode} The current gameMode
+ * @param challengeType {@link ChallengeType} ChallengeType.SHOP_ITEM_BLACKLIST
+ * @param shopItem {@link ModifierTypeOption} The shop item.
+ * @param isValid {@link Utils.BooleanHolder} Whether this item is valid for this challenge. Default is true. Set to false if item should not be in the shop.
+ * @returns True if any challenge was successfully applied.
+ */
+export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.SHOP_ITEM_BLACKLIST, shopItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean;
+/**
+ * Apply all challenges that modify if this random item can be generated.
+ * @param gameMode {@link GameMode} The current gameMode
+ * @param challengeType {@link ChallengeType} ChallengeType.RANDOM_ITEM_BLACKLIST
+ * @param randomItem {@link ModifierTypeOption} The random item.
+ * @param isValid {@link Utils.BooleanHolder} Whether this item is valid for this challenge. Default is true. Set to false if item is not valid for this challenge.
+ * @returns True if any challenge was successfully applied.
+ */
+export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.RANDOM_ITEM_BLACKLIST, randomItem: ModifierTypeOption, isValid: Utils.BooleanHolder): boolean;
+/**
+ * Apply all challenges that modify if that pokemon can be added to the party.
+ * @param gameMode {@link GameMode} The current gameMode
+ * @param challengeType {@link ChallengeType} ChallengeType.ADD_POKEMON_TO_PARTY
+ * @param pokemon {@link EnemyPokemon} The pokemon cought.
+ * @param waveIndex {@link number} Current wave index.
+ * @param canBeAddToParty {@link Utils.BooleanHolder} Whether this pokemon can be added to the party. Default is true. Set to false if pokemon won't be added to the party.
+ * @returns True if any challenge was successfully applied.
+ */
+export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.ADD_POKEMON_TO_PARTY, pokemon: EnemyPokemon, waveIndex: number, canBeAddToParty: Utils.BooleanHolder): boolean;
+/**
+ * Apply all challenges that modify if that move can be used.
+ * @param gameMode {@link GameMode} The current gameMode
+ * @param challengeType {@link ChallengeType} ChallengeType.MOVE_BLACKLIST
+ * @param move {@link PokemonMove} The move thats tryed to be used.
+ * @param moveCanBeUsed {@link Utils.BooleanHolder} Whether this move can be used. Default is true. Set to false if move is not valid for the challenge.
+ * @returns True if any challenge was successfully applied.
+ */
+export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.MOVE_BLACKLIST, move: PokemonMove, moveCanBeUsed: Utils.BooleanHolder): boolean;
 export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType, ...args: any[]): boolean {
   let ret = false;
   gameMode.challenges.forEach(c => {
@@ -891,6 +1074,21 @@ export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType
       case ChallengeType.MOVE_WEIGHT:
         ret ||= c.applyMoveWeight(args[0], args[1], args[2], args[3]);
         break;
+      case ChallengeType.NO_HEAL_PHASE:
+        ret ||= c.applyNoHealPhase(args[0]);
+        break;
+      case ChallengeType.SHOP_ITEM_BLACKLIST:
+        ret ||= c.applyShopItemBlacklist(args[0], args[1]);
+        break;
+      case ChallengeType.RANDOM_ITEM_BLACKLIST:
+        ret ||= c.applyShopItemBlacklist(args[0], args[1]);
+        break;
+      case ChallengeType.ADD_POKEMON_TO_PARTY:
+        ret ||= c.applyAddPokemonToParty(args[0], args[1], args[2]);
+        break;
+      case ChallengeType.MOVE_BLACKLIST:
+        ret ||= c.applyMoveBlacklist(args[0], args[1]);
+        break;
       }
     }
   });
@@ -912,6 +1110,8 @@ export function copyChallenge(source: Challenge | any): Challenge {
     return LowerStarterMaxCostChallenge.loadChallenge(source);
   case Challenges.LOWER_STARTER_POINTS:
     return LowerStarterPointsChallenge.loadChallenge(source);
+  case Challenges.NUZLOCKE:
+    return NuzlockeChallenge.loadChallenge(source);
   case Challenges.FRESH_START:
     return FreshStartChallenge.loadChallenge(source);
   }
@@ -924,6 +1124,7 @@ export function initChallenges() {
   allChallenges.push(
     new SingleGenerationChallenge(),
     new SingleTypeChallenge(),
+    new NuzlockeChallenge(),
     new FreshStartChallenge(),
   );
 }

@@ -1977,6 +1977,18 @@ export class CommandPhase extends FieldPhase {
 
     switch (command) {
     case Command.FIGHT:
+      // Check if move can be used in challenge
+      const isValidForChallenge = new Utils.BooleanHolder(true);
+      applyChallenges(this.scene.gameMode, ChallengeType.MOVE_BLACKLIST, playerPokemon.getMoveset()[cursor], isValidForChallenge);
+      if (!isValidForChallenge.value) {
+        const moveName = playerPokemon.getMoveset()[cursor].getName();
+        this.scene.ui.setMode(Mode.MESSAGE);
+        this.scene.ui.showText(i18next.t("challenges:illegalMove", { moveName: moveName }), null, () => {
+          this.scene.ui.clearText();
+          this.scene.ui.setMode(Mode.FIGHT, this.fieldIndex);
+        }, null, true);
+        break;
+      }
       let useStruggle = false;
       if (cursor === -1 ||
           playerPokemon.trySelectMove(cursor, args[0] as boolean) ||
@@ -5029,6 +5041,13 @@ export class AttemptCapturePhase extends PokemonPhase {
         });
       };
       Promise.all([pokemon.hideInfo(), this.scene.gameData.setPokemonCaught(pokemon)]).then(() => {
+        const challengeCanAddToParty = new Utils.BooleanHolder(true);
+        applyChallenges(this.scene.gameMode, ChallengeType.ADD_POKEMON_TO_PARTY, pokemon, this.scene.currentBattle.waveIndex, challengeCanAddToParty);
+        if (!challengeCanAddToParty.value) {
+          removePokemon();
+          end();
+          return;
+        }
         if (this.scene.getParty().length === 6) {
           const promptRelease = () => {
             this.scene.ui.showText(i18next.t("battle:partyFull", { pokemonName: getPokemonNameWithAffix(pokemon) }), null, () => {
@@ -5214,7 +5233,7 @@ export class SelectModifierPhase extends BattlePhase {
         modifierType = typeOptions[cursor].type;
         break;
       default:
-        const shopOptions = getPlayerShopModifierTypeOptionsForWave(this.scene.currentBattle.waveIndex, this.scene.getWaveMoneyAmount(1));
+        const shopOptions = getPlayerShopModifierTypeOptionsForWave(this.scene.currentBattle.waveIndex, this.scene.getWaveMoneyAmount(1), this.scene.gameMode);
         const shopOption = shopOptions[rowCursor > 2 || shopOptions.length <= SHOP_OPTIONS_ROW_LIMIT ? cursor : cursor + SHOP_OPTIONS_ROW_LIMIT];
         modifierType = shopOption.type;
         cost = shopOption.cost;
@@ -5441,6 +5460,13 @@ export class PartyHealPhase extends BattlePhase {
 
   start() {
     super.start();
+
+    const isHealPhaseActive = new Utils.BooleanHolder(true);
+    applyChallenges(this.scene.gameMode, ChallengeType.NO_HEAL_PHASE, isHealPhaseActive);
+    if (!isHealPhaseActive.value) {
+      this.end();
+      return;
+    }
 
     const bgmPlaying = this.scene.isBgmPlaying();
     if (bgmPlaying) {
