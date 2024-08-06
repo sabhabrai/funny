@@ -156,4 +156,6 @@ export const battle: SimpleTranslationEntries = {
   "battlerTagsCursedOnAdd": "{{pokemonNameWithAffix}} cortou seus PS pela metade e amaldiçoou {{pokemonName}}!",
   "battlerTagsCursedLapse": "{{pokemonNameWithAffix}} foi ferido pelo Curse!",
   "battlerTagsStockpilingOnAdd": "{{pokemonNameWithAffix}} estocou {{stockpiledCount}}!",
+  "battlerTagsHealBlock": "{{pokemonNameWithAffix}} não pode restaurar seus PS!",
+  "battlerTagsHealBlockOnRemove": "{{pokemonNameWithAffix}} pode restaurar seus PS novamente!",
 } as const;

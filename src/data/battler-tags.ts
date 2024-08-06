@@ -1558,7 +1558,6 @@ export class IceFaceTag extends BattlerTag {
   }
 }
 
-
 /**
  * Battler tag enabling the Stockpile mechanic. This tag handles:
  * - Stack tracking, including max limit enforcement (which is replicated in Stockpile for redundancy).
@@ -1644,6 +1643,33 @@ export class StockpilingTag extends BattlerTag {
     if (spDefChange) {
       pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [BattleStat.SPDEF], -spDefChange, true, false, true));
     }
+  }
+}
+
+/**
+ * Describes the behavior of a Heal Block Tag.
+ */
+export class HealBlockTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.HEAL_BLOCK, BattlerTagLapseType.TURN_END, 5, Moves.HEAL_BLOCK);
+  }
+
+  onAdd(pokemon: Pokemon): void {
+    super.onAdd(pokemon);
+  }
+
+  lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    return super.lapse(pokemon, lapseType);
+  }
+
+  onActivation(pokemon: Pokemon): string {
+    return i18next.t("battle:battlerTagsHealBlock", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
+  }
+
+  onRemove(pokemon: Pokemon): void {
+    super.onRemove(pokemon);
+
+    pokemon.scene.queueMessage(i18next.t("battle:battlerTagsHealBlockOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }), null, false, null);
   }
 }
 
@@ -1770,6 +1796,8 @@ export function getBattlerTag(tagType: BattlerTagType, turnCount: number, source
     return new StockpilingTag(sourceMove);
   case BattlerTagType.OCTOLOCK:
     return new OctolockTag(sourceId);
+  case BattlerTagType.HEAL_BLOCK:
+    return new HealBlockTag();
   case BattlerTagType.NONE:
   default:
     return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMove, sourceId);
