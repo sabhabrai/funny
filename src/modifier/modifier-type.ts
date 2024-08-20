@@ -979,7 +979,7 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
       }
 
       if (totalWeight !== 0) {
-        const randInt = Utils.randSeedInt(totalWeight, 1);
+        const randInt = Utils.randSeedInt(totalWeight, 1); // Why is the minimum 1?
         let weight = 0;
 
         for (const i in weights) {
