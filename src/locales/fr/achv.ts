@@ -268,6 +268,10 @@ export const PGMachv: AchievementTranslationEntries = {
   "MONO_FAIRY": {
     name: "Hey ! Listen !",
   },
+  "EEVEE_TRAINER": {
+    name: "RP Pania",
+    description: "Terminer un challenge Évoli.",
+  },
   "FRESH_START": {
     name: "Du premier coup !",
     description: "Terminer un challenge « Nouveau départ »."
@@ -393,5 +397,6 @@ export const PGFachv: AchievementTranslationEntries = {
   "MONO_DRAGON": PGMachv.MONO_DRAGON,
   "MONO_DARK": PGMachv.MONO_DARK,
   "MONO_FAIRY": PGMachv.MONO_FAIRY,
+  "EEVEE_TRAINER": PGMachv.EEVEE_TRAINER,
   "FRESH_START": PGMachv.FRESH_START
 } as const;
