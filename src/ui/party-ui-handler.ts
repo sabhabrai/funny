@@ -1301,15 +1301,72 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotHpOverlay.setScale(hpRatio, 1);
     this.slotHpOverlay.setVisible(false);
 
-    this.slotHpText = addTextObject(this.scene, 0, 0, `${this.pokemon.hp}/${this.pokemon.getMaxHp()}`, TextStyle.PARTY);
-    this.slotHpText.setPositionRelative(this.slotHpBar, this.slotHpBar.width - 3, this.slotHpBar.height - 2);
-    this.slotHpText.setOrigin(1, 0);
+      const colorSchemes = {
+        0: {
+          high: 0x00FF00, // Green
+          highshadow: 0x5595e9,
+          medium: 0xFFFF00, // Yellow
+          low: 0xFF0000 // Red
+        },
+        1: {
+          high: 0xf89890, // PINK
+          highshadow: 0xfca2a2,
+          medium: 0xf8b050, // Orange
+          mediumshadow: 0xc07800,
+          low: 0x40c8f8, // Purple
+          lowshadow: 0x006090
+        },
+        2: {
+          high: 0xf89890, // PINK
+          highshadow: 0xfca2a2,
+          medium: 0xf8b050, // Orange
+          mediumshadow: 0xc07800,
+          low: 0x40c8f8, // Purple
+          lowshadow: 0x006090
+        },
+        3: {
+          high: 0xf89890, // PINK
+          highshadow: 0xfca2a2,
+          medium: 0xf8b050, // Orange
+          mediumshadow: 0xc07800,
+          low: 0x40c8f8, // Purple
+          lowshadow: 0x006090
+        },
+        4: {
+          high: 0xf89890, // PINK
+          highshadow: 0xfca2a2,
+          medium: 0xf8b050, // Orange
+          mediumshadow: 0xc07800,
+          low: 0x40c8f8, // Purple
+          lowshadow: 0x006090
+        }
+      };
+
+      const hpState = hpRatio > 0.5 ? "high" : hpRatio > 0.25 ? "medium" : "low";
+      const colors = colorSchemes[(this.scene as BattleScene).hpColor];
+      const slotHpOverlay = this.scene.add.sprite(0, 0, "party_slot_hp_overlay", hpState);
+
+      slotHpOverlay.setPositionRelative(slotHpBar, 16, 2);
+      slotHpOverlay.setOrigin(0, 0);
+      slotHpOverlay.setScale(hpRatio, 1);
+
+      // Set the tint based on the hpState
+      if (hpState === "high") {
+        slotHpOverlay.setTintFill(colors.high, colors.high, colors.highshadow, colors.highshadow);
+      }
+      if (hpState === "medium") {
+        slotHpOverlay.setTintFill(colors.medium, colors.medium, colors.mediumshadow, colors.mediumshadow);
+      }
+      if (hpState === "low") {
+        slotHpOverlay.setTintFill(colors.low, colors.low, colors.lowshadow, colors.lowshadow);
+      }
     this.slotHpText.setVisible(false);
 
     this.slotDescriptionLabel = addTextObject(this.scene, 0, 0, "", TextStyle.MESSAGE);
     this.slotDescriptionLabel.setPositionRelative(slotBg, this.slotIndex >= battlerCount ? 94 : 32, this.slotIndex >= battlerCount ? 16 : 46);
     this.slotDescriptionLabel.setOrigin(0, 1);
     this.slotDescriptionLabel.setVisible(false);
+
 
     slotInfoContainer.add([this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel]);
 
