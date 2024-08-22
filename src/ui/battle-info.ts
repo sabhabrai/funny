@@ -1,7 +1,7 @@
 import { EnemyPokemon, default as Pokemon } from "../field/pokemon";
 import { getLevelTotalExp, getLevelRelExp } from "../data/exp";
 import * as Utils from "../utils";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject, getTextColor, TextStyle } from "./text";
 import { getGenderSymbol, getGenderColor, Gender } from "../data/gender";
 import { StatusEffect } from "../data/status-effect";
 import BattleScene from "../battle-scene";
@@ -677,6 +677,11 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       displayName = `${displayName.slice(0, displayName.endsWith(".") ? -2 : -1).trimEnd()}.`;
       nameSizeTest.setText(displayName);
       nameTextWidth = nameSizeTest.displayWidth;
+    }
+
+    //if it's a challenge, highlight in green the name of the opposing pokemon if it's usable
+    if (pokemon.scene.highlightUsablePokemon && pokemon.scene.gameMode.isChallenge && !this.player && pokemon.isUsableInChallenge()) {
+      this.nameText.setColor(getTextColor(TextStyle.SUMMARY_GREEN));
     }
 
     nameSizeTest.destroy();

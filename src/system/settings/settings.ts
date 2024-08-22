@@ -89,6 +89,7 @@ export const SettingKeys = {
   EXP_Gains_Speed: "EXP_GAINS_SPEED",
   EXP_Party_Display: "EXP_PARTY_DISPLAY",
   Skip_Seen_Dialogues: "SKIP_SEEN_DIALOGUES",
+  Highlight_Usable_Pokemon: "HIGHLIGHT_USABLE_POKEMON",
   Battle_Style: "BATTLE_STYLE",
   Enable_Retries: "ENABLE_RETRIES",
   Hide_IVs: "HIDE_IVS",
@@ -237,6 +238,13 @@ export const Setting: Array<Setting> = [
   {
     key: SettingKeys.Skip_Seen_Dialogues,
     label: i18next.t("settings:skipSeenDialogues"),
+    options: OFF_ON,
+    default: 0,
+    type: SettingType.GENERAL
+  },
+  {
+    key: SettingKeys.Highlight_Usable_Pokemon,
+    label: i18next.t("settings:highlightUsablePokemon"),
     options: OFF_ON,
     default: 0,
     type: SettingType.GENERAL
@@ -658,6 +666,9 @@ export function setSetting(scene: BattleScene, setting: string, value: integer):
     break;
   case SettingKeys.Skip_Seen_Dialogues:
     scene.skipSeenDialogues = Setting[index].options[value].value === "On";
+    break;
+  case SettingKeys.Highlight_Usable_Pokemon:
+    scene.highlightUsablePokemon = Setting[index].options[value].value === "On";
     break;
   case SettingKeys.Battle_Style:
     scene.battleStyle = value;
