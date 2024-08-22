@@ -43,7 +43,7 @@ describe("Moves - Protect", () => {
   test(
     "should protect the user from attacks",
     async () => {
-      await game.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.CHARIZARD]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -61,7 +61,7 @@ describe("Moves - Protect", () => {
       game.override.enemyMoveset(Array(4).fill(Moves.CEASELESS_EDGE));
       vi.spyOn(allMoves[Moves.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
 
-      await game.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.CHARIZARD]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -79,7 +79,7 @@ describe("Moves - Protect", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.CHARM));
 
-      await game.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.CHARIZARD]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -96,7 +96,7 @@ describe("Moves - Protect", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.TACHYON_CUTTER));
 
-      await game.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.CHARIZARD]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 

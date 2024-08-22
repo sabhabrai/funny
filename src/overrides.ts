@@ -184,5 +184,5 @@ export const defaultOverrides = new DefaultOverrides();
 
 export default {
   ...defaultOverrides,
-  ...overrides
+  ...overrides,
 } satisfies InstanceType<typeof DefaultOverrides>;

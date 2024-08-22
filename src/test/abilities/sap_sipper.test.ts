@@ -40,7 +40,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.DUSKULL);
     game.override.enemyAbility(enemyAbility);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const startingOppHp = game.scene.currentBattle.enemyParty[0].hp;
 
@@ -61,7 +61,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyAbility(enemyAbility);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     game.move.select(moveToUse);
 
@@ -80,7 +80,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyAbility(enemyAbility);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     game.move.select(moveToUse);
 
@@ -100,7 +100,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyAbility(enemyAbility);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const startingOppHp = game.scene.currentBattle.enemyParty[0].hp;
 
@@ -122,7 +122,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyAbility(Abilities.NONE);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     game.move.select(moveToUse);
 
@@ -147,7 +147,7 @@ describe("Abilities - Sap Sipper", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyAbility(enemyAbility);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const startingOppHp = game.scene.currentBattle.enemyParty[0].hp;
 

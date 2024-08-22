@@ -37,7 +37,7 @@ describe("Abilities - Serene Grace", () => {
 
   it("Move chance without Serene Grace", async () => {
     const moveToUse = Moves.AIR_SLASH;
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 
@@ -65,7 +65,7 @@ describe("Abilities - Serene Grace", () => {
   it("Move chance with Serene Grace", async () => {
     const moveToUse = Moves.AIR_SLASH;
     game.override.ability(Abilities.SERENE_GRACE);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.TOGEKISS
     ]);
 

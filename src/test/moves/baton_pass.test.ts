@@ -37,7 +37,7 @@ describe("Moves - Baton Pass", () => {
 
   it("passes stat stage buffs when player uses it", async () => {
     // arrange
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.RAICHU,
       Species.SHUCKLE
     ]);
@@ -63,7 +63,7 @@ describe("Moves - Baton Pass", () => {
     game.override
       .startingWave(5)
       .enemyMoveset(new Array(4).fill([Moves.NASTY_PLOT]));
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.RAICHU,
       Species.SHUCKLE
     ]);

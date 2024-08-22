@@ -52,7 +52,7 @@ describe("Items - Grip Claw", () => {
   it(
     "should only steal items from the attack target",
     async () => {
-      await game.startBattle([Species.PANSEAR, Species.ROWLET]);
+      await game.classicMode.startBattle([Species.PANSEAR, Species.ROWLET]);
 
       const enemyPokemon = game.scene.getEnemyField();
 

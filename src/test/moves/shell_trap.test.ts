@@ -43,7 +43,7 @@ describe("Moves - Shell Trap", () => {
   it(
     "should activate after the user is hit by a physical attack",
     async () => {
-      await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
       const playerPokemon = game.scene.getPlayerField();
       const enemyPokemon = game.scene.getEnemyField();
@@ -69,7 +69,7 @@ describe("Moves - Shell Trap", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.SWIFT));
 
-      await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
       const playerPokemon = game.scene.getPlayerField();
       const enemyPokemon = game.scene.getEnemyField();
@@ -95,7 +95,7 @@ describe("Moves - Shell Trap", () => {
     async () => {
       game.override.enemyMoveset(SPLASH_ONLY);
 
-      await game.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.TURTONATOR]);
 
       const playerPokemon = game.scene.getPlayerField();
       const enemyPokemon = game.scene.getEnemyField();
@@ -121,7 +121,7 @@ describe("Moves - Shell Trap", () => {
     async () => {
       game.override.enemyMoveset(SPLASH_ONLY);
 
-      await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
       const playerPokemon = game.scene.getPlayerField();
       const enemyPokemon = game.scene.getEnemyField();
@@ -148,7 +148,7 @@ describe("Moves - Shell Trap", () => {
       game.override.battleType("single");
       vi.spyOn(allMoves[Moves.RAZOR_LEAF], "priority", "get").mockReturnValue(-4);
 
-      await game.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.CHARIZARD]);
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;

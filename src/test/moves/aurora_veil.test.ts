@@ -43,7 +43,7 @@ describe("Moves - Aurora Veil", () => {
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
     const moveToUse = Moves.TACKLE;
-    await game.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 
@@ -57,7 +57,7 @@ describe("Moves - Aurora Veil", () => {
     game.override.battleType("double");
 
     const moveToUse = Moves.ROCK_SLIDE;
-    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
     game.move.select(moveToUse, 1);
@@ -70,7 +70,7 @@ describe("Moves - Aurora Veil", () => {
 
   it("reduces damage of special attacks by half in a single battle", async () => {
     const moveToUse = Moves.ABSORB;
-    await game.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 
@@ -85,7 +85,7 @@ describe("Moves - Aurora Veil", () => {
     game.override.battleType("double");
 
     const moveToUse = Moves.DAZZLING_GLEAM;
-    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
     game.move.select(moveToUse, 1);

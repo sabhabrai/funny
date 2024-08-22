@@ -49,7 +49,7 @@ describe("Moves - Tera Blast", () => {
     game.override
       .enemySpecies(Species.FURRET)
       .startingHeldItems([{ name: "TERA_SHARD", type: Type.FIGHTING }]);
-    await game.startBattle();
+    await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "apply");
 
@@ -66,7 +66,7 @@ describe("Moves - Tera Blast", () => {
     const stellarTypeDmgBonus = 20;
     const basePower = moveToCheck.power;
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     game.move.select(Moves.TERA_BLAST);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -78,7 +78,7 @@ describe("Moves - Tera Blast", () => {
   // Currently abilities are bugged and can't see when a move's category is changed
   it.skip("uses the higher stat of the user's Atk and SpAtk for damage calculation", async () => {
     game.override.enemyAbility(Abilities.TOXIC_DEBRIS);
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.stats[Stat.ATK] = 100;
@@ -91,7 +91,7 @@ describe("Moves - Tera Blast", () => {
 
   it("causes stat drops if user is Stellar tera type", async () => {
     game.override.startingHeldItems([{ name: "TERA_SHARD", type: Type.STELLAR }]);
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

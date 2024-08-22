@@ -38,7 +38,7 @@ describe("Abilities - Shield Dust", () => {
 
   it("Shield Dust", async () => {
     const moveToUse = Moves.AIR_SLASH;
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 

@@ -41,7 +41,7 @@ describe("Moves - Reflect", () => {
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
     const moveToUse = Moves.TACKLE;
-    await game.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 
@@ -55,7 +55,7 @@ describe("Moves - Reflect", () => {
     game.override.battleType("double");
 
     const moveToUse = Moves.ROCK_SLIDE;
-    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
     game.move.select(moveToUse, 1);
@@ -68,7 +68,7 @@ describe("Moves - Reflect", () => {
 
   it("does not affect special attacks", async () => {
     const moveToUse = Moves.ABSORB;
-    await game.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
 

@@ -32,7 +32,7 @@ describe("Items - Lock Capsule", () => {
   });
 
   it("doesn't set the cost of common tier items to 0", async () => {
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     game.move.select(Moves.SURF);
     await game.phaseInterceptor.to(SelectModifierPhase, false);

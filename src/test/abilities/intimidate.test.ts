@@ -210,7 +210,7 @@ describe("Abilities - Intimidate", () => {
   it("single - wild next wave opp triger once, us: none", async () => {
     game.override.startingWave(2);
     game.override.moveset([Moves.AERIAL_ACE]);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
     let battleStatsOpponent = game.scene.currentBattle.enemyParty[0].summonData.battleStats;
     expect(battleStatsOpponent[BattleStat.ATK]).toBe(-1);
     let battleStatsPokemon = game.scene.getParty()[0].summonData.battleStats;
@@ -230,7 +230,7 @@ describe("Abilities - Intimidate", () => {
   it("single - wild next turn - no retrigger on next turn", async () => {
     game.override.startingWave(2);
     game.override.moveset([Moves.SPLASH]);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
     let battleStatsOpponent = game.scene.currentBattle.enemyParty[0].summonData.battleStats;
     expect(battleStatsOpponent[BattleStat.ATK]).toBe(-1);
     let battleStatsPokemon = game.scene.getParty()[0].summonData.battleStats;
@@ -249,7 +249,7 @@ describe("Abilities - Intimidate", () => {
     game.override.moveset([Moves.SPLASH]);
     game.override.enemyMoveset([Moves.VOLT_SWITCH, Moves.VOLT_SWITCH, Moves.VOLT_SWITCH, Moves.VOLT_SWITCH]);
     game.override.startingWave(5);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
     let battleStatsOpponent = game.scene.currentBattle.enemyParty[0].summonData.battleStats;
     expect(battleStatsOpponent[BattleStat.ATK]).toBe(-1);
     let battleStatsPokemon = game.scene.getParty()[0].summonData.battleStats;
@@ -276,7 +276,7 @@ describe("Abilities - Intimidate", () => {
     game.override.moveset([Moves.SPLASH]);
     game.override.enemyMoveset(SPLASH_ONLY);
     game.override.startingWave(5);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
     let battleStatsOpponent = game.scene.currentBattle.enemyParty[0].summonData.battleStats;
     expect(battleStatsOpponent[BattleStat.ATK]).toBe(-1);
     let battleStatsPokemon = game.scene.getParty()[0].summonData.battleStats;

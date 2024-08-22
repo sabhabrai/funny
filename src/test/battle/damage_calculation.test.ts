@@ -36,7 +36,7 @@ describe("Round Down and Minimun 1 test in Damage Calculation", () => {
     game.override.moveset([Moves.JUMP_KICK]);
     game.override.ability(Abilities.WONDER_GUARD);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const shedinja = game.scene.getPlayerPokemon()!;
 
@@ -56,7 +56,7 @@ describe("Round Down and Minimun 1 test in Damage Calculation", () => {
     game.override.starterSpecies(Species.PIKACHU);
     game.override.enemyLevel(100);
 
-    await game.startBattle();
+    await game.classicMode.startBattle();
 
     const charizard = game.scene.getEnemyPokemon()!;
 

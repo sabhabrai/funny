@@ -38,7 +38,7 @@ describe("Abilities - Sheer Force", () => {
   it("Sheer Force", async () => {
     const moveToUse = Moves.AIR_SLASH;
     game.override.ability(Abilities.SHEER_FORCE);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 
@@ -71,7 +71,7 @@ describe("Abilities - Sheer Force", () => {
   it("Sheer Force with exceptions including binding moves", async () => {
     const moveToUse = Moves.BIND;
     game.override.ability(Abilities.SHEER_FORCE);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 
@@ -104,7 +104,7 @@ describe("Abilities - Sheer Force", () => {
   it("Sheer Force with moves with no secondary effect", async () => {
     const moveToUse = Moves.TACKLE;
     game.override.ability(Abilities.SHEER_FORCE);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 
@@ -139,7 +139,7 @@ describe("Abilities - Sheer Force", () => {
     game.override.enemyAbility(Abilities.COLOR_CHANGE);
     game.override.startingHeldItems([{ name: "KINGS_ROCK", count: 1 }]);
     game.override.ability(Abilities.SHEER_FORCE);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.PIDGEOT
     ]);
 

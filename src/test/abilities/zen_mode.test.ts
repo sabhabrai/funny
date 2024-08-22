@@ -51,7 +51,7 @@ describe("Abilities - ZEN MODE", () => {
     "not enough damage to change form",
     async () => {
       const moveToUse = Moves.SPLASH;
-      await game.startBattle([Species.DARMANITAN]);
+      await game.classicMode.startBattle([Species.DARMANITAN]);
       game.scene.getParty()[0].stats[Stat.HP] = 100;
       game.scene.getParty()[0].hp = 100;
       expect(game.scene.getParty()[0].formIndex).toBe(0);
@@ -74,7 +74,7 @@ describe("Abilities - ZEN MODE", () => {
     "enough damage to change form",
     async () => {
       const moveToUse = Moves.SPLASH;
-      await game.startBattle([Species.DARMANITAN]);
+      await game.classicMode.startBattle([Species.DARMANITAN]);
       game.scene.getParty()[0].stats[Stat.HP] = 1000;
       game.scene.getParty()[0].hp = 100;
       expect(game.scene.getParty()[0].formIndex).toBe(0);
@@ -94,7 +94,7 @@ describe("Abilities - ZEN MODE", () => {
     "kill pokemon while on zen mode",
     async () => {
       const moveToUse = Moves.SPLASH;
-      await game.startBattle([Species.DARMANITAN, Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.DARMANITAN, Species.CHARIZARD]);
       game.scene.getParty()[0].stats[Stat.HP] = 1000;
       game.scene.getParty()[0].hp = 100;
       expect(game.scene.getParty()[0].formIndex).toBe(0);
@@ -138,7 +138,7 @@ describe("Abilities - ZEN MODE", () => {
         [Species.DARMANITAN]: zenForm,
       });
 
-      await game.startBattle([Species.MAGIKARP, Species.DARMANITAN]);
+      await game.classicMode.startBattle([Species.MAGIKARP, Species.DARMANITAN]);
 
       const darmanitan = game.scene.getParty().find((p) => p.species.speciesId === Species.DARMANITAN)!;
       expect(darmanitan).not.toBe(undefined);

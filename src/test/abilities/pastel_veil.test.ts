@@ -35,7 +35,7 @@ describe("Abilities - Pastel Veil", () => {
   });
 
   it("prevents the user and its allies from being afflicted by poison", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.GALAR_PONYTA]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.GALAR_PONYTA]);
     const ponyta = game.scene.getPlayerField()[1];
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;
@@ -51,7 +51,7 @@ describe("Abilities - Pastel Veil", () => {
   });
 
   it("it heals the poisoned status condition of allies if user is sent out into battle", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.FEEBAS, Species.GALAR_PONYTA]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS, Species.GALAR_PONYTA]);
     const ponyta = game.scene.getParty()[2];
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;

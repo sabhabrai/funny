@@ -34,7 +34,7 @@ describe("Battle order", () => {
   });
 
   it("opponent faster than player 50 vs 150", async () => {
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.BULBASAUR,
     ]);
     game.scene.getParty()[0].stats[Stat.SPD] = 50;
@@ -49,7 +49,7 @@ describe("Battle order", () => {
   }, 20000);
 
   it("Player faster than opponent 150 vs 50", async () => {
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.BULBASAUR,
     ]);
     game.scene.getParty()[0].stats[Stat.SPD] = 150;
@@ -65,7 +65,7 @@ describe("Battle order", () => {
 
   it("double - both opponents faster than player 50/50 vs 150/150", async () => {
     game.override.battleType("double");
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.BULBASAUR,
       Species.BLASTOISE,
     ]);
@@ -87,7 +87,7 @@ describe("Battle order", () => {
 
   it("double - speed tie except 1 - 100/100 vs 100/150", async () => {
     game.override.battleType("double");
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.BULBASAUR,
       Species.BLASTOISE,
     ]);
@@ -108,7 +108,7 @@ describe("Battle order", () => {
 
   it("double - speed tie 100/150 vs 100/150", async () => {
     game.override.battleType("double");
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.BULBASAUR,
       Species.BLASTOISE,
     ]);

@@ -39,7 +39,7 @@ describe("Moves - Rage Powder", () => {
     async () => {
       game.override.enemyMoveset([Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER]);
 
-      await game.startBattle([Species.AMOONGUSS, Species.VENUSAUR]);
+      await game.classicMode.startBattle([Species.AMOONGUSS, Species.VENUSAUR]);
 
       const enemyPokemon = game.scene.getEnemyField();
 
@@ -62,7 +62,7 @@ describe("Moves - Rage Powder", () => {
       game.override.enemyMoveset([Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER]);
 
       // Test with two non-Grass type player Pokemon
-      await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+      await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
       const enemyPokemon = game.scene.getEnemyField();
 

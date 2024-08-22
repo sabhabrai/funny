@@ -42,7 +42,7 @@ describe("Moves - Wide Guard", () => {
   test(
     "should protect the user and allies from multi-target attack moves",
     async () => {
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -63,7 +63,7 @@ describe("Moves - Wide Guard", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.GROWL));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -84,7 +84,7 @@ describe("Moves - Wide Guard", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.TACKLE));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -105,7 +105,7 @@ describe("Moves - Wide Guard", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.SPLASH));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
       const leadPokemon = game.scene.getPlayerField();
       const enemyPokemon = game.scene.getEnemyField();

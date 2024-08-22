@@ -37,7 +37,7 @@ describe("Moves - Tackle", () => {
   it("TACKLE against ghost", async () => {
     const moveToUse = Moves.TACKLE;
     game.override.enemySpecies(Species.GENGAR);
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.MIGHTYENA,
     ]);
     const hpOpponent = game.scene.currentBattle.enemyParty[0].hp;
@@ -49,7 +49,7 @@ describe("Moves - Tackle", () => {
 
   it("TACKLE against not resistant", async () => {
     const moveToUse = Moves.TACKLE;
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.MIGHTYENA,
     ]);
     game.scene.currentBattle.enemyParty[0].stats[Stat.DEF] = 50;

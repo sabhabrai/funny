@@ -38,7 +38,7 @@ describe("Moves - Growth", () => {
 
   it("GROWTH", async () => {
     const moveToUse = Moves.GROWTH;
-    await game.startBattle([
+    await game.classicMode.startBattle([
       Species.MIGHTYENA,
       Species.MIGHTYENA,
     ]);
