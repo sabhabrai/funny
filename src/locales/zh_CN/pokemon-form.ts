@@ -19,7 +19,7 @@ export const battlePokemonForm: SimpleTranslationEntries = {
 export const pokemonForm: SimpleTranslationEntries = {
   // Starters forms
   // 1G
-  "pikachuCosplay": "服装",
+  "pikachuCosplay": "换装",
   "pikachuCoolCosplay": "摇滚巨星",
   "pikachuBeautyCosplay": "贵妇",
   "pikachuCuteCosplay": "流行偶像",
