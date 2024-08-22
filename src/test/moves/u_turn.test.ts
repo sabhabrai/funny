@@ -7,8 +7,10 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#app/enums/status-effect.js";
 import { SPLASH_ONLY } from "../utils/testUtils";
+import { Mode } from "#app/ui/ui.js";
 import { SwitchPhase } from "#app/phases/switch-phase.js";
 import { TurnEndPhase } from "#app/phases/turn-end-phase.js";
+import { BerryPhase } from "#app/phases/berry-phase.js";
 
 describe("Moves - U-turn", () => {
   let phaserGame: Phaser.Game;
@@ -52,9 +54,9 @@ describe("Moves - U-turn", () => {
     await game.phaseInterceptor.to(TurnEndPhase);
 
     // assert
+    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.SHUCKLE);
     expect(game.scene.getParty()[1].hp).toEqual(Math.floor(game.scene.getParty()[1].getMaxHp() * 0.33 + playerHp));
     expect(game.phaseInterceptor.log).toContain("SwitchSummonPhase");
-    expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.SHUCKLE);
   }, 20000);
 
   it("triggers rough skin on the u-turn user before a new pokemon is switched in", async() => {
@@ -72,9 +74,9 @@ describe("Moves - U-turn", () => {
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
+    expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
     expect(playerPkm.hp).not.toEqual(playerPkm.getMaxHp());
     expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true); // proxy for asserting ability activated
-    expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
 
@@ -93,9 +95,32 @@ describe("Moves - U-turn", () => {
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
-    expect(playerPkm.status?.effect).toEqual(StatusEffect.POISON);
     expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
+    expect(playerPkm.status?.effect).toEqual(StatusEffect.POISON);
     expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true); // proxy for asserting ability activated
+    expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
+  }, 20000);
+
+  it("does not switch out the user if the move fails", async () => {
+    // arrange
+    game.override
+      .enemySpecies(Species.DUGTRIO)
+      .moveset(Moves.VOLT_SWITCH); // cheating a little here but no types are immune to bug
+    await game.startBattle([
+      Species.RAICHU,
+      Species.SHUCKLE
+    ]);
+
+    // act
+    game.doAttack(getMovePosition(game.scene, 0, Moves.U_TURN));
+    game.onNextPrompt("SwitchPhase", Mode.PARTY, () => {
+      expect.fail("Switch was forced");
+    }, () => game.isCurrentPhase(BerryPhase));
+    await game.phaseInterceptor.to(BerryPhase, false);
+
+    // assert
+    const playerPkm = game.scene.getPlayerPokemon()!;
+    expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
 });

@@ -116,6 +116,25 @@ class DefaultOverrides {
   readonly OPP_VARIANT_OVERRIDE: Variant = 0;
   readonly OPP_IVS_OVERRIDE: integer | integer[] = [];
 
+  // --------------------------
+  // TRAINER/AI OVERRIDES
+  // --------------------------
+  /**
+   * Force enemy AI to always switch pkmn
+   */
+  readonly TRAINER_ALWAYS_SWITCHES_OVERRIDE: boolean = false;
+  /**
+   * Force enemy trainer battles to always pick pkmn in this order.  If the
+   * trainer would have more Pokemon than in the array, it will wrap around to
+   * the beginning.  If the trainer would have less Pokemon than in the array,
+   * it will ignore the extras.
+   *
+   * Has no effect on wild battles. Only affects newly generated trainers (eg,
+   * won't work on a saved trainer wave). OPP_SPECIES_OVERRIDE and other OPP_
+   * overrides will supercede this value.
+   */
+  readonly TRAINER_PARTY_OVERRIDE: Species[] = [];
+
   // -------------
   // EGG OVERRIDES
   // -------------

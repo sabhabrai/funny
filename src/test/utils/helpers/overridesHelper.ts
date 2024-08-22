@@ -122,7 +122,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param moveset the {@linkcode Moves | moves}set to set
    * @returns this
    */
-  moveset(moveset: Moves[]): this {
+  moveset(moveset: Moves[] | Moves): this {
+    if (!Array.isArray(moveset)) {
+      moveset = new Array(4).fill(moveset);
+    }
     vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
     this.log(`Player Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);
@@ -241,7 +244,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param moveset the {@linkcode Moves | moves}set to set
    * @returns this
    */
-  enemyMoveset(moveset: Moves[]): this {
+  enemyMoveset(moveset: Moves[] | Moves): this {
+    if (!Array.isArray(moveset)) {
+      moveset = new Array(4).fill(moveset);
+    }
     vi.spyOn(Overrides, "OPP_MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
     this.log(`Enemy Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);
@@ -278,6 +284,27 @@ export class OverridesHelper extends GameManagerHelper {
   enemyHeldItems(items: ModifierOverride[]) {
     vi.spyOn(Overrides, "OPP_HELD_ITEMS_OVERRIDE", "get").mockReturnValue(items);
     this.log("Enemy Pokemon held items set to:", items);
+    return this;
+  }
+
+  /**
+   * Overrides the trainer AI's party
+   * @param species List of pokemon to generate in the party
+   * @returns this
+   */
+  enemyParty(species: Species[]) {
+    vi.spyOn(Overrides, "TRAINER_PARTY_OVERRIDE", "get").mockReturnValue(species);
+    this.log("Enemy trainer party set to:", species);
+    return this;
+  }
+
+  /**
+   * Forces the AI to always switch out, or reset to allow normal switching decisions
+   * @returns this
+   */
+  forceTrainerSwitches(newValue: boolean = true) {
+    vi.spyOn(Overrides, "TRAINER_ALWAYS_SWITCHES_OVERRIDE", "get").mockReturnValue(newValue);
+    this.log("Trainers will always switch out set to:", newValue);
     return this;
   }
 

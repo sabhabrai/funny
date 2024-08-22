@@ -1,5 +1,7 @@
 import { vi } from "vitest";
 import { GameManagerHelper } from "./gameManagerHelper";
+import { BattlerIndex } from "#app/battle.js";
+import { EnemyPokemon } from "#app/field/pokemon.js";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase.js";
 
 /**
@@ -31,5 +33,14 @@ export class MoveHelper extends GameManagerHelper {
     } else {
       hitCheck.mockReturnValue(false);
     }
+  }
+
+  /**
+   * Forces an enemy Pokemon to attack into a certain slot
+   * @param pokemon Pokemon to force the attack of
+   * @param slot BattlerIndex to force the attack into
+   */
+  forceAiTargets(pokemon: EnemyPokemon | undefined, slot: BattlerIndex | BattlerIndex[]) {
+    vi.spyOn(pokemon!, "getNextTargets").mockReturnValue(Array.isArray(slot) ? slot : [slot]);
   }
 }
