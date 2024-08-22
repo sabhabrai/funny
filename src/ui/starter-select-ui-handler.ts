@@ -609,7 +609,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     starterBoxContainer.add(this.starterSelectScrollBar);
 
-    this.pokerusCursorObjs = new Array(3).fill(null).map(() => {
+    this.pokerusCursorObjs = new Array(9).fill(null).map(() => {
       const cursorObj = this.scene.add.image(0, 0, "select_cursor_pokerus");
       cursorObj.setVisible(false);
       cursorObj.setOrigin(0, 0);
@@ -876,31 +876,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     date.setUTCHours(0, 0, 0, 0);
 
     this.scene.executeWithSeedOffset(() => {
-      for (let c = 0; c < 3; c++) {
-        let randomSpeciesId: Species;
-        let species: PokemonSpecies | undefined;
+      for (let gen = 0; gen < 9; gen++) {
+        const currentGenSpecies = this.allSpecies.filter(species => species.generation === gen + 1);
+        const randomSpeciesId = Utils.randSeedItem(currentGenSpecies).speciesId;
+        const species = getPokemonSpecies(randomSpeciesId);
 
-        const generateSpecies = () => {
-          randomSpeciesId = Utils.randSeedItem(starterSpecies);
-          species = getPokemonSpecies(randomSpeciesId);
-        };
-
-        let dupe = false;
-
-        do {
-          dupe = false;
-
-          generateSpecies();
-
-          for (let ps = 0; ps < c; ps++) {
-            if (this.pokerusSpecies[ps] === species) {
-              dupe = true;
-              break;
-            }
-          }
-        } while (dupe);
-
-        this.pokerusSpecies.push(species!); // TODO: is the bang correct?
+        this.pokerusSpecies.push(species);
       }
     }, 0, date.getTime().toString());
 
