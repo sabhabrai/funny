@@ -2424,6 +2424,38 @@ export class ContactHeldItemTransferChanceModifier extends HeldItemTransferModif
   }
 }
 
+export class PreventStatLowerChanceModifier extends PokemonHeldItemModifier {
+  private chance: number;
+
+  constructor(type: ModifierType, pokemonId: integer, chancePercent: number, stackCount?: integer) {
+    super(type, pokemonId, stackCount);
+
+    this.chance = chancePercent / 100;
+  }
+
+  matchType(modifier: Modifier): boolean {
+    return modifier instanceof PreventStatLowerChanceModifier;
+  }
+
+  clone(): PreventStatLowerChanceModifier {
+    return new PreventStatLowerChanceModifier(this.type as ModifierTypes.PreventStatLowerChanceModifierType, this.pokemonId, this.chance * 100, this.stackCount);
+  }
+
+  getArgs(): any[] {
+    return super.getArgs().concat(this.chance * 100);
+  }
+
+  apply(args: any[]): boolean {
+    const cancelled = args[1] as Utils.BooleanHolder;
+    cancelled.value =  Phaser.Math.RND.realInRange(0, 1) < (this.chance * this.getStackCount()) ? true : false;
+    return true;
+  }
+
+  getMaxHeldItemCount(pokemon: Pokemon): integer {
+    return 5;
+  }
+}
+
 export class IvScannerModifier extends PersistentModifier {
   constructor(type: ModifierType, stackCount?: integer) {
     super(type, stackCount);

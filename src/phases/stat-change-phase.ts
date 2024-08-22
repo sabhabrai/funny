@@ -5,7 +5,7 @@ import { MistTag, ArenaTagSide } from "#app/data/arena-tag.js";
 import { BattleStat, getBattleStatName, getBattleStatLevelChangeDescription } from "#app/data/battle-stat.js";
 import Pokemon from "#app/field/pokemon.js";
 import { getPokemonNameWithAffix } from "#app/messages.js";
-import { PokemonResetNegativeStatStageModifier } from "#app/modifier/modifier.js";
+import { PokemonResetNegativeStatStageModifier, PreventStatLowerChanceModifier } from "#app/modifier/modifier.js";
 import { handleTutorial, Tutorial } from "#app/tutorial.js";
 import i18next from "i18next";
 import * as Utils from "#app/utils.js";
@@ -69,6 +69,16 @@ export class StatChangePhase extends PokemonPhase {
 
     if (!this.ignoreAbilities) {
       applyAbAttrs(StatChangeMultiplierAbAttr, pokemon, null, false, levels);
+    }
+
+    // clear amulet
+    if (levels.value < 0) {
+      const cancelled = new Utils.BooleanHolder(false);
+      pokemon.scene.applyModifiers(PreventStatLowerChanceModifier, pokemon.isPlayer(), pokemon, cancelled);
+      if (!this.selfTarget && cancelled.value) {
+        this.scene.queueMessage(i18next.t("modifier:PreventStatLowerChanceApply", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon), itemName: i18next.t("modifierType:ModifierType.CLEAR_AMULET.name") }));
+        return this.end();
+      }
     }
 
     const battleStats = this.getPokemon().summonData.battleStats;
