@@ -3,7 +3,7 @@ import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, test, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import GameManager from "../utils/gameManager";
 import { getMovePosition } from "../utils/gameManagerUtils";
 import { BattleStat } from "#app/data/battle-stat";
@@ -80,8 +80,8 @@ describe("Moves - Parting Shot", () => {
     }, TIMEOUT
   );
 
-  it.skip( // TODO: fix this bug to pass the test!
-    "Parting shot should fail if target is -6/-6 de-buffed",
+  test(
+    "Parting shot should not switch out if target is -6/-6 de-buffed",
     async () => {
       game.override.moveset([Moves.PARTING_SHOT, Moves.MEMENTO, Moves.SPLASH]);
       await game.startBattle([Species.MEOWTH, Species.MEOWTH, Species.MEOWTH, Species.MURKROW, Species.ABRA]);
@@ -123,7 +123,7 @@ describe("Moves - Parting Shot", () => {
     }, TIMEOUT
   );
 
-  it.skip( // TODO: fix this bug to pass the test!
+  test(
     "Parting shot shouldn't allow switch out when mist is active",
     async () => {
       game.override
@@ -141,11 +141,11 @@ describe("Moves - Parting Shot", () => {
       const battleStatsOpponent = enemyPokemon.summonData.battleStats;
       expect(battleStatsOpponent[BattleStat.ATK]).toBe(0);
       expect(battleStatsOpponent[BattleStat.SPATK]).toBe(0);
-      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.SNORLAX);
     }, TIMEOUT
   );
 
-  it.skip( // TODO: fix this bug to pass the test!
+  test(
     "Parting shot shouldn't allow switch out against clear body ability",
     async () => {
       game.override
@@ -162,11 +162,11 @@ describe("Moves - Parting Shot", () => {
       const battleStatsOpponent = enemyPokemon.summonData.battleStats;
       expect(battleStatsOpponent[BattleStat.ATK]).toBe(0);
       expect(battleStatsOpponent[BattleStat.SPATK]).toBe(0);
-      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MURKROW);
+      expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.SNORLAX);
     }, TIMEOUT
   );
 
-  it.skip( // TODO: fix this bug to pass the test!
+  test(
     "Parting shot should de-buff and not fail if no party available to switch - party size 1",
     async () => {
       await game.startBattle([Species.MURKROW]);
@@ -184,7 +184,7 @@ describe("Moves - Parting Shot", () => {
     }, TIMEOUT
   );
 
-  it.skip( // TODO: fix this bug to pass the test!
+  test(
     "Parting shot regularly not fail if no party available to switch - party fainted",
     async () => {
       await game.startBattle([Species.MURKROW, Species.MEOWTH]);
@@ -201,8 +201,8 @@ describe("Moves - Parting Shot", () => {
 
       await game.phaseInterceptor.to(BerryPhase, false);
       const battleStatsOpponent = game.scene.currentBattle.enemyParty[0].summonData.battleStats;
-      expect(battleStatsOpponent[BattleStat.ATK]).toBe(0);
-      expect(battleStatsOpponent[BattleStat.SPATK]).toBe(0);
+      expect(battleStatsOpponent[BattleStat.ATK]).toBe(-1);
+      expect(battleStatsOpponent[BattleStat.SPATK]).toBe(-1);
       expect(game.scene.getPlayerField()[0].species.speciesId).toBe(Species.MEOWTH);
     }, TIMEOUT
   );
