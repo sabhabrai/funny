@@ -2,6 +2,13 @@ import BattleScene from "../battle-scene";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { Mode } from "./ui";
 import * as Utils from "../utils";
+import i18next from "i18next";
+
+type argsAjustText = {
+  padding?: number;
+  ignoreTextBalance?: Array<string> | "all";
+  ignoreLanguages?: Array<string>;
+};
 
 export default abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;
@@ -193,5 +200,55 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
 
   clear() {
     super.clear();
+  }
+
+  /**
+   * @param text
+   * @param textObject
+   * @param maxWidth
+   * @param opts options additional
+   * @argument ignoreLanguages ignore adjust for some language.
+   * @argument ignoreBalanceText ignore Text Balance for some languages or for all.
+   * @argument padding default 0.
+   */
+
+  adjustText(text: string, textObject: Phaser.GameObjects.Text, maxWidth: number, opts: argsAjustText = {}): void {
+    const currentLanguage = i18next.resolvedLanguage!;
+    if (opts.ignoreLanguages && opts.ignoreLanguages[0] && !opts.ignoreLanguages.some(localKey => localKey === currentLanguage)) {
+      return;
+    }
+
+    const fontSizeToNumber = (FS: number | string): number => {
+      return parseInt(FS.toString().replace("px", ""));
+    };
+
+    // If fontSize was modified before, revert to original
+    const fontSize = textObject.getData("originalFontSize") ?? fontSizeToNumber(textObject.style.fontSize);
+    textObject.setData("originalFontSize", textObject.getData("originalFontSize") ?? fontSize);
+    textObject.setFontSize(fontSize);
+
+    const textWrapped = () => textObject.getWrappedText(text);
+    const textSize = () => Phaser.GameObjects.GetTextSize(textObject, textObject.style.getTextMetrics(), textWrapped());
+    const balanceText = typeof opts.ignoreTextBalance === "string" ? opts.ignoreTextBalance === "all" : (opts.ignoreTextBalance && opts.ignoreTextBalance[0] && opts.ignoreTextBalance.some(localKey => localKey === currentLanguage));
+
+    // Text Balance
+    if (!balanceText && textWrapped()[1] && textWrapped().length <= textObject.style.maxLines && textWrapped()[0].length * 0.25 > textWrapped()[1].length) {
+      textObject.setWordWrapWidth(maxWidth * 0.65);
+    }
+
+    // If is very near to border add "padding", not need if border container appareance is nice
+    const padding = opts.padding ?? 0;
+
+    // Text ajust
+    if (textWrapped().length > textObject.style.maxLines || (textSize().width + padding) > maxWidth) {
+
+      let fontDecrement = fontSize;
+      while (textWrapped().length > textObject.style.maxLines || (textSize().width + padding) > maxWidth) {
+        fontDecrement -= 1;
+        textObject.setFontSize(fontDecrement);
+      }
+      textObject.setFontSize(fontDecrement - padding / 2);
+
+    }
   }
 }
