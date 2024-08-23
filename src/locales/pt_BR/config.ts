@@ -41,7 +41,8 @@ import { nature } from "./nature";
 import { partyUiHandler } from "./party-ui-handler";
 import { pokeball } from "./pokeball";
 import { pokemon } from "./pokemon";
-import { battlePokemonForm, pokemonForm } from "./pokemon-form";
+import { pokemonForm, battlePokemonForm } from "./pokemon-form";
+import { fusionAffixes } from "./pokemon-fusion-affixes";
 import { pokemonInfo } from "./pokemon-info";
 import { pokemonInfoContainer } from "./pokemon-info-container";
 import { pokemonSummary } from "./pokemon-summary";
@@ -100,6 +101,7 @@ export const ptBrConfig = {
   pokeball: pokeball,
   pokemon: pokemon,
   pokemonForm: pokemonForm,
+  fusionAffixes: fusionAffixes,
   pokemonInfo: pokemonInfo,
   pokemonInfoContainer: pokemonInfoContainer,
   pokemonSummary: pokemonSummary,
