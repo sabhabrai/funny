@@ -6025,6 +6025,18 @@ export class VariableTargetAttr extends MoveAttr {
   }
 }
 
+export class UnselectableMoveAttr extends MoveAttr {
+  private unselectableCondition: MoveConditionFunc;
+  constructor(unselectableCondition: MoveConditionFunc) {
+    super();
+    this.unselectableCondition = unselectableCondition;
+  }
+
+  getCondition(): MoveConditionFunc {
+    return this.unselectableCondition;
+  }
+}
+
 const failOnGravityCondition: MoveConditionFunc = (user, target, move) => !user.scene.arena.getTag(ArenaTagType.GRAVITY);
 
 const failOnBossCondition: MoveConditionFunc = (user, target, move) => !target.isBossImmune();
@@ -6040,6 +6052,8 @@ const failIfDampCondition: MoveConditionFunc = (user, target, move) => {
   }
   return !cancelled.value;
 };
+
+const failOnNoBerryCondition: MoveConditionFunc = (user, target, move) => user.scene.findModifiers(m => m instanceof BerryModifier, user.isPlayer()).length > 0;
 
 const userSleptOrComatoseCondition: MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) =>  user.status?.effect === StatusEffect.SLEEP || user.hasAbility(Abilities.COMATOSE);
 
@@ -6316,7 +6330,7 @@ export function initMoves() {
       .windMove(),
     new AttackMove(Moves.FLY, Type.FLYING, MoveCategory.PHYSICAL, 90, 95, 15, -1, 0, 1)
       .attr(ChargeAttr, ChargeAnim.FLY_CHARGING, i18next.t("moveTriggers:flewUpHigh", {pokemonName: "{USER}"}), BattlerTagType.FLYING)
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .ignoresVirtual(),
     new AttackMove(Moves.BIND, Type.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(TrapAttr, BattlerTagType.BIND),
@@ -6332,7 +6346,7 @@ export function initMoves() {
     new AttackMove(Moves.JUMP_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 100, 95, 10, -1, 0, 1)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .recklessMove(),
     new AttackMove(Moves.ROLLING_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 60, 85, 15, 30, 0, 1)
       .attr(FlinchAttr),
@@ -6626,7 +6640,7 @@ export function initMoves() {
     new AttackMove(Moves.HIGH_JUMP_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, 130, 90, 10, -1, 0, 1)
       .attr(MissEffectAttr, crashDamageFunc)
       .attr(NoEffectAttr, crashDamageFunc)
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .recklessMove(),
     new StatusMove(Moves.GLARE, Type.NORMAL, 100, 30, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
@@ -6669,7 +6683,7 @@ export function initMoves() {
     new AttackMove(Moves.PSYWAVE, Type.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1)
       .attr(RandomLevelDamageAttr),
     new SelfStatusMove(Moves.SPLASH, Type.NORMAL, -1, 40, -1, 0, 1)
-      .condition(failOnGravityCondition),
+      .attr(UnselectableMoveAttr, failOnGravityCondition),
     new SelfStatusMove(Moves.ACID_ARMOR, Type.POISON, -1, 20, -1, 0, 1)
       .attr(StatChangeAttr, BattleStat.DEF, 2, true),
     new AttackMove(Moves.CRABHAMMER, Type.WATER, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 1)
@@ -7215,7 +7229,7 @@ export function initMoves() {
     new AttackMove(Moves.BOUNCE, Type.FLYING, MoveCategory.PHYSICAL, 85, 85, 5, 30, 0, 3)
       .attr(ChargeAttr, ChargeAnim.BOUNCE_CHARGING, i18next.t("moveTriggers:sprangUp", {pokemonName: "{USER}"}), BattlerTagType.FLYING)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .ignoresVirtual(),
     new AttackMove(Moves.MUD_SHOT, Type.GROUND, MoveCategory.SPECIAL, 55, 95, 15, 100, 0, 3)
       .attr(StatChangeAttr, BattleStat.SPD, -1),
@@ -7258,6 +7272,10 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.ROOSTED, true, false)
       .triageMove(),
     new StatusMove(Moves.GRAVITY, Type.PSYCHIC, -1, 5, -1, 0, 4)
+      .attr(AddBattlerTagAttr, BattlerTagType.IGNORE_FLYING, true, true, 5, 5)
+      .attr(AddBattlerTagAttr, BattlerTagType.INTERRUPTED)
+      .attr(RemoveBattlerTagAttr, [BattlerTagType.FLYING, BattlerTagType.MAGNET_RISEN])
+      .attr(HitsTagAttr, BattlerTagType.FLYING, false)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, 5)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(Moves.MIRACLE_EYE, Type.PSYCHIC, -1, 40, -1, 0, 4)
@@ -7366,6 +7384,7 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.AQUA_RING, true, true),
     new SelfStatusMove(Moves.MAGNET_RISE, Type.ELECTRIC, -1, 10, -1, 0, 4)
       .attr(AddBattlerTagAttr, BattlerTagType.MAGNET_RISEN, true, true)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .condition((user, target, move) => !user.scene.arena.getTag(ArenaTagType.GRAVITY) && [BattlerTagType.MAGNET_RISEN, BattlerTagType.IGNORE_FLYING, BattlerTagType.INGRAIN].every((tag) => !user.getTag(tag))),
     new AttackMove(Moves.FLARE_BLITZ, Type.FIRE, MoveCategory.PHYSICAL, 120, 100, 15, 10, 0, 4)
       .attr(RecoilAttr, false, 0.33)
@@ -7590,7 +7609,7 @@ export function initMoves() {
       .powderMove()
       .attr(AddBattlerTagAttr, BattlerTagType.CENTER_OF_ATTENTION, true),
     new StatusMove(Moves.TELEKINESIS, Type.PSYCHIC, -1, 15, -1, 0, 5)
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .unimplemented(),
     new StatusMove(Moves.MAGIC_ROOM, Type.PSYCHIC, -1, 10, -1, 0, 5)
       .ignoresProtect()
@@ -7679,7 +7698,7 @@ export function initMoves() {
         (user, target, move) =>  target.status || target.hasAbility(Abilities.COMATOSE)? 2 : 1),
     new AttackMove(Moves.SKY_DROP, Type.FLYING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5)
       .attr(ChargeAttr, ChargeAnim.SKY_DROP_CHARGING, i18next.t("moveTriggers:tookTargetIntoSky", {pokemonName: "{USER}", targetName: "{TARGET}"}), BattlerTagType.FLYING) // TODO: Add 2nd turn message
-      .condition(failOnGravityCondition)
+      .attr(UnselectableMoveAttr, failOnGravityCondition)
       .ignoresVirtual(),
     new SelfStatusMove(Moves.SHIFT_GEAR, Type.STEEL, -1, 10, -1, 0, 5)
       .attr(StatChangeAttr, BattleStat.ATK, 1, true)
@@ -7825,7 +7844,7 @@ export function initMoves() {
       .attr(MinimizeAccuracyAttr)
       .attr(FlyingTypeMultiplierAttr)
       .attr(HitsTagAttr, BattlerTagType.MINIMIZED, true)
-      .condition(failOnGravityCondition),
+      .attr(UnselectableMoveAttr, failOnGravityCondition),
     new StatusMove(Moves.MAT_BLOCK, Type.FIGHTING, -1, 10, -1, 0, 6)
       .target(MoveTarget.USER_SIDE)
       .attr(AddArenaTagAttr, ArenaTagType.MAT_BLOCK, 1, true, true)
@@ -8398,11 +8417,7 @@ export function initMoves() {
     new SelfStatusMove(Moves.STUFF_CHEEKS, Type.NORMAL, -1, 10, -1, 0, 8) // TODO: Stuff Cheeks should not be selectable when the user does not have a berry, see wiki
       .attr(EatBerryAttr)
       .attr(StatChangeAttr, BattleStat.DEF, 2, true)
-      .condition((user) => {
-        const userBerries = user.scene.findModifiers(m => m instanceof BerryModifier, user.isPlayer());
-        return userBerries.length > 0;
-      })
-      .partial(),
+      .attr(UnselectableMoveAttr, failOnNoBerryCondition),
     new SelfStatusMove(Moves.NO_RETREAT, Type.FIGHTING, -1, 5, -1, 0, 8)
       .attr(StatChangeAttr, [ BattleStat.ATK, BattleStat.DEF, BattleStat.SPATK, BattleStat.SPDEF, BattleStat.SPD ], 1, true)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, true, false, 1)
