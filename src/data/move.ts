@@ -4314,7 +4314,7 @@ export class DisableMoveAttr extends MoveEffectAttr {
 }
 
 /**
- * Handles moves that are usd consecutively without user command
+ * Handles moves that are used consecutively without user command
  * @extends MoveEffectAttr
  * @param tagTypes: The types of tags decided by moves
  * @param turnCount: The turns move planned to keep use non-stop
@@ -4325,7 +4325,7 @@ export class NonStopAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
   private turnCount: number;
   // no round specify means it's a frenzy move that rand 2-3 turns
-  constructor(tagType: BattlerTagType, turnCount:number = 0) {
+  constructor(tagType: BattlerTagType, turnCount: number = 0) {
     super(true, MoveEffectTrigger.HIT, false, true);
     this.tagType = tagType;
     this.turnCount = turnCount;
