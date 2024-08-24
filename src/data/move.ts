@@ -4321,7 +4321,7 @@ export class DisableMoveAttr extends MoveEffectAttr {
  * example: @see {@linkcode Moves.THRASH} for frenzy moves
  * example: @see {@linkcode Moves.ICE_BALL} for non stop moves
  */
-export class nonStopAttr extends MoveEffectAttr {
+export class NonStopAttr extends MoveEffectAttr {
   public tagType: BattlerTagType;
   private turnCount: number;
   // no round specify means it's a frenzy move that rand 2-3 turns
@@ -6375,7 +6375,7 @@ export function initMoves() {
       .attr(RecoilAttr)
       .recklessMove(),
     new AttackMove(Moves.THRASH, Type.NORMAL, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 1)
-      .attr(nonStopAttr, BattlerTagType.FRENZY)
+      .attr(NonStopAttr, BattlerTagType.FRENZY)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc)
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
@@ -6495,7 +6495,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
       .powderMove(),
     new AttackMove(Moves.PETAL_DANCE, Type.GRASS, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 1)
-      .attr(nonStopAttr, BattlerTagType.FRENZY)
+      .attr(NonStopAttr, BattlerTagType.FRENZY)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc)
       .makesContact()
@@ -6830,7 +6830,7 @@ export function initMoves() {
     new StatusMove(Moves.LOCK_ON, Type.NORMAL, -1, 5, -1, 0, 2)
       .attr(IgnoreAccuracyAttr),
     new AttackMove(Moves.OUTRAGE, Type.DRAGON, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 2)
-      .attr(nonStopAttr, BattlerTagType.FRENZY)
+      .attr(NonStopAttr, BattlerTagType.FRENZY)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc)
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
@@ -6846,7 +6846,7 @@ export function initMoves() {
       .attr(StatChangeAttr, BattleStat.ATK, -2),
     new AttackMove(Moves.ROLLOUT, Type.ROCK, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 2)
       .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, Moves.DEFENSE_CURL)
-      .attr(nonStopAttr, BattlerTagType.NONSTOP, 4)
+      .attr(NonStopAttr, BattlerTagType.NONSTOP, 4)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc),
     new AttackMove(Moves.FALSE_SWIPE, Type.NORMAL, MoveCategory.PHYSICAL, 40, 100, 40, -1, 0, 2)
@@ -7131,7 +7131,7 @@ export function initMoves() {
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(Moves.ICE_BALL, Type.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
       .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, Moves.DEFENSE_CURL)
-      .attr(nonStopAttr, BattlerTagType.NONSTOP, 4)
+      .attr(NonStopAttr, BattlerTagType.NONSTOP, 4)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc)
       .ballBombMove(),
@@ -8694,7 +8694,7 @@ export function initMoves() {
       .attr(StatChangeAttr, BattleStat.SPATK, 1, true),
     new AttackMove(Moves.RAGING_FURY, Type.FIRE, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 8)
       .makesContact(false)
-      .attr(nonStopAttr, BattlerTagType.FRENZY)
+      .attr(NonStopAttr, BattlerTagType.FRENZY)
       .attr(MissEffectAttr, nonStopMissFunc)
       .attr(NoEffectAttr, nonStopMissFunc)
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
