@@ -1,5 +1,5 @@
 import BattleScene from "#app/battle-scene.js";
-import { applyPreSwitchOutAbAttrs, PreSwitchOutAbAttr } from "#app/data/ability.js";
+import { applyPreSwitchOutAbAttrs, PreSwitchOutAbAttr } from "#app/data/ability";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms.js";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 
