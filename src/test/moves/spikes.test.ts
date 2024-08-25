@@ -106,7 +106,7 @@ describe("Moves - Spikes", () => {
     game.move.select(Moves.SPIKES);
     await game.toNextTurn();
 
-    game.forceOpponentToSwitch();
+    game.forceEnemyToSwitch();
     game.move.select(Moves.SPLASH);
     await game.toNextTurn();
     expect(game.scene.currentBattle.enemyParty[0].hp).toBeLessThan(initialHpOpponent);

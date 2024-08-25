@@ -7,6 +7,7 @@ import { GameModes, getGameMode } from "#app/game-mode";
 import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
 import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
+import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MovePhase } from "#app/phases/move-phase";
@@ -42,6 +43,8 @@ import { DailyModeHelper } from "./helpers/dailyModeHelper";
 import { MoveHelper } from "./helpers/moveHelper";
 import { OverridesHelper } from "./helpers/overridesHelper";
 import { SettingsHelper } from "./helpers/settingsHelper";
+import { Moves } from "#app/enums/moves";
+import { getMoveTargets } from "#app/data/move";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -232,7 +235,34 @@ export default class GameManager {
     }, () => this.isCurrentPhase(CommandPhase) || this.isCurrentPhase(NewBattlePhase));
   }
 
-  forceOpponentToSwitch() {
+  /**
+   * Forces the next enemy selecting a move to use the given move in its moveset against the
+   * given target (if applicable).
+   * @param moveId {@linkcode Moves} the move the enemy will use
+   * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
+   */
+  async forceEnemyMove(moveId: Moves, target?: BattlerIndex) {
+    // Wait for the next EnemyCommandPhase to start
+    await this.phaseInterceptor.to(EnemyCommandPhase, false);
+    const enemy = this.scene.getEnemyField()[(this.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
+    const legalTargets = getMoveTargets(enemy, moveId);
+
+    vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
+      move: moveId,
+      targets: (target && !legalTargets.multiple && legalTargets.targets.includes(target))
+        ? [target]
+        : enemy.getNextTargets(moveId)
+    });
+
+    /**
+     * Run the EnemyCommandPhase to completion.
+     * This allows this function to be called consecutively to
+     * force a move for each enemy in a double battle.
+     */
+    await this.phaseInterceptor.to(EnemyCommandPhase);
+  }
+
+  forceEnemyToSwitch() {
     const originalMatchupScore = Trainer.prototype.getPartyMemberMatchupScores;
     Trainer.prototype.getPartyMemberMatchupScores = () => {
       Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
