@@ -18,10 +18,10 @@ import { getBiomeName } from "../data/biomes";
 import { Nature, getNatureName, getNatureStatMultiplier } from "../data/nature";
 import { loggedInUser } from "../account";
 import { Variant, getVariantTint } from "#app/data/variant";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { Ability } from "../data/ability.js";
 import i18next from "i18next";
-import {modifierSortFunc} from "../modifier/modifier";
+import { modifierSortFunc } from "../modifier/modifier";
 import { PlayerGender } from "#enums/player-gender";
 
 enum Page {
@@ -751,16 +751,16 @@ export default class SummaryUiHandler extends UiHandler {
         labelImage: this.scene.add.image(0, 0, "summary_profile_ability"),
         ability: this.pokemon?.getAbility(true)!, // TODO: is this bang correct?
         nameText: null,
-        descriptionText: null};
+        descriptionText: null };
 
-      const allAbilityInfo = [this.abilityContainer]; // Creates an array to iterate through
+      const allAbilityInfo = [ this.abilityContainer ]; // Creates an array to iterate through
       // Only add to the array and set up displaying a passive if it's unlocked
       if (this.pokemon?.hasPassive()) {
         this.passiveContainer = {
           labelImage: this.scene.add.image(0, 0, "summary_profile_passive"),
           ability: this.pokemon.getPassiveAbility(),
           nameText: null,
-          descriptionText: null};
+          descriptionText: null };
         allAbilityInfo.push(this.passiveContainer);
 
         // Sets up the pixel button prompt image
@@ -781,7 +781,7 @@ export default class SummaryUiHandler extends UiHandler {
         abilityInfo.nameText.setOrigin(0, 1);
         profileContainer.add(abilityInfo.nameText);
 
-        abilityInfo.descriptionText = addTextObject(this.scene, 7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, { wordWrap: { width: 1224 } }); // TODO: is this bang correct?
+        abilityInfo.descriptionText = addTextObject(this.scene, 7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, { wordWrap: { width: 1224 }}); // TODO: is this bang correct?
         abilityInfo.descriptionText.setOrigin(0, 0);
         profileContainer.add(abilityInfo.descriptionText);
 
@@ -989,7 +989,7 @@ export default class SummaryUiHandler extends UiHandler {
         moveRowContainer.add(ppText);
       }
 
-      this.moveDescriptionText = addTextObject(this.scene, 2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 } });
+      this.moveDescriptionText = addTextObject(this.scene, 2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 }});
       this.movesContainer.add(this.moveDescriptionText);
 
       const moveDescriptionTextMaskRect = this.scene.make.graphics({});

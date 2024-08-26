@@ -1,10 +1,10 @@
 import UiHandler from "../ui-handler";
 import BattleScene from "../../battle-scene";
-import {Mode} from "../ui";
-import {addWindow} from "../ui-theme";
-import {addTextObject, TextStyle} from "../text";
-import {Button} from "#enums/buttons";
-import {NavigationManager} from "#app/ui/settings/navigationMenu";
+import { Mode } from "../ui";
+import { addWindow } from "../ui-theme";
+import { addTextObject, TextStyle } from "../text";
+import { Button } from "#enums/buttons";
+import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 
 type CancelFn = (succes?: boolean) => boolean;

@@ -702,9 +702,9 @@ export abstract class BattleAnim {
 
     private getGraphicFrameData(scene: BattleScene, frames: AnimFrame[]): Map<integer, Map<AnimFrameTarget, GraphicFrameData>> {
       const ret: Map<integer, Map<AnimFrameTarget, GraphicFrameData>> = new Map([
-        [AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>() ],
-        [AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>() ],
-        [AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>() ]
+        [ AnimFrameTarget.GRAPHIC, new Map<AnimFrameTarget, GraphicFrameData>() ],
+        [ AnimFrameTarget.USER, new Map<AnimFrameTarget, GraphicFrameData>() ],
+        [ AnimFrameTarget.TARGET, new Map<AnimFrameTarget, GraphicFrameData>() ]
       ]);
 
       const isOppAnim = this.isOppAnim();

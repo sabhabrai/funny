@@ -31,14 +31,14 @@ describe("Moves - Roost", () => {
     game.override.enemyAbility(Abilities.INSOMNIA);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
-    game.override.moveset([Moves.STOMPING_TANTRUM]);
-    game.override.enemyMoveset([Moves.ROOST, Moves.ROOST, Moves.ROOST, Moves.ROOST]);
+    game.override.moveset([ Moves.STOMPING_TANTRUM ]);
+    game.override.enemyMoveset([ Moves.ROOST, Moves.ROOST, Moves.ROOST, Moves.ROOST ]);
   });
 
   test(
     "move should ground the user until the end of turn",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 

@@ -27,7 +27,7 @@ describe("Abilities - Quick Draw", () => {
 
     game.override.starterSpecies(Species.MAGIKARP);
     game.override.ability(Abilities.QUICK_DRAW);
-    game.override.moveset([Moves.TACKLE, Moves.TAIL_WHIP]);
+    game.override.moveset([ Moves.TACKLE, Moves.TAIL_WHIP ]);
 
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);

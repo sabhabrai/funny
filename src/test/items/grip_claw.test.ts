@@ -31,7 +31,7 @@ describe("Items - Grip Claw", () => {
 
     game.override
       .battleType("double")
-      .moveset([Moves.POPULATION_BOMB, Moves.SPLASH])
+      .moveset([ Moves.POPULATION_BOMB, Moves.SPLASH ])
       .startingHeldItems([
         { name: "GRIP_CLAW", count: 5 }, // TODO: Find a way to mock the steal chance of grip claw
         { name: "MULTI_LENS", count: 3 },
@@ -52,7 +52,7 @@ describe("Items - Grip Claw", () => {
   it(
     "should only steal items from the attack target",
     async () => {
-      await game.startBattle([Species.PANSEAR, Species.ROWLET]);
+      await game.startBattle([ Species.PANSEAR, Species.ROWLET ]);
 
       const enemyPokemon = game.scene.getEnemyField();
 

@@ -27,7 +27,7 @@ describe("Abilities - Unseen Fist", () => {
     game.override.battleType("single");
     game.override.starterSpecies(Species.URSHIFU);
     game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset([Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT]);
+    game.override.enemyMoveset([ Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT ]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
   });
@@ -66,8 +66,8 @@ describe("Abilities - Unseen Fist", () => {
 });
 
 async function testUnseenFistHitResult(game: GameManager, attackMove: Moves, protectMove: Moves, shouldSucceed: boolean = true): Promise<void> {
-  game.override.moveset([attackMove]);
-  game.override.enemyMoveset([protectMove, protectMove, protectMove, protectMove]);
+  game.override.moveset([ attackMove ]);
+  game.override.enemyMoveset([ protectMove, protectMove, protectMove, protectMove ]);
 
   await game.startBattle();
 

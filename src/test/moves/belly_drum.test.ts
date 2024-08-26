@@ -33,15 +33,15 @@ describe("Moves - BELLY DRUM", () => {
     game.override.enemySpecies(Species.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
-    game.override.moveset([Moves.BELLY_DRUM]);
-    game.override.enemyMoveset([Moves.SPLASH]);
+    game.override.moveset([ Moves.BELLY_DRUM ]);
+    game.override.enemyMoveset([ Moves.SPLASH ]);
   });
 
   // Bulbapedia Reference: https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move)
 
   test("Belly Drum raises the user's Attack to its max, at the cost of 1/2 of its maximum HP",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
@@ -56,7 +56,7 @@ describe("Moves - BELLY DRUM", () => {
 
   test("Belly Drum will still take effect if an uninvolved stat is at max",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);
@@ -76,7 +76,7 @@ describe("Moves - BELLY DRUM", () => {
 
   test("Belly Drum fails if the pokemon's attack stat is at its maximum",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -92,7 +92,7 @@ describe("Moves - BELLY DRUM", () => {
 
   test("Belly Drum fails if the user's health is less than 1/2",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const hpLost = toDmgValue(leadPokemon.getMaxHp() / RATIO);

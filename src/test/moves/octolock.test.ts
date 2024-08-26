@@ -36,12 +36,12 @@ describe("Moves - Octolock", () => {
       game.override.enemyAbility(Abilities.BALL_FETCH);
 
       game.override.startingLevel(2000);
-      game.override.moveset([Moves.OCTOLOCK, Moves.SPLASH]);
+      game.override.moveset([ Moves.OCTOLOCK, Moves.SPLASH ]);
       game.override.ability(Abilities.BALL_FETCH);
     });
 
     it("Reduces DEf and SPDEF by 1 each turn", { timeout: 10000 }, async () => {
-      await game.startBattle([Species.GRAPPLOCT]);
+      await game.startBattle([ Species.GRAPPLOCT ]);
 
       const enemyPokemon = game.scene.getEnemyField();
 
@@ -62,7 +62,7 @@ describe("Moves - Octolock", () => {
     });
 
     it("Traps the target pokemon", { timeout: 10000 }, async () => {
-      await game.startBattle([Species.GRAPPLOCT]);
+      await game.startBattle([ Species.GRAPPLOCT ]);
 
       const enemyPokemon = game.scene.getEnemyField();
 

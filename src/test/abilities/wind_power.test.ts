@@ -27,12 +27,12 @@ describe("Abilities - Wind Power", () => {
     game.override.battleType("single");
     game.override.enemySpecies(Species.SHIFTRY);
     game.override.enemyAbility(Abilities.WIND_POWER);
-    game.override.moveset([Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM]);
+    game.override.moveset([ Moves.TAILWIND, Moves.SPLASH, Moves.PETAL_BLIZZARD, Moves.SANDSTORM ]);
     game.override.enemyMoveset(SPLASH_ONLY);
   });
 
   it("it becomes charged when hit by wind moves", async () => {
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([ Species.MAGIKARP ]);
     const shiftry = game.scene.getEnemyPokemon()!;
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
@@ -47,7 +47,7 @@ describe("Abilities - Wind Power", () => {
     game.override.ability(Abilities.WIND_POWER);
     game.override.enemySpecies(Species.MAGIKARP);
 
-    await game.startBattle([Species.SHIFTRY]);
+    await game.startBattle([ Species.SHIFTRY ]);
     const shiftry = game.scene.getPlayerPokemon()!;
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();
@@ -62,7 +62,7 @@ describe("Abilities - Wind Power", () => {
     game.override.enemySpecies(Species.MAGIKARP);
     game.override.ability(Abilities.WIND_POWER);
 
-    await game.startBattle([Species.SHIFTRY]);
+    await game.startBattle([ Species.SHIFTRY ]);
     const magikarp = game.scene.getEnemyPokemon()!;
     const shiftry = game.scene.getPlayerPokemon()!;
 
@@ -80,7 +80,7 @@ describe("Abilities - Wind Power", () => {
   it("does not interact with Sandstorm", async () => {
     game.override.enemySpecies(Species.MAGIKARP);
 
-    await game.startBattle([Species.SHIFTRY]);
+    await game.startBattle([ Species.SHIFTRY ]);
     const shiftry = game.scene.getPlayerPokemon()!;
 
     expect(shiftry.getTag(BattlerTagType.CHARGED)).toBeUndefined();

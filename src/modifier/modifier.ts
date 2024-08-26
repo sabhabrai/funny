@@ -12,7 +12,7 @@ import { getPokemonNameWithAffix } from "../messages";
 import * as Utils from "../utils";
 import { TempBattleStat } from "../data/temp-battle-stat";
 import { getBerryEffectFunc, getBerryPredicate } from "../data/berry";
-import { BattlerTagType} from "#enums/battler-tag-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { StatusEffect, getStatusEffectHealText } from "../data/status-effect";
 import { achvs } from "../system/achv";
@@ -1332,7 +1332,7 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   getMaxHeldItemCount(pokemon: Pokemon): integer {
-    if ([BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA].includes(this.berryType)) {
+    if ([ BerryType.LUM, BerryType.LEPPA, BerryType.SITRUS, BerryType.ENIGMA ].includes(this.berryType)) {
       return 2;
     }
     return 3;
@@ -2791,7 +2791,7 @@ export function overrideHeldItems(scene: BattleScene, pokemon: Pokemon, isPlayer
     const qty = item.count || 1;
 
     if (modifierType instanceof ModifierTypes.ModifierTypeGenerator) {
-      const pregenArgs = ("type" in item) && (item.type !== null) ? [item.type] : undefined;
+      const pregenArgs = ("type" in item) && (item.type !== null) ? [ item.type ] : undefined;
       modifierType = modifierType.generateType([], pregenArgs);
     }
 

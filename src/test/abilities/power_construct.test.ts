@@ -28,8 +28,8 @@ describe("Abilities - POWER CONSTRUCT", () => {
     const moveToUse = Moves.SPLASH;
     game.override.battleType("single");
     game.override.ability(Abilities.POWER_CONSTRUCT);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
   });
 
   test(
@@ -42,7 +42,7 @@ describe("Abilities - POWER CONSTRUCT", () => {
         [Species.ZYGARDE]: completeForm,
       });
 
-      await game.startBattle([Species.MAGIKARP, Species.ZYGARDE]);
+      await game.startBattle([ Species.MAGIKARP, Species.ZYGARDE ]);
 
       const zygarde = game.scene.getParty().find((p) => p.species.speciesId === Species.ZYGARDE);
       expect(zygarde).not.toBe(undefined);

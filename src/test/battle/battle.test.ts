@@ -98,9 +98,9 @@ describe("Test Battle Phase", () => {
     game.override
       .startingWave(3)
       .battleType("single");
-    game.override.moveset([Moves.TACKLE]);
+    game.override.moveset([ Moves.TACKLE ]);
     game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
     await game.startBattle();
     game.move.select(Moves.TACKLE);
     await game.phaseInterceptor.runFrom(EnemyCommandPhase).to(SelectModifierPhase, false);
@@ -111,9 +111,9 @@ describe("Test Battle Phase", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.startingLevel(5);
     game.override.startingWave(3);
-    game.override.moveset([Moves.TACKLE]);
+    game.override.moveset([ Moves.TACKLE ]);
     game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.enemyMoveset([Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP]);
+    game.override.enemyMoveset([ Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP, Moves.TAIL_WHIP ]);
     game.override.battleType("single");
     await game.startBattle();
     game.move.select(Moves.TACKLE);
@@ -258,8 +258,8 @@ describe("Test Battle Phase", () => {
     game.override.ability(Abilities.ZEN_MODE);
     game.override.startingLevel(2000);
     game.override.startingWave(3);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
     await game.startBattle([
       Species.DARMANITAN,
       Species.CHARIZARD,
@@ -281,8 +281,8 @@ describe("Test Battle Phase", () => {
     game.override.ability(Abilities.ZEN_MODE);
     game.override.startingLevel(2000);
     game.override.startingWave(3);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
     await game.startBattle();
     const turn = game.scene.currentBattle.turn;
     game.move.select(moveToUse);
@@ -299,8 +299,8 @@ describe("Test Battle Phase", () => {
     game.override.ability(Abilities.ZEN_MODE);
     game.override.startingLevel(2000);
     game.override.startingWave(3);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
     await game.startBattle();
     const waveIndex = game.scene.currentBattle.waveIndex;
     game.move.select(moveToUse);
@@ -317,7 +317,7 @@ describe("Test Battle Phase", () => {
       .enemySpecies(Species.RATTATA)
       .startingWave(1)
       .startingLevel(100)
-      .moveset([moveToUse])
+      .moveset([ moveToUse ])
       .enemyMoveset(SPLASH_ONLY)
       .startingHeldItems([{ name: "TEMP_STAT_BOOSTER", type: TempBattleStat.ACC }]);
 

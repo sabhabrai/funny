@@ -31,13 +31,13 @@ describe("Abilities - Steely Spirit", () => {
     game.override.battleType("double");
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.moveset([Moves.IRON_HEAD, Moves.SPLASH]);
+    game.override.moveset([ Moves.IRON_HEAD, Moves.SPLASH ]);
     game.override.enemyMoveset(SPLASH_ONLY);
     vi.spyOn(allMoves[moveToCheck], "calculateBattlePower");
   });
 
   it("increases Steel-type moves' power used by the user and its allies by 50%", async () => {
-    await game.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.startBattle([ Species.PIKACHU, Species.SHUCKLE ]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
@@ -53,7 +53,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("stacks if multiple users with this ability are on the field.", async () => {
-    await game.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.startBattle([ Species.PIKACHU, Species.PIKACHU ]);
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
     game.scene.getPlayerField().forEach(p => {
@@ -70,7 +70,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("does not take effect when suppressed", async () => {
-    await game.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.startBattle([ Species.PIKACHU, Species.SHUCKLE ]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 

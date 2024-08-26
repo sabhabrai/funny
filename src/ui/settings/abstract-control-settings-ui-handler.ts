@@ -1,11 +1,11 @@
 import UiHandler from "../ui-handler";
 import BattleScene from "../../battle-scene";
-import {Mode} from "../ui";
-import {InterfaceConfig} from "../../inputs-controller";
-import {addWindow} from "../ui-theme";
-import {addTextObject, TextStyle} from "../text";
-import {getIconWithSettingName} from "#app/configs/inputs/configHandler";
-import NavigationMenu, {NavigationManager} from "#app/ui/settings/navigationMenu";
+import { Mode } from "../ui";
+import { InterfaceConfig } from "../../inputs-controller";
+import { addWindow } from "../ui-theme";
+import { addTextObject, TextStyle } from "../text";
+import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
+import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
 import { Device } from "#enums/devices";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
@@ -172,7 +172,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       // Fetch common setting keys such as 'Controller' and 'Gamepad Support' from gamepad settings.
       const commonSettingKeys = Object.keys(this.setting).slice(0, this.commonSettingsCount).map(key => this.setting[key]);
       // Combine common and specific bindings into a single array.
-      const specificBindingKeys = [...commonSettingKeys, ...Object.keys(config.settings)];
+      const specificBindingKeys = [ ...commonSettingKeys, ...Object.keys(config.settings) ];
       // Fetch default values for these settings and prepare to highlight selected options.
       const optionCursors = Object.values(Object.keys(this.settingDeviceDefaults).filter(s => specificBindingKeys.includes(s)).map(k => this.settingDeviceDefaults[k]));
       // Filter out settings that are not relevant to the current gamepad configuration.
@@ -201,7 +201,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
         const valueLabels: Phaser.GameObjects.GameObject[] = [];
 
         // Process each option for the current setting.
-        for (const [o, option] of this.settingDeviceOptions[this.setting[setting]].entries()) {
+        for (const [ o, option ] of this.settingDeviceOptions[this.setting[setting]].entries()) {
           // Check if the current setting is for binding keys.
           if (bindingSettings.includes(this.setting[setting])) {
             // Create a label for non-null options, typically indicating actionable options like 'change'.

@@ -27,7 +27,7 @@ describe("Items - Leek", () => {
     game = new GameManager(phaserGame);
 
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.override.enemyMoveset([ Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH ]);
     game.override.disableCrits();
 
     game.override.battleType("single");
@@ -35,7 +35,7 @@ describe("Items - Leek", () => {
 
   it("LEEK activates in battle correctly", async () => {
     game.override.startingHeldItems([{ name: "LEEK" }]);
-    game.override.moveset([Moves.POUND]);
+    game.override.moveset([ Moves.POUND ]);
     const consoleSpy = vi.spyOn(console, "log");
     await game.startBattle([
       Species.FARFETCHD
@@ -43,7 +43,7 @@ describe("Items - Leek", () => {
 
     game.move.select(Moves.POUND);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
 
@@ -112,7 +112,7 @@ describe("Items - Leek", () => {
 
   it("LEEK held by fused FARFETCHD line (base)", async () => {
     // Randomly choose from the Farfetch'd line
-    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
+    const species = [ Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD ];
 
     await game.startBattle([
       species[Utils.randInt(species.length)],
@@ -147,7 +147,7 @@ describe("Items - Leek", () => {
 
   it("LEEK held by fused FARFETCHD line (part)", async () => {
     // Randomly choose from the Farfetch'd line
-    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
+    const species = [ Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD ];
 
     await game.startBattle([
       Species.PIKACHU,

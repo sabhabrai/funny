@@ -109,7 +109,7 @@ export class RechargingTag extends BattlerTag {
     super.onAdd(pokemon);
 
     // Queue a placeholder move for the Pokemon to "use" next turn
-    pokemon.getMoveQueue().push({ move: Moves.NONE, targets: [] });
+    pokemon.getMoveQueue().push({ move: Moves.NONE, targets: []});
   }
 
   /** Cancels the source's move this turn and queues a "__ must recharge!" message */
@@ -296,7 +296,7 @@ export class InterruptedTag extends BattlerTag {
     super.onAdd(pokemon);
 
     pokemon.getMoveQueue().shift();
-    pokemon.pushMoveHistory({move: Moves.NONE, result: MoveResult.OTHER});
+    pokemon.pushMoveHistory({ move: Moves.NONE, result: MoveResult.OTHER });
   }
 
   lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -750,7 +750,7 @@ export class OctolockTag extends TrappedTag {
     const shouldLapse = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (shouldLapse) {
-      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [BattleStat.DEF, BattleStat.SPDEF], -1));
+      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [ BattleStat.DEF, BattleStat.SPDEF ], -1));
       return true;
     }
 
@@ -1704,8 +1704,8 @@ export class StockpilingTag extends BattlerTag {
     super.loadTag(source);
     this.stockpiledCount = source.stockpiledCount || 0;
     this.statChangeCounts = {
-      [ BattleStat.DEF ]: source.statChangeCounts?.[ BattleStat.DEF ] ?? 0,
-      [ BattleStat.SPDEF ]: source.statChangeCounts?.[ BattleStat.SPDEF ] ?? 0,
+      [BattleStat.DEF]: source.statChangeCounts?.[BattleStat.DEF] ?? 0,
+      [BattleStat.SPDEF]: source.statChangeCounts?.[BattleStat.SPDEF] ?? 0,
     };
   }
 
@@ -1727,7 +1727,7 @@ export class StockpilingTag extends BattlerTag {
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
       pokemon.scene.unshiftPhase(new StatChangePhase(
         pokemon.scene, pokemon.getBattlerIndex(), true,
-        [BattleStat.SPDEF, BattleStat.DEF], 1, true, false, true, this.onStatsChanged
+        [ BattleStat.SPDEF, BattleStat.DEF ], 1, true, false, true, this.onStatsChanged
       ));
     }
   }
@@ -1745,11 +1745,11 @@ export class StockpilingTag extends BattlerTag {
     const spDefChange = this.statChangeCounts[BattleStat.SPDEF];
 
     if (defChange) {
-      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [BattleStat.DEF], -defChange, true, false, true));
+      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [ BattleStat.DEF ], -defChange, true, false, true));
     }
 
     if (spDefChange) {
-      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [BattleStat.SPDEF], -spDefChange, true, false, true));
+      pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [ BattleStat.SPDEF ], -spDefChange, true, false, true));
     }
   }
 }
@@ -1956,9 +1956,9 @@ export function getBattlerTag(tagType: BattlerTagType, turnCount: number, source
   case BattlerTagType.OCTOLOCK:
     return new OctolockTag(sourceId);
   case BattlerTagType.IGNORE_GHOST:
-    return new ExposedTag(tagType, sourceMove, Type.GHOST, [Type.NORMAL, Type.FIGHTING]);
+    return new ExposedTag(tagType, sourceMove, Type.GHOST, [ Type.NORMAL, Type.FIGHTING ]);
   case BattlerTagType.IGNORE_DARK:
-    return new ExposedTag(tagType, sourceMove, Type.DARK, [Type.PSYCHIC]);
+    return new ExposedTag(tagType, sourceMove, Type.DARK, [ Type.PSYCHIC ]);
   case BattlerTagType.GULP_MISSILE_ARROKUDA:
   case BattlerTagType.GULP_MISSILE_PIKACHU:
     return new GulpMissileTag(tagType, sourceMove);

@@ -33,7 +33,7 @@ describe("Abilities - Galvanize", () => {
       .battleType("single")
       .startingLevel(100)
       .ability(Abilities.GALVANIZE)
-      .moveset([Moves.TACKLE, Moves.REVELATION_DANCE, Moves.FURY_SWIPES])
+      .moveset([ Moves.TACKLE, Moves.REVELATION_DANCE, Moves.FURY_SWIPES ])
       .enemySpecies(Species.DUSCLOPS)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(SPLASH_ONLY)
@@ -87,7 +87,7 @@ describe("Abilities - Galvanize", () => {
   it("should not change the type of variable-type moves", async () => {
     game.override.enemySpecies(Species.MIGHTYENA);
 
-    await game.startBattle([Species.ESPEON]);
+    await game.startBattle([ Species.ESPEON ]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getMoveType");
@@ -113,7 +113,7 @@ describe("Abilities - Galvanize", () => {
     vi.spyOn(enemyPokemon, "apply");
 
     game.move.select(Moves.FURY_SWIPES);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
     await game.move.forceHit();
 
     await game.phaseInterceptor.to("MoveEffectPhase");

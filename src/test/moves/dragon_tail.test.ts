@@ -30,7 +30,7 @@ describe("Moves - Dragon Tail", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single")
-      .moveset([Moves.DRAGON_TAIL, Moves.SPLASH])
+      .moveset([ Moves.DRAGON_TAIL, Moves.SPLASH ])
       .enemySpecies(Species.WAILORD)
       .enemyMoveset(SPLASH_ONLY)
       .startingLevel(5)
@@ -42,7 +42,7 @@ describe("Moves - Dragon Tail", () => {
   test(
     "Single battle should cause opponent to flee, and not crash",
     async () => {
-      await game.startBattle([Species.DRATINI]);
+      await game.startBattle([ Species.DRATINI ]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -63,7 +63,7 @@ describe("Moves - Dragon Tail", () => {
     "Single battle should cause opponent to flee, display ability, and not crash",
     async () => {
       game.override.enemyAbility(Abilities.ROUGH_SKIN);
-      await game.startBattle([Species.DRATINI]);
+      await game.startBattle([ Species.DRATINI ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -83,9 +83,9 @@ describe("Moves - Dragon Tail", () => {
     "Double battles should proceed without crashing",
     async () => {
       game.override.battleType("double").enemyMoveset(SPLASH_ONLY);
-      game.override.moveset([Moves.DRAGON_TAIL, Moves.SPLASH, Moves.FLAMETHROWER])
+      game.override.moveset([ Moves.DRAGON_TAIL, Moves.SPLASH, Moves.FLAMETHROWER ])
         .enemyAbility(Abilities.ROUGH_SKIN);
-      await game.startBattle([Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD]);
+      await game.startBattle([ Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD ]);
 
       const leadPokemon = game.scene.getParty()[0]!;
 
@@ -117,9 +117,9 @@ describe("Moves - Dragon Tail", () => {
     "Flee move redirection works",
     async () => {
       game.override.battleType("double").enemyMoveset(SPLASH_ONLY);
-      game.override.moveset([Moves.DRAGON_TAIL, Moves.SPLASH, Moves.FLAMETHROWER]);
+      game.override.moveset([ Moves.DRAGON_TAIL, Moves.SPLASH, Moves.FLAMETHROWER ]);
       game.override.enemyAbility(Abilities.ROUGH_SKIN);
-      await game.startBattle([Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD]);
+      await game.startBattle([ Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD ]);
 
       const leadPokemon = game.scene.getParty()[0]!;
       const secPokemon = game.scene.getParty()[1]!;

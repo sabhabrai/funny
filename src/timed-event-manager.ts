@@ -116,7 +116,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
     this.add([
       this.eventTimerText,
       // this.bannerShadow,
-      this.banner]);
+      this.banner ]);
   }
 
   show() {

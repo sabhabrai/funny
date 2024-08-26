@@ -33,7 +33,7 @@ describe("Round Down and Minimun 1 test in Damage Calculation", () => {
     game.override.enemySpecies(Species.GASTLY);
     game.override.enemyMoveset(SPLASH_ONLY);
     game.override.starterSpecies(Species.SHEDINJA);
-    game.override.moveset([Moves.JUMP_KICK]);
+    game.override.moveset([ Moves.JUMP_KICK ]);
     game.override.ability(Abilities.WONDER_GUARD);
 
     await game.startBattle();

@@ -29,7 +29,7 @@ describe("Abilities - COSTAR", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("double");
     game.override.ability(Abilities.COSTAR);
-    game.override.moveset([Moves.SPLASH, Moves.NASTY_PLOT]);
+    game.override.moveset([ Moves.SPLASH, Moves.NASTY_PLOT ]);
     game.override.enemyMoveset(SPLASH_ONLY);
   });
 
@@ -39,9 +39,9 @@ describe("Abilities - COSTAR", () => {
     async () => {
       game.override.enemyAbility(Abilities.BALL_FETCH);
 
-      await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
+      await game.startBattle([ Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO ]);
 
-      let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
+      let [ leftPokemon, rightPokemon ] = game.scene.getPlayerField();
 
       game.move.select(Moves.NASTY_PLOT);
       await game.phaseInterceptor.to(CommandPhase);
@@ -56,7 +56,7 @@ describe("Abilities - COSTAR", () => {
       game.doSwitchPokemon(2);
       await game.phaseInterceptor.to(MessagePhase);
 
-      [leftPokemon, rightPokemon] = game.scene.getPlayerField();
+      [ leftPokemon, rightPokemon ] = game.scene.getPlayerField();
       expect(leftPokemon.summonData.battleStats[BattleStat.SPATK]).toBe(+2);
       expect(rightPokemon.summonData.battleStats[BattleStat.SPATK]).toBe(+2);
     },
@@ -68,9 +68,9 @@ describe("Abilities - COSTAR", () => {
     async () => {
       game.override.enemyAbility(Abilities.INTIMIDATE);
 
-      await game.startBattle([Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO]);
+      await game.startBattle([ Species.MAGIKARP, Species.MAGIKARP, Species.FLAMIGO ]);
 
-      let [leftPokemon, rightPokemon] = game.scene.getPlayerField();
+      let [ leftPokemon, rightPokemon ] = game.scene.getPlayerField();
 
       expect(leftPokemon.summonData.battleStats[BattleStat.ATK]).toBe(-2);
       expect(leftPokemon.summonData.battleStats[BattleStat.ATK]).toBe(-2);
@@ -80,7 +80,7 @@ describe("Abilities - COSTAR", () => {
       game.doSwitchPokemon(2);
       await game.phaseInterceptor.to(MessagePhase);
 
-      [leftPokemon, rightPokemon] = game.scene.getPlayerField();
+      [ leftPokemon, rightPokemon ] = game.scene.getPlayerField();
       expect(leftPokemon.summonData.battleStats[BattleStat.ATK]).toBe(-2);
       expect(rightPokemon.summonData.battleStats[BattleStat.ATK]).toBe(-2);
     },

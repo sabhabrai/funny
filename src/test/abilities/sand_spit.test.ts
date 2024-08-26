@@ -31,7 +31,7 @@ describe("Abilities - Sand Spit", () => {
 
     game.override.starterSpecies(Species.SILICOBRA);
     game.override.ability(Abilities.SAND_SPIT);
-    game.override.moveset([Moves.SPLASH, Moves.COIL]);
+    game.override.moveset([ Moves.SPLASH, Moves.COIL ]);
   });
 
   it("should trigger when hit with damaging move", async () => {

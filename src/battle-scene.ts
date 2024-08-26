@@ -1632,14 +1632,14 @@ export default class BattleScene extends SceneBase {
     if (fromArenaPool) {
       return this.arena.randomSpecies(waveIndex, level, undefined, getPartyLuckValue(this.party));
     }
-    const filteredSpecies = speciesFilter ? [...new Set(allSpecies.filter(s => s.isCatchable()).filter(speciesFilter).map(s => {
+    const filteredSpecies = speciesFilter ? [ ...new Set(allSpecies.filter(s => s.isCatchable()).filter(speciesFilter).map(s => {
       if (!filterAllEvolutions) {
         while (pokemonPrevolutions.hasOwnProperty(s.speciesId)) {
           s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
         }
       }
       return s;
-    }))] : allSpecies.filter(s => s.isCatchable());
+    })) ] : allSpecies.filter(s => s.isCatchable());
     return filteredSpecies[Utils.randSeedInt(filteredSpecies.length)];
   }
 
@@ -2034,7 +2034,7 @@ export default class BattleScene extends SceneBase {
    *
    */
   pushConditionalPhase(phase: Phase, condition: () => boolean): void {
-    this.conditionalQueue.push([condition, phase]);
+    this.conditionalQueue.push([ condition, phase ]);
   }
 
   /**
@@ -2302,7 +2302,7 @@ export default class BattleScene extends SceneBase {
             }
           }
 
-          return Promise.allSettled([this.party.map(p => p.updateInfo(instant)), ...modifierPromises]).then(() => resolve(success));
+          return Promise.allSettled([ this.party.map(p => p.updateInfo(instant)), ...modifierPromises ]).then(() => resolve(success));
         } else {
           const args = [ this ];
           if (modifier.shouldApply(args)) {
@@ -2580,7 +2580,7 @@ export default class BattleScene extends SceneBase {
           return mods;
         }
         const rand = Math.floor(Utils.randSeedInt(mods.length));
-        return [mods[rand], ...shuffleModifiers(mods.filter((_, i) => i !== rand))];
+        return [ mods[rand], ...shuffleModifiers(mods.filter((_, i) => i !== rand)) ];
       };
       modifiers = shuffleModifiers(modifiers);
     }, scene.currentBattle.turn << 4, scene.waveSeed);

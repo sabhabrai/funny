@@ -27,14 +27,14 @@ describe("Abilities - Sweet Veil", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("double");
-    game.override.moveset([Moves.SPLASH, Moves.REST, Moves.YAWN]);
+    game.override.moveset([ Moves.SPLASH, Moves.REST, Moves.YAWN ]);
     game.override.enemySpecies(Species.MAGIKARP);
     game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([Moves.POWDER, Moves.POWDER, Moves.POWDER, Moves.POWDER]);
+    game.override.enemyMoveset([ Moves.POWDER, Moves.POWDER, Moves.POWDER, Moves.POWDER ]);
   });
 
   it("prevents the user and its allies from falling asleep", async () => {
-    await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
+    await game.startBattle([ Species.SWIRLIX, Species.MAGIKARP ]);
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.SPLASH, 1);
@@ -46,7 +46,7 @@ describe("Abilities - Sweet Veil", () => {
 
   it("causes Rest to fail when used by the user or its allies", async () => {
     game.override.enemyMoveset(SPLASH_ONLY);
-    await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
+    await game.startBattle([ Species.SWIRLIX, Species.MAGIKARP ]);
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.REST, 1);
@@ -57,8 +57,8 @@ describe("Abilities - Sweet Veil", () => {
   });
 
   it("causes Yawn to fail if used on the user or its allies", async () => {
-    game.override.enemyMoveset([Moves.YAWN, Moves.YAWN, Moves.YAWN, Moves.YAWN]);
-    await game.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
+    game.override.enemyMoveset([ Moves.YAWN, Moves.YAWN, Moves.YAWN, Moves.YAWN ]);
+    await game.startBattle([ Species.SWIRLIX, Species.MAGIKARP ]);
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.SPLASH, 1);
@@ -74,7 +74,7 @@ describe("Abilities - Sweet Veil", () => {
     game.override.startingLevel(5);
     game.override.enemyMoveset(SPLASH_ONLY);
 
-    await game.startBattle([Species.SHUCKLE, Species.SHUCKLE, Species.SWIRLIX]);
+    await game.startBattle([ Species.SHUCKLE, Species.SHUCKLE, Species.SWIRLIX ]);
 
     game.move.select(Moves.SPLASH);
     game.move.select(Moves.YAWN, 1, BattlerIndex.PLAYER);

@@ -95,7 +95,7 @@ export class MoveEffectPhase extends PokemonPhase {
          * Stores results of hit checks of the invoked move against all targets, organized by battler index.
          * @see {@linkcode hitCheck}
          */
-      const targetHitChecks = Object.fromEntries(targets.map(p => [p.getBattlerIndex(), this.hitCheck(p)]));
+      const targetHitChecks = Object.fromEntries(targets.map(p => [ p.getBattlerIndex(), this.hitCheck(p) ]));
       const hasActiveTargets = targets.some(t => t.isActive(true));
       /**
          * If no targets are left for the move to hit (FAIL), or the invoked move is single-target
@@ -344,7 +344,7 @@ export class MoveEffectPhase extends PokemonPhase {
      */
   hitCheck(target: Pokemon): boolean {
     // Moves targeting the user and entry hazards can't miss
-    if ([MoveTarget.USER, MoveTarget.ENEMY_SIDE].includes(this.move.getMove().moveTarget)) {
+    if ([ MoveTarget.USER, MoveTarget.ENEMY_SIDE ].includes(this.move.getMove().moveTarget)) {
       return true;
     }
 

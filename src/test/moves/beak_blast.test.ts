@@ -31,7 +31,7 @@ describe("Moves - Beak Blast", () => {
     game.override
       .battleType("single")
       .ability(Abilities.UNNERVE)
-      .moveset([Moves.BEAK_BLAST])
+      .moveset([ Moves.BEAK_BLAST ])
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.INSOMNIA)
       .enemyMoveset(Array(4).fill(Moves.TACKLE))
@@ -42,7 +42,7 @@ describe("Moves - Beak Blast", () => {
   it(
     "should add a charge effect that burns attackers on contact",
     async () => {
-      await game.startBattle([Species.BLASTOISE]);
+      await game.startBattle([ Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -62,7 +62,7 @@ describe("Moves - Beak Blast", () => {
     async () => {
       game.override.statusEffect(StatusEffect.SLEEP);
 
-      await game.startBattle([Species.BLASTOISE]);
+      await game.startBattle([ Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -82,7 +82,7 @@ describe("Moves - Beak Blast", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.WATER_GUN));
 
-      await game.startBattle([Species.BLASTOISE]);
+      await game.startBattle([ Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -102,7 +102,7 @@ describe("Moves - Beak Blast", () => {
     async () => {
       game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
 
-      await game.startBattle([Species.BLASTOISE]);
+      await game.startBattle([ Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
 
@@ -118,7 +118,7 @@ describe("Moves - Beak Blast", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.PROTECT));
 
-      await game.startBattle([Species.BLASTOISE]);
+      await game.startBattle([ Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;

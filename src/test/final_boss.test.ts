@@ -28,7 +28,7 @@ describe("Final Boss", () => {
   });
 
   it("should spawn Eternatus on wave 200 in END biome", async () => {
-    await game.runToFinalBossEncounter(game, [Species.BIDOOF], GameModes.CLASSIC);
+    await game.runToFinalBossEncounter(game, [ Species.BIDOOF ], GameModes.CLASSIC);
 
     expect(game.scene.currentBattle.waveIndex).toBe(FinalWave.Classic);
     expect(game.scene.arena.biomeType).toBe(Biome.END);
@@ -37,7 +37,7 @@ describe("Final Boss", () => {
 
   it("should NOT spawn Eternatus before wave 200 in END biome", async () => {
     game.override.startingWave(FinalWave.Classic - 1);
-    await game.runToFinalBossEncounter(game, [Species.BIDOOF], GameModes.CLASSIC);
+    await game.runToFinalBossEncounter(game, [ Species.BIDOOF ], GameModes.CLASSIC);
 
     expect(game.scene.currentBattle.waveIndex).not.toBe(FinalWave.Classic);
     expect(game.scene.arena.biomeType).toBe(Biome.END);
@@ -46,7 +46,7 @@ describe("Final Boss", () => {
 
   it("should NOT spawn Eternatus outside of END biome", async () => {
     game.override.startingBiome(Biome.FOREST);
-    await game.runToFinalBossEncounter(game, [Species.BIDOOF], GameModes.CLASSIC);
+    await game.runToFinalBossEncounter(game, [ Species.BIDOOF ], GameModes.CLASSIC);
 
     expect(game.scene.currentBattle.waveIndex).toBe(FinalWave.Classic);
     expect(game.scene.arena.biomeType).not.toBe(Biome.END);
@@ -54,7 +54,7 @@ describe("Final Boss", () => {
   });
 
   it("should not have passive enabled on Eternatus", async () => {
-    await game.runToFinalBossEncounter(game, [Species.BIDOOF], GameModes.CLASSIC);
+    await game.runToFinalBossEncounter(game, [ Species.BIDOOF ], GameModes.CLASSIC);
 
     const eternatus = game.scene.getEnemyPokemon();
     expect(eternatus?.species.speciesId).toBe(Species.ETERNATUS);

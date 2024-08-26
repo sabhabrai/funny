@@ -30,7 +30,7 @@ describe("Moves - Crafty Shield", () => {
 
     game.override.battleType("double");
 
-    game.override.moveset([Moves.CRAFTY_SHIELD, Moves.SPLASH, Moves.SWORDS_DANCE]);
+    game.override.moveset([ Moves.CRAFTY_SHIELD, Moves.SPLASH, Moves.SWORDS_DANCE ]);
 
     game.override.enemySpecies(Species.SNORLAX);
     game.override.enemyMoveset(Array(4).fill(Moves.GROWL));
@@ -43,7 +43,7 @@ describe("Moves - Crafty Shield", () => {
   test(
     "should protect the user and allies from status moves",
     async () => {
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -64,7 +64,7 @@ describe("Moves - Crafty Shield", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.TACKLE));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -86,7 +86,7 @@ describe("Moves - Crafty Shield", () => {
       game.override.enemySpecies(Species.DUSCLOPS);
       game.override.enemyMoveset(Array(4).fill(Moves.CURSE));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -105,7 +105,7 @@ describe("Moves - Crafty Shield", () => {
   test(
     "should not block allies' self-targeted moves",
     async () => {
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 

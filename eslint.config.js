@@ -39,7 +39,10 @@ export default [
             }],
             "space-before-blocks": ["error", "always"], // Enforces a space before blocks
             "keyword-spacing": ["error", { "before": true, "after": true }], // Enforces spacing before and after keywords
-            "comma-spacing": ["error", { "before": false, "after": true }] // Enforces spacing after comma
+            "comma-spacing": ["error", { "before": false, "after": true }], // Enforces spacing after comma
+            "array-bracket-spacing": [ "error", "always", { "objectsInArrays": false, "arraysInArrays": false }], // Enforces consistent spacing inside array brackets
+            "object-curly-spacing": [ "error", "always", { "arraysInObjects": false, "objectsInObjects": false }], // Enforces consistent spacing inside braces of object literals, destructuring assignments, and import/export specifiers
+            "computed-property-spacing": [ "error", "never" ] // Enforces consistent spacing inside computed property brackets
         }
     }
 ]
