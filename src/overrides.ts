@@ -13,6 +13,7 @@ import { Gender } from "./data/gender";
 import { allSpecies } from "./data/pokemon-species"; // eslint-disable-line @typescript-eslint/no-unused-vars
 import { Variant } from "./data/variant";
 import { type ModifierOverride } from "./modifier/modifier-type";
+import { Unlockables } from "./system/unlockables";
 
 /**
  * Overrides that are using when testing different in game situations
@@ -69,6 +70,8 @@ class DefaultOverrides {
       [PokeballType.MASTER_BALL]: 0,
     },
   };
+  /** Forces an item to be UNLOCKED */
+  readonly UNLOCK_OVERRIDE: Unlockables[] = [];
 
   // ----------------
   // PLAYER OVERRIDES
