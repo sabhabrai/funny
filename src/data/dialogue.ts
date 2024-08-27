@@ -997,6 +997,17 @@ export const trainerTypeDialogue: TrainerTypeDialogue = {
       "dialogue:janine.defeat.3",
     ]
   },
+  [TrainerType.KOGA]: {
+    encounter: [
+      "dialogue:koga.encounter.1"
+    ],
+    victory: [
+      "dialogue:koga.victory.1"
+    ],
+    defeat: [
+      "dialogue:koga.defeat.1"
+    ]
+  },
   [TrainerType.SABRINA]: {
     encounter: [
       "dialogue:sabrina.encounter.1",
@@ -1726,15 +1737,15 @@ export const trainerTypeDialogue: TrainerTypeDialogue = {
       "dialogue:bugsy.defeat.1"
     ]
   },
-  [TrainerType.KOGA]: {
+  [TrainerType.KOGA_ELITE]: {
     encounter: [
-      "dialogue:koga.encounter.1"
+      "dialogue:koga_elite.encounter.1"
     ],
     victory: [
-      "dialogue:koga.victory.1"
+      "dialogue:koga_elite.victory.1"
     ],
     defeat: [
-      "dialogue:koga.defeat.1"
+      "dialogue:koga_elite.defeat.1"
     ]
   },
   [TrainerType.BERTHA]: {
