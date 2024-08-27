@@ -1,10 +1,10 @@
-import { BattleStat } from "#app/data/battle-stat";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import GameManager from "#test/utils/gameManager";
 import { Abilities } from "#enums/abilities";
+import { Stat } from "#enums/stat";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import GameManager from "#test/utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -60,7 +60,7 @@ describe("Abilities - Mycelium Might", () => {
     // The player Pokemon (with Mycelium Might) goes last despite having higher speed than the opponent.
     expect((game.scene.getCurrentPhase() as MovePhase).pokemon.getBattlerIndex()).toBe(leadIndex);
     await game.phaseInterceptor.to(TurnEndPhase);
-    expect(enemyPokemon?.summonData.battleStats[BattleStat.ATK]).toBe(-1);
+    expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
   }, 20000);
 
   it("will still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
@@ -82,7 +82,7 @@ describe("Abilities - Mycelium Might", () => {
     // The enemy Pokemon goes second because its move is in a lower priority bracket.
     expect((game.scene.getCurrentPhase() as MovePhase).pokemon.getBattlerIndex()).toBe(enemyIndex);
     await game.phaseInterceptor.to(TurnEndPhase);
-    expect(enemyPokemon?.summonData.battleStats[BattleStat.ATK]).toBe(-1);
+    expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
   }, 20000);
 
   it("will not affect non-status moves", async () => {

@@ -88,7 +88,7 @@
   "RibbonAchv": {
     "description": "Accumuler un total de {{ribbonAmount}} Rubans."
   },
-  "TRANSFER_MAX_BATTLE_STAT": {
+  "TRANSFER_MAX_STAT_STAGE": {
     "name": "Travail d’équipe",
     "description": "Utiliser Relais avec au moins une statistique montée à fond."
   },

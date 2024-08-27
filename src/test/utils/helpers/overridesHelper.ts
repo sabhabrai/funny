@@ -281,6 +281,17 @@ export class OverridesHelper extends GameManagerHelper {
     return this;
   }
 
+  /**
+   * Override the items rolled at the end of a battle
+   * @param items the items to be rolled
+   * @returns this
+   */
+  itemRewards(items: ModifierOverride[]) {
+    vi.spyOn(Overrides, "ITEM_REWARD_OVERRIDE", "get").mockReturnValue(items);
+    this.log("Item rewards set to:", items);
+    return this;
+  }
+
   private log(...params: any[]) {
     console.log("Overrides:", ...params);
   }

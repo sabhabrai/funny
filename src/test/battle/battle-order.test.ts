@@ -1,4 +1,4 @@
-import { Stat } from "#app/data/pokemon-stat";
+import { Stat } from "#enums/stat";
 import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";

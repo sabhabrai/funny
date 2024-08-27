@@ -1,4 +1,4 @@
-import { BattleStat } from "#app/data/battle-stat";
+import { Stat } from "#enums/stat";
 import { TrappedTag } from "#app/data/battler-tags";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
@@ -40,40 +40,40 @@ describe("Moves - Octolock", () => {
       game.override.ability(Abilities.BALL_FETCH);
     });
 
-    it("Reduces DEf and SPDEF by 1 each turn", { timeout: 10000 }, async () => {
+    it("lowers DEF and SPDEF stat stages of the target Pokemon by 1 each turn", { timeout: 10000 }, async () => {
       await game.startBattle([Species.GRAPPLOCT]);
 
-      const enemyPokemon = game.scene.getEnemyField();
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       // use Octolock and advance to init phase of next turn to check for stat changes
       game.move.select(Moves.OCTOLOCK);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(enemyPokemon[0].summonData.battleStats[BattleStat.DEF]).toBe(-1);
-      expect(enemyPokemon[0].summonData.battleStats[BattleStat.SPDEF]).toBe(-1);
+      expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(-1);
+      expect(enemyPokemon.getStatStage(Stat.SPDEF)).toBe(-1);
 
       // take a second turn to make sure stat changes occur again
       await game.phaseInterceptor.to(CommandPhase);
       game.move.select(Moves.SPLASH);
 
       await game.phaseInterceptor.to(TurnInitPhase);
-      expect(enemyPokemon[0].summonData.battleStats[BattleStat.DEF]).toBe(-2);
-      expect(enemyPokemon[0].summonData.battleStats[BattleStat.SPDEF]).toBe(-2);
+      expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(-2);
+      expect(enemyPokemon.getStatStage(Stat.SPDEF)).toBe(-2);
     });
 
-    it("Traps the target pokemon", { timeout: 10000 }, async () => {
+    it("traps the target Pokemon", { timeout: 10000 }, async () => {
       await game.startBattle([Species.GRAPPLOCT]);
 
-      const enemyPokemon = game.scene.getEnemyField();
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       // before Octolock - enemy should not be trapped
-      expect(enemyPokemon[0].findTag(t => t instanceof TrappedTag)).toBeUndefined();
+      expect(enemyPokemon.findTag(t => t instanceof TrappedTag)).toBeUndefined();
 
       game.move.select(Moves.OCTOLOCK);
 
       // after Octolock - enemy should be trapped
       await game.phaseInterceptor.to(MoveEndPhase);
-      expect(enemyPokemon[0].findTag(t => t instanceof TrappedTag)).toBeDefined();
+      expect(enemyPokemon.findTag(t => t instanceof TrappedTag)).toBeDefined();
     });
   });
 });
