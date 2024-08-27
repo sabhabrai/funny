@@ -2323,11 +2323,12 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     super(true);
   }
 
-  applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): boolean {
+  async applyPostSummon(pokemon: Pokemon, passive: boolean, simulated: boolean, args: any[]): Promise<boolean> {
     const targets = pokemon.getOpponents();
     if (simulated || !targets.length) {
       return simulated;
     }
+    const promises: Promise<void>[] = [];
 
     let target: Pokemon;
     if (targets.length > 1) {
@@ -2336,7 +2337,7 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
       target = targets[0];
     }
 
-    target = target!; // compiler doesn't know its guranteed to be defined
+    target = target!;
     pokemon.summonData.speciesForm = target.getSpeciesForm();
     pokemon.summonData.fusionSpeciesForm = target.getFusionSpeciesForm();
     pokemon.summonData.ability = target.getAbility().id;
@@ -2344,14 +2345,20 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     pokemon.summonData.fusionGender = target.getFusionGender();
     pokemon.summonData.stats = [ pokemon.stats[Stat.HP] ].concat(target.stats.slice(1));
     pokemon.summonData.battleStats = target.summonData.battleStats.slice(0);
-    pokemon.summonData.moveset = target.getMoveset().map(m => new PokemonMove(m!.moveId, m!.ppUsed, m!.ppUp)); // TODO: are those bangs correct?
+    pokemon.summonData.moveset = target.getMoveset().map(m => {
+      const pp = m?.getMove().pp!;
+      // if PP value is less than 5, do nothing. If greater, we need to reduce the value to 5 using a negative ppUp value.
+      const ppUp = pp <= 5 ? 0 : (5 - pp) / Math.max(Math.floor(pp / 5), 1);
+      return new PokemonMove(m?.moveId!, 0, ppUp);
+    });
     pokemon.summonData.types = target.getTypes();
+    promises.push(pokemon.updateInfo());
 
+    pokemon.scene.queueMessage(i18next.t("abilityTriggers:postSummonTransform", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon), targetName: target!.name, }));
     pokemon.scene.playSound("battle_anims/PRSFX- Transform");
+    promises.push(pokemon.loadAssets(false).then(() => pokemon.playAnim()));
 
-    pokemon.loadAssets(false).then(() => pokemon.playAnim());
-
-    pokemon.scene.queueMessage(i18next.t("abilityTriggers:postSummonTransform", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon), targetName: target.name, }));
+    await Promise.all(promises);
 
     return true;
   }
