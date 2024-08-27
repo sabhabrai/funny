@@ -60,7 +60,7 @@ export class TitlePhase extends Phase {
     const options: OptionSelectItem[] = [];
     if (loggedInUser && loggedInUser.lastSessionSlot > -1) {
       options.push({
-        label: i18next.t("continue", {ns: "menu"}),
+        label: i18next.t("continue", { ns: "menu" }),
         handler: () => {
           this.loadSaveSlot(this.lastSessionData || !loggedInUser ? -1 : loggedInUser.lastSessionSlot);
           return true;

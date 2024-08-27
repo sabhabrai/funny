@@ -30,7 +30,7 @@ describe("Moves - Mat Block", () => {
 
     game.override.battleType("double");
 
-    game.override.moveset([Moves.MAT_BLOCK, Moves.SPLASH]);
+    game.override.moveset([ Moves.MAT_BLOCK, Moves.SPLASH ]);
 
     game.override.enemySpecies(Species.SNORLAX);
     game.override.enemyMoveset(Array(4).fill(Moves.TACKLE));
@@ -43,7 +43,7 @@ describe("Moves - Mat Block", () => {
   test(
     "should protect the user and allies from attack moves",
     async () => {
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -64,7 +64,7 @@ describe("Moves - Mat Block", () => {
     async () => {
       game.override.enemyMoveset(Array(4).fill(Moves.GROWL));
 
-      await game.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+      await game.startBattle([ Species.CHARIZARD, Species.BLASTOISE ]);
 
       const leadPokemon = game.scene.getPlayerField();
 
@@ -83,7 +83,7 @@ describe("Moves - Mat Block", () => {
   test(
     "should fail when used after the first turn",
     async () => {
-      await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+      await game.startBattle([ Species.BLASTOISE, Species.CHARIZARD ]);
 
       const leadPokemon = game.scene.getPlayerField();
 

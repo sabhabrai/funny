@@ -28,7 +28,7 @@ describe("Arena - Gravity", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .moveset([Moves.TACKLE, Moves.GRAVITY, Moves.FISSURE])
+      .moveset([ Moves.TACKLE, Moves.GRAVITY, Moves.FISSURE ])
       .ability(Abilities.UNNERVE)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemySpecies(Species.SHUCKLE)
@@ -43,7 +43,7 @@ describe("Arena - Gravity", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     // Setup Gravity on first turn
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([ Species.PIKACHU ]);
     game.move.select(Moves.GRAVITY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -67,7 +67,7 @@ describe("Arena - Gravity", () => {
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     // Setup Gravity on first turn
-    await game.startBattle([Species.PIKACHU]);
+    await game.startBattle([ Species.PIKACHU ]);
     game.move.select(Moves.GRAVITY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -87,9 +87,9 @@ describe("Arena - Gravity", () => {
         .startingLevel(5)
         .enemyLevel(5)
         .enemySpecies(Species.PIDGEOT)
-        .moveset([Moves.GRAVITY, Moves.EARTHQUAKE]);
+        .moveset([ Moves.GRAVITY, Moves.EARTHQUAKE ]);
 
-      await game.startBattle([Species.PIKACHU]);
+      await game.startBattle([ Species.PIKACHU ]);
 
       const pidgeot = game.scene.getEnemyPokemon()!;
       vi.spyOn(pidgeot, "getAttackTypeEffectiveness");
@@ -120,9 +120,9 @@ describe("Arena - Gravity", () => {
         .startingLevel(5)
         .enemyLevel(5)
         .enemySpecies(Species.PIDGEOT)
-        .moveset([Moves.GRAVITY, Moves.THUNDERBOLT]);
+        .moveset([ Moves.GRAVITY, Moves.THUNDERBOLT ]);
 
-      await game.startBattle([Species.PIKACHU]);
+      await game.startBattle([ Species.PIKACHU ]);
 
       const pidgeot = game.scene.getEnemyPokemon()!;
       vi.spyOn(pidgeot, "getAttackTypeEffectiveness");

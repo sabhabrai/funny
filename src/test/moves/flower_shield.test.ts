@@ -30,14 +30,14 @@ describe("Moves - Flower Shield", () => {
     game.override.ability(Abilities.NONE);
     game.override.enemyAbility(Abilities.NONE);
     game.override.battleType("single");
-    game.override.moveset([Moves.FLOWER_SHIELD, Moves.SPLASH]);
+    game.override.moveset([ Moves.FLOWER_SHIELD, Moves.SPLASH ]);
     game.override.enemyMoveset(SPLASH_ONLY);
   });
 
   it("increases defense of all Grass-type Pokemon on the field by one stage - single battle", async () => {
     game.override.enemySpecies(Species.CHERRIM);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([ Species.MAGIKARP ]);
     const cherrim = game.scene.getEnemyPokemon()!;
     const magikarp = game.scene.getPlayerPokemon()!;
 
@@ -54,7 +54,7 @@ describe("Moves - Flower Shield", () => {
   it("increases defense of all Grass-type Pokemon on the field by one stage - double battle", async () => {
     game.override.enemySpecies(Species.MAGIKARP).startingBiome(Biome.GRASS).battleType("double");
 
-    await game.startBattle([Species.CHERRIM, Species.MAGIKARP]);
+    await game.startBattle([ Species.CHERRIM, Species.MAGIKARP ]);
     const field = game.scene.getField(true);
 
     const grassPokemons = field.filter(p => p.getTypes().includes(Type.GRASS));
@@ -76,10 +76,10 @@ describe("Moves - Flower Shield", () => {
   */
   it("does not increase defense of a pokemon in semi-vulnerable state", async () => {
     game.override.enemySpecies(Species.PARAS);
-    game.override.enemyMoveset([Moves.DIG, Moves.DIG, Moves.DIG, Moves.DIG]);
+    game.override.enemyMoveset([ Moves.DIG, Moves.DIG, Moves.DIG, Moves.DIG ]);
     game.override.enemyLevel(50);
 
-    await game.startBattle([Species.CHERRIM]);
+    await game.startBattle([ Species.CHERRIM ]);
     const paras = game.scene.getEnemyPokemon()!;
     const cherrim = game.scene.getPlayerPokemon()!;
 
@@ -98,7 +98,7 @@ describe("Moves - Flower Shield", () => {
   it("does nothing if there are no Grass-type pokemon on the field", async () => {
     game.override.enemySpecies(Species.MAGIKARP);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([ Species.MAGIKARP ]);
     const enemy = game.scene.getEnemyPokemon()!;
     const ally = game.scene.getPlayerPokemon()!;
 

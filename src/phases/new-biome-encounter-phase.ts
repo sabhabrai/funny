@@ -25,7 +25,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
 
     const enemyField = this.scene.getEnemyField();
     this.scene.tweens.add({
-      targets: [this.scene.arenaEnemy, enemyField].flat(),
+      targets: [ this.scene.arenaEnemy, enemyField ].flat(),
       x: "+=300",
       duration: 2000,
       onComplete: () => {

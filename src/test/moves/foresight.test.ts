@@ -28,7 +28,7 @@ describe("Moves - Foresight", () => {
       .enemyMoveset(SPLASH_ONLY)
       .enemyLevel(5)
       .starterSpecies(Species.MAGIKARP)
-      .moveset([Moves.FORESIGHT, Moves.QUICK_ATTACK, Moves.MACH_PUNCH]);
+      .moveset([ Moves.FORESIGHT, Moves.QUICK_ATTACK, Moves.MACH_PUNCH ]);
   });
 
   it("should allow Normal and Fighting moves to hit Ghost types", async () => {

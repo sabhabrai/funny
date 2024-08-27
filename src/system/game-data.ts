@@ -28,8 +28,8 @@ import { speciesEggMoves } from "../data/egg-moves";
 import { allMoves } from "../data/move";
 import { TrainerVariant } from "../field/trainer";
 import { Variant, variantData } from "#app/data/variant";
-import {setSettingGamepad, SettingGamepad, settingGamepadDefaults} from "./settings/settings-gamepad";
-import {setSettingKeyboard, SettingKeyboard} from "#app/system/settings/settings-keyboard";
+import { setSettingGamepad, SettingGamepad, settingGamepadDefaults } from "./settings/settings-gamepad";
+import { setSettingKeyboard, SettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena.js";
 import { EnemyAttackStatusEffectChanceModifier } from "../modifier/modifier";
 import { StatusEffect } from "#app/data/status-effect.js";
@@ -339,8 +339,8 @@ export class GameData {
       [VoucherType.GOLDEN]: 0
     };
     this.eggs = [];
-    this.eggPity = [0, 0, 0, 0];
-    this.unlockPity = [0, 0, 0, 0];
+    this.eggPity = [ 0, 0, 0, 0 ];
+    this.unlockPity = [ 0, 0, 0, 0 ];
     this.initDexData();
     this.initStarterData();
   }
@@ -549,8 +549,8 @@ export class GameData {
           ? systemData.eggs.map(e => e.toEgg())
           : [];
 
-        this.eggPity = systemData.eggPity ? systemData.eggPity.slice(0) : [0, 0, 0, 0];
-        this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [0, 0, 0, 0];
+        this.eggPity = systemData.eggPity ? systemData.eggPity.slice(0) : [ 0, 0, 0, 0 ];
+        this.unlockPity = systemData.unlockPity ? systemData.unlockPity.slice(0) : [ 0, 0, 0, 0 ];
 
         this.dexData = Object.assign(this.dexData, systemData.dexData);
         this.consolidateDexData(this.dexData);
@@ -1186,12 +1186,12 @@ export class GameData {
     return new Promise<[boolean, boolean]>(resolve => {
       if (bypassLogin) {
         localStorage.removeItem(`sessionData${slotId ? slotId : ""}_${loggedInUser?.username}`);
-        return resolve([true, true]);
+        return resolve([ true, true ]);
       }
 
       updateUserInfo().then(success => {
         if (success !== null && !success) {
-          return resolve([false, false]);
+          return resolve([ false, false ]);
         }
         const sessionData = this.getSessionSaveData(scene);
         Utils.apiPost(`savedata/session/clear?slot=${slotId}&trainerId=${this.trainerId}&secretId=${this.secretId}&clientSessionId=${clientSessionId}`, JSON.stringify(sessionData), undefined, true).then(response => {
@@ -1202,14 +1202,14 @@ export class GameData {
           return response.json();
         }).then(jsonResponse => {
           if (!jsonResponse.error) {
-            return resolve([true, jsonResponse.success as boolean]);
+            return resolve([ true, jsonResponse.success as boolean ]);
           }
           if (jsonResponse && jsonResponse.error.startsWith("session out of date")) {
             this.scene.clearPhaseQueue();
             this.scene.unshiftPhase(new ReloadSessionPhase(this.scene));
           }
           console.error(jsonResponse);
-          resolve([false, false]);
+          resolve([ false, false ]);
         });
       });
     });
@@ -1343,7 +1343,7 @@ export class GameData {
           break;
         }
         const encryptedData = AES.encrypt(dataStr, saveKey);
-        const blob = new Blob([ encryptedData.toString() ], {type: "text/json"});
+        const blob = new Blob([ encryptedData.toString() ], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         link.download = `${dataKey}.prsv`;
@@ -1414,7 +1414,7 @@ export class GameData {
                 dataName = i18next.t("menuUiHandler:RUN_HISTORY").toLowerCase();
                 keys.forEach((key) => {
                   const entryKeys = Object.keys(data[key]);
-                  valid = ["isFavorite", "isVictory", "entry"].every(v => entryKeys.includes(v)) && entryKeys.length === 3;
+                  valid = [ "isFavorite", "isVictory", "entry" ].every(v => entryKeys.includes(v)) && entryKeys.length === 3;
                 });
                 if (valid) {
                   localStorage.setItem(`runHistoryData_${loggedInUser?.username}`, dataStr);

@@ -56,7 +56,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       }
 
       // Swaps the fainted Pokemon and the first non-fainted legal Pokemon in the party
-      [party[this.partyMemberIndex], party[legalIndex]] = [party[legalIndex], party[this.partyMemberIndex]];
+      [ party[this.partyMemberIndex], party[legalIndex] ] = [ party[legalIndex], party[this.partyMemberIndex] ];
       console.warn("Swapped %s %O with %s %O", getPokemonNameWithAffix(partyMember), partyMember, getPokemonNameWithAffix(party[0]), party[0]);
     }
 

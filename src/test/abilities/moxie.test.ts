@@ -32,8 +32,8 @@ describe("Abilities - Moxie", () => {
     game.override.enemyAbility(Abilities.MOXIE);
     game.override.ability(Abilities.MOXIE);
     game.override.startingLevel(2000);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
   });
 
   it("MOXIE", async () => {

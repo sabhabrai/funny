@@ -33,7 +33,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {
-    game.override.moveset([Moves.SUNNY_DAY, Moves.SPLASH]);
+    game.override.moveset([ Moves.SUNNY_DAY, Moves.SPLASH ]);
 
     await game.startBattle();
 
@@ -54,7 +54,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("during rain, gain 1/8 of maximum health at the end of each turn", async () => {
-    game.override.moveset([Moves.RAIN_DANCE, Moves.SPLASH]);
+    game.override.moveset([ Moves.RAIN_DANCE, Moves.SPLASH ]);
 
     await game.startBattle();
 
@@ -77,7 +77,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing fire attacks do 25% more damage", async () => {
-    game.override.moveset([Moves.FLAMETHROWER]);
+    game.override.moveset([ Moves.FLAMETHROWER ]);
 
     await game.startBattle();
 
@@ -103,7 +103,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks heal 1/4 of maximum health and deal no damage", async () => {
-    game.override.moveset([Moves.WATER_GUN]);
+    game.override.moveset([ Moves.WATER_GUN ]);
 
     await game.startBattle();
 
@@ -118,7 +118,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("opposing water attacks do not heal if they were protected from", async () => {
-    game.override.moveset([Moves.WATER_GUN]);
+    game.override.moveset([ Moves.WATER_GUN ]);
 
     await game.startBattle();
 
@@ -126,7 +126,7 @@ describe("Abilities - Dry Skin", () => {
     expect(enemy).not.toBe(undefined);
 
     enemy.hp = 1;
-    game.override.enemyMoveset([Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT]);
+    game.override.enemyMoveset([ Moves.PROTECT, Moves.PROTECT, Moves.PROTECT, Moves.PROTECT ]);
 
     game.move.select(Moves.WATER_GUN);
     await game.phaseInterceptor.to(TurnEndPhase);
@@ -134,7 +134,7 @@ describe("Abilities - Dry Skin", () => {
   });
 
   it("multi-strike water attacks only heal once", async () => {
-    game.override.moveset([Moves.WATER_GUN, Moves.WATER_SHURIKEN]);
+    game.override.moveset([ Moves.WATER_GUN, Moves.WATER_SHURIKEN ]);
 
     await game.startBattle();
 

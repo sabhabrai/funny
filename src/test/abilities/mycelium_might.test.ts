@@ -29,9 +29,9 @@ describe("Abilities - Mycelium Might", () => {
     game.override.disableCrits();
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.CLEAR_BODY);
-    game.override.enemyMoveset([Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK]);
+    game.override.enemyMoveset([ Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK ]);
     game.override.ability(Abilities.MYCELIUM_MIGHT);
-    game.override.moveset([Moves.QUICK_ATTACK, Moves.BABY_DOLL_EYES]);
+    game.override.moveset([ Moves.QUICK_ATTACK, Moves.BABY_DOLL_EYES ]);
   });
 
   /**
@@ -42,7 +42,7 @@ describe("Abilities - Mycelium Might", () => {
    **/
 
   it("will move last in its priority bracket and ignore protective abilities", async () => {
-    await game.startBattle([Species.REGIELEKI]);
+    await game.startBattle([ Species.REGIELEKI ]);
 
     const leadIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -64,8 +64,8 @@ describe("Abilities - Mycelium Might", () => {
   }, 20000);
 
   it("will still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
-    await game.startBattle([Species.REGIELEKI]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
+    await game.startBattle([ Species.REGIELEKI ]);
 
     const leadIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -86,7 +86,7 @@ describe("Abilities - Mycelium Might", () => {
   }, 20000);
 
   it("will not affect non-status moves", async () => {
-    await game.startBattle([Species.REGIELEKI]);
+    await game.startBattle([ Species.REGIELEKI ]);
 
     const leadIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();

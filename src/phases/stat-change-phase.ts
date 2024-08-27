@@ -173,7 +173,7 @@ export class StatChangePhase extends PokemonPhase {
   }
 
   aggregateStatChanges(random: boolean = false): void {
-    const isAccEva = [BattleStat.ACC, BattleStat.EVA].some(s => this.stats.includes(s));
+    const isAccEva = [ BattleStat.ACC, BattleStat.EVA ].some(s => this.stats.includes(s));
     let existingPhase: StatChangePhase;
     if (this.stats.length === 1) {
       while ((existingPhase = (this.scene.findPhase(p => p instanceof StatChangePhase && p.battlerIndex === this.battlerIndex && p.stats.length === 1
@@ -193,7 +193,7 @@ export class StatChangePhase extends PokemonPhase {
       }
     }
     while ((existingPhase = (this.scene.findPhase(p => p instanceof StatChangePhase && p.battlerIndex === this.battlerIndex && p.selfTarget === this.selfTarget
-      && ([BattleStat.ACC, BattleStat.EVA].some(s => p.stats.includes(s)) === isAccEva)
+      && ([ BattleStat.ACC, BattleStat.EVA ].some(s => p.stats.includes(s)) === isAccEva)
       && p.levels === this.levels && p.showMessage === this.showMessage && p.ignoreAbilities === this.ignoreAbilities) as StatChangePhase))) {
       this.stats.push(...existingPhase.stats);
       if (!this.scene.tryRemovePhase(p => p === existingPhase)) {

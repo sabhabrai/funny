@@ -14,7 +14,7 @@ import { pokemonEvolutions } from "../data/pokemon-evolutions";
 import { addWindow } from "./ui-theme";
 import { SpeciesFormChangeItemTrigger, FormChangeItem } from "../data/pokemon-forms";
 import { getVariantTint } from "#app/data/variant";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { applyChallenges, ChallengeType } from "#app/data/challenge.js";
 import MoveInfoOverlay from "./move-info-overlay";
 import i18next from "i18next";
@@ -208,7 +208,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   public static NoEffectMessage = i18next.t("partyUiHandler:anyEffect");
 
-  private localizedOptions = [PartyOption.SEND_OUT, PartyOption.SUMMARY, PartyOption.CANCEL, PartyOption.APPLY, PartyOption.RELEASE, PartyOption.TEACH, PartyOption.SPLICE, PartyOption.UNSPLICE, PartyOption.REVIVE, PartyOption.TRANSFER, PartyOption.UNPAUSE_EVOLUTION, PartyOption.PASS_BATON, PartyOption.RENAME];
+  private localizedOptions = [ PartyOption.SEND_OUT, PartyOption.SUMMARY, PartyOption.CANCEL, PartyOption.APPLY, PartyOption.RELEASE, PartyOption.TEACH, PartyOption.SPLICE, PartyOption.UNSPLICE, PartyOption.REVIVE, PartyOption.TRANSFER, PartyOption.UNPAUSE_EVOLUTION, PartyOption.PASS_BATON, PartyOption.RENAME ];
 
   constructor(scene: BattleScene) {
     super(scene, Mode.PARTY);
@@ -1228,7 +1228,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     slotLevelText.setPositionRelative(slotLevelLabel, 9, 0);
     slotLevelText.setOrigin(0, 0.25);
 
-    slotInfoContainer.add([this.slotName, slotLevelLabel, slotLevelText ]);
+    slotInfoContainer.add([ this.slotName, slotLevelLabel, slotLevelText ]);
 
     const genderSymbol = getGenderSymbol(this.pokemon.getGender(true));
 
@@ -1311,7 +1311,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotDescriptionLabel.setOrigin(0, 1);
     this.slotDescriptionLabel.setVisible(false);
 
-    slotInfoContainer.add([this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel]);
+    slotInfoContainer.add([ this.slotHpBar, this.slotHpOverlay, this.slotHpText, this.slotDescriptionLabel ]);
 
     if (partyUiMode !== PartyUiMode.TM_MODIFIER) {
       this.slotDescriptionLabel.setVisible(false);

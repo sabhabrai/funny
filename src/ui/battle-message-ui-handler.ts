@@ -6,7 +6,7 @@ import MessageUiHandler from "./message-ui-handler";
 import { getStatName, Stat } from "../data/pokemon-stat";
 import { addWindow } from "./ui-theme";
 import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
@@ -54,7 +54,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     moveDetailsWindow.setName("move-details-window");
     moveDetailsWindow.setOrigin(0, 1);
 
-    this.movesWindowContainer.add([movesWindow, moveDetailsWindow]);
+    this.movesWindowContainer.add([ movesWindow, moveDetailsWindow ]);
     ui.add(this.movesWindowContainer);
 
     const messageContainer = this.scene.add.container(12, -39);
@@ -116,7 +116,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     this.levelUpStatsIncrContent = levelUpStatsIncrContent;
 
-    const levelUpStatsValuesContent = addBBCodeTextObject(this.scene, (this.scene.game.canvas.width / 6) - 7, -94, "", TextStyle.WINDOW, { maxLines: 6, lineSpacing: 5});
+    const levelUpStatsValuesContent = addBBCodeTextObject(this.scene, (this.scene.game.canvas.width / 6) - 7, -94, "", TextStyle.WINDOW, { maxLines: 6, lineSpacing: 5 });
     levelUpStatsValuesContent.setOrigin(1, 0);
     levelUpStatsValuesContent.setAlign("right");
     levelUpStatsContainer.add(levelUpStatsValuesContent);

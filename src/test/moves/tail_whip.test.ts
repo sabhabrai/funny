@@ -31,8 +31,8 @@ describe("Moves - Tail whip", () => {
     game.override.enemyAbility(Abilities.INSOMNIA);
     game.override.ability(Abilities.INSOMNIA);
     game.override.startingLevel(2000);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
   });
 
   it("TAIL_WHIP", async () => {

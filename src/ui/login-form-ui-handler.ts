@@ -79,7 +79,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   getButtonLabels(config?: ModalConfig): string[] {
-    return [ i18next.t("menu:login"), i18next.t("menu:register")];
+    return [ i18next.t("menu:login"), i18next.t("menu:register") ];
   }
 
   getReadableErrorMessage(error: string): string {
@@ -112,7 +112,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
-        this.scene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        this.scene.ui.setMode(Mode.LOADING, { buttonActions: []});
         const onFail = error => {
           this.scene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           this.scene.ui.playError();

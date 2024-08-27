@@ -34,12 +34,12 @@ describe("Moves - Stockpile", () => {
       game.override.enemyAbility(Abilities.NONE);
 
       game.override.startingLevel(2000);
-      game.override.moveset([Moves.STOCKPILE, Moves.SPLASH]);
+      game.override.moveset([ Moves.STOCKPILE, Moves.SPLASH ]);
       game.override.ability(Abilities.NONE);
     });
 
     it("Gains a stockpile stack and increases DEF and SPDEF by 1 on each use, fails at max stacks (3)", { timeout: 10000 }, async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([ Species.ABOMASNOW ]);
 
       const user = game.scene.getPlayerPokemon()!;
 
@@ -80,7 +80,7 @@ describe("Moves - Stockpile", () => {
     });
 
     it("Gains a stockpile stack even if DEF and SPDEF are at +6", { timeout: 10000 }, async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([ Species.ABOMASNOW ]);
 
       const user = game.scene.getPlayerPokemon()!;
 

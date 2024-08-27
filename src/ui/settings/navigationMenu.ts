@@ -1,9 +1,9 @@
 import BattleScene from "#app/battle-scene";
-import {Mode} from "#app/ui/ui";
-import {InputsIcons} from "#app/ui/settings/abstract-control-settings-ui-handler.js";
-import {addTextObject, setTextStyle, TextStyle} from "#app/ui/text";
-import {addWindow} from "#app/ui/ui-theme";
-import {Button} from "#enums/buttons";
+import { Mode } from "#app/ui/ui";
+import { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler.js";
+import { addTextObject, setTextStyle, TextStyle } from "#app/ui/text";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 
 const LEFT = "LEFT";
@@ -33,7 +33,7 @@ export class NavigationManager {
       Mode.SETTINGS_GAMEPAD,
       Mode.SETTINGS_KEYBOARD,
     ];
-    this.labels = [i18next.t("settings:general"), i18next.t("settings:display"), i18next.t("settings:audio"), i18next.t("settings:gamepad"), i18next.t("settings:keyboard")];
+    this.labels = [ i18next.t("settings:general"), i18next.t("settings:display"), i18next.t("settings:audio"), i18next.t("settings:gamepad"), i18next.t("settings:keyboard") ];
   }
 
   public reset() {
@@ -158,7 +158,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     const navigationManager = NavigationManager.getInstance();
     const posSelected = navigationManager.modes.indexOf(navigationManager.selectedMode);
 
-    for (const [index, title] of this.headerTitles.entries()) {
+    for (const [ index, title ] of this.headerTitles.entries()) {
       setTextStyle(title, this.scene, index === posSelected ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_LABEL);
     }
   }

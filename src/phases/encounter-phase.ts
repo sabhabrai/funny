@@ -190,7 +190,7 @@ export class EncounterPhase extends BattlePhase {
 
     const enemyField = this.scene.getEnemyField();
     this.scene.tweens.add({
-      targets: [this.scene.arenaEnemy, this.scene.currentBattle.trainer, enemyField, this.scene.arenaPlayer, this.scene.trainer].flat(),
+      targets: [ this.scene.arenaEnemy, this.scene.currentBattle.trainer, enemyField, this.scene.arenaPlayer, this.scene.trainer ].flat(),
       x: (_target, _key, value, fieldIndex: integer) => fieldIndex < 2 + (enemyField.length) ? value + 300 : value - 300,
       duration: 2000,
       onComplete: () => {
@@ -205,7 +205,7 @@ export class EncounterPhase extends BattlePhase {
     const enemyField = this.scene.getEnemyField();
 
     if (this.scene.currentBattle.battleSpec === BattleSpec.FINAL_BOSS) {
-      return i18next.t("battle:bossAppeared", { bossName: getPokemonNameWithAffix(enemyField[0])});
+      return i18next.t("battle:bossAppeared", { bossName: getPokemonNameWithAffix(enemyField[0]) });
     }
 
     if (this.scene.currentBattle.battleType === BattleType.TRAINER) {
@@ -362,11 +362,11 @@ export class EncounterPhase extends BattlePhase {
         //The two lines below check if English ordinals (1st, 2nd, 3rd, Xth) are used and determine which one to use.
         //Otherwise, it defaults to an empty string.
         //As of 08-07-24: Spanish and Italian default to the English translations
-        const ordinalUse = ["en", "es", "it"];
+        const ordinalUse = [ "en", "es", "it" ];
         const currentLanguage = i18next.resolvedLanguage ?? "en";
-        const ordinalIndex = (ordinalUse.includes(currentLanguage)) ? ["st", "nd", "rd"][((count + 90) % 100 - 10) % 10 - 1] ?? "th" : "";
+        const ordinalIndex = (ordinalUse.includes(currentLanguage)) ? [ "st", "nd", "rd" ][((count + 90) % 100 - 10) % 10 - 1] ?? "th" : "";
         const cycleCount = count.toLocaleString() + ordinalIndex;
-        const encounterDialogue = i18next.t(`${(this.scene.gameData.gender === PlayerGender.FEMALE) ? "PGF" : "PGM"}battleSpecDialogue:encounter`, {cycleCount: cycleCount});
+        const encounterDialogue = i18next.t(`${(this.scene.gameData.gender === PlayerGender.FEMALE) ? "PGF" : "PGM"}battleSpecDialogue:encounter`, { cycleCount: cycleCount });
         this.scene.ui.showDialogue(encounterDialogue, enemy?.species.name, null, () => {
           this.doEncounterCommon(false);
         });

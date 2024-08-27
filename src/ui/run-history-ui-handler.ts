@@ -7,7 +7,7 @@ import * as Utils from "../utils";
 import PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
-import {Button} from "../enums/buttons";
+import { Button } from "../enums/buttons";
 import { BattleType } from "../battle";
 import { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
@@ -100,7 +100,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     let success = false;
     const error = false;
 
-    if ([Button.ACTION, Button.CANCEL].includes(button)) {
+    if ([ Button.ACTION, Button.CANCEL ].includes(button)) {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {
@@ -178,7 +178,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     const emptyWindow = addWindow(this.scene, 0, 0, 304, 165);
     this.runsContainer.add(emptyWindow);
     const emptyWindowCoordinates = emptyWindow.getCenter();
-    const emptyText = addTextObject(this.scene, 0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, {fontSize: "128px"});
+    const emptyText = addTextObject(this.scene, 0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, { fontSize: "128px" });
     emptyText.setPosition(emptyWindowCoordinates.x-18, emptyWindowCoordinates.y-15);
     this.runsContainer.add(emptyText);
   }

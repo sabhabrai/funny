@@ -236,7 +236,7 @@ export default class GameManager {
     const originalMatchupScore = Trainer.prototype.getPartyMemberMatchupScores;
     Trainer.prototype.getPartyMemberMatchupScores = () => {
       Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
-      return [[1, 100], [1, 100]];
+      return [[ 1, 100 ], [ 1, 100 ]];
     };
   }
 

@@ -28,15 +28,15 @@ import { Mode } from "./ui";
 import { addWindow } from "./ui-theme";
 import { Egg } from "#app/data/egg";
 import Overrides from "#app/overrides";
-import {SettingKeyboard} from "#app/system/settings/settings-keyboard";
-import {Passive as PassiveAttr} from "#enums/passive";
+import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import { Passive as PassiveAttr } from "#enums/passive";
 import * as Challenge from "../data/challenge";
 import MoveInfoOverlay from "./move-info-overlay";
 import { getEggTierForSpecies } from "#app/data/egg.js";
 import { Device } from "#enums/devices";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import { EggSourceType } from "#app/enums/egg-source-types.js";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { DropDown, DropDownLabel, DropDownOption, DropDownState, DropDownType } from "./dropdown";
@@ -119,16 +119,16 @@ const languageSettings: { [key: string]: LanguageSetting } = {
 };
 
 const starterCandyCosts: { passive: integer, costReduction: [integer, integer], egg: integer }[] = [
-  { passive: 40, costReduction: [25, 60], egg: 30 }, // 1 Cost
-  { passive: 40, costReduction: [25, 60], egg: 30 }, // 2 Cost
-  { passive: 35, costReduction: [20, 50], egg: 25 }, // 3 Cost
-  { passive: 30, costReduction: [15, 40], egg: 20 }, // 4 Cost
-  { passive: 25, costReduction: [12, 35], egg: 18 }, // 5 Cost
-  { passive: 20, costReduction: [10, 30], egg: 15 }, // 6 Cost
-  { passive: 15, costReduction: [8, 20], egg: 12 },  // 7 Cost
-  { passive: 10, costReduction: [5, 15], egg: 10 },  // 8 Cost
-  { passive: 10, costReduction: [5, 15], egg: 10 },  // 9 Cost
-  { passive: 10, costReduction: [5, 15], egg: 10 },  // 10 Cost
+  { passive: 40, costReduction: [ 25, 60 ], egg: 30 }, // 1 Cost
+  { passive: 40, costReduction: [ 25, 60 ], egg: 30 }, // 2 Cost
+  { passive: 35, costReduction: [ 20, 50 ], egg: 25 }, // 3 Cost
+  { passive: 30, costReduction: [ 15, 40 ], egg: 20 }, // 4 Cost
+  { passive: 25, costReduction: [ 12, 35 ], egg: 18 }, // 5 Cost
+  { passive: 20, costReduction: [ 10, 30 ], egg: 15 }, // 6 Cost
+  { passive: 15, costReduction: [ 8, 20 ], egg: 12 },  // 7 Cost
+  { passive: 10, costReduction: [ 5, 15 ], egg: 10 },  // 8 Cost
+  { passive: 10, costReduction: [ 5, 15 ], egg: 10 },  // 9 Cost
+  { passive: 10, costReduction: [ 5, 15 ], egg: 10 },  // 10 Cost
 ];
 
 const valueReductionMax = 2;
@@ -164,7 +164,7 @@ function calcStarterPosition(index: number, scrollCursor:number = 0): {x: number
   const x = (index % 9) * 18;
   const y = yOffset + (Math.floor(index / 9) - scrollCursor) * height;
 
-  return {x: x, y: y};
+  return { x: x, y: y };
 }
 
 /**
@@ -1062,7 +1062,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           ease: "Cubic.easeOut",
           yoyo: true
         }
-      ],};
+      ], };
 
     const isPassiveAvailable = this.isPassiveAvailable(species.speciesId);
     const isValueReductionAvailable = this.isValueReductionAvailable(species.speciesId);
@@ -1328,7 +1328,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const ui = this.getUi();
           let options: any[] = []; // TODO: add proper type
 
-          const [isDupe, removeIndex]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
+          const [ isDupe, removeIndex ]: [boolean, number] = this.isInParty(this.lastSpecies); // checks to see if the pokemon is a duplicate; if it is, returns the index that will be removed
 
           const isPartyValid = this.isPartyValid();
           const isValidForChallenge = new Utils.BooleanHolder(true);
@@ -1692,7 +1692,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                   }
                   this.pokemonCandyCountText.setText(`x${starterData.candyCount}`);
 
-                  const egg = new Egg({scene: this.scene, species: this.lastSpecies.speciesId, sourceType: EggSourceType.SAME_SPECIES_EGG});
+                  const egg = new Egg({ scene: this.scene, species: this.lastSpecies.speciesId, sourceType: EggSourceType.SAME_SPECIES_EGG });
                   egg.addEggToGameData(this.scene);
 
                   this.scene.gameData.saveSystem().then(success => {
@@ -2014,7 +2014,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         break;
       }
     }
-    return [isDupe, removeIndex];
+    return [ isDupe, removeIndex ];
   }
 
   addToParty(species: PokemonSpecies, dexAttr: bigint, abilityIndex: integer, nature: Nature, moveset: StarterMoveset) {
@@ -2124,7 +2124,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     controlLabel.setPosition(this.instructionRowX + this.instructionRowTextOffset, this.instructionRowY);
     iconElement.setVisible(true);
     controlLabel.setVisible(true);
-    this.instructionsContainer.add([iconElement, controlLabel]);
+    this.instructionsContainer.add([ iconElement, controlLabel ]);
     this.instructionRowY += 8;
     if (this.instructionRowY >= 24) {
       this.instructionRowY = 0;
@@ -2147,7 +2147,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     controlLabel.setPosition(this.filterInstructionRowX + this.instructionRowTextOffset, this.filterInstructionRowY);
     iconElement.setVisible(true);
     controlLabel.setVisible(true);
-    this.filterInstructionsContainer.add([iconElement, controlLabel]);
+    this.filterInstructionsContainer.add([ iconElement, controlLabel ]);
     this.filterInstructionRowY += 8;
     if (this.filterInstructionRowY >= 24) {
       this.filterInstructionRowY = 0;
@@ -2578,7 +2578,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.abilityCursor = species ? this.scene.gameData.getStarterSpeciesDefaultAbilityIndex(species) : 0;
     this.natureCursor = species ? this.scene.gameData.getSpeciesDefaultNature(species) : 0;
 
-    const starterAttributes : StarterAttributes | null = species ? {...this.starterPreferences[species.speciesId]} : null;
+    const starterAttributes : StarterAttributes | null = species ? { ...this.starterPreferences[species.speciesId] } : null;
     // validate starterAttributes
     if (starterAttributes) {
       // this may cause changes so we created a copy of the attributes before
@@ -2874,7 +2874,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.dexAttrCursor |= this.scene.gameData.getFormAttr(formIndex !== undefined ? formIndex : (formIndex = oldProps!.formIndex)); // TODO: is this bang correct?
       this.abilityCursor = abilityIndex !== undefined ? abilityIndex : (abilityIndex = oldAbilityIndex);
       this.natureCursor = natureIndex !== undefined ? natureIndex : (natureIndex = oldNatureIndex);
-      const [isInParty, partyIndex]: [boolean, number] = this.isInParty(species); // we use this to firstly check if the pokemon is in the party, and if so, to get the party index in order to update the icon image
+      const [ isInParty, partyIndex ]: [boolean, number] = this.isInParty(species); // we use this to firstly check if the pokemon is in the party, and if so, to get the party index in order to update the icon image
       if (isInParty) {
         this.updatePartyIcon(species, partyIndex);
       }
@@ -3064,7 +3064,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.canCycleForm = species.forms.filter(f => f.isStarterSelectable || !pokemonFormChanges[species.speciesId]?.find(fc => fc.formKey))
           .map((_, f) => dexEntry.caughtAttr & this.scene.gameData.getFormAttr(f)).filter(f => f).length > 1;
         this.canCycleNature = this.scene.gameData.getNaturesForAttr(dexEntry.natureAttr).length > 1;
-        this.canCycleVariant = !!shiny && [ dexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT, dexEntry.caughtAttr & DexAttr.VARIANT_2, dexEntry.caughtAttr & DexAttr.VARIANT_3].filter(v => v).length > 1;
+        this.canCycleVariant = !!shiny && [ dexEntry.caughtAttr & DexAttr.DEFAULT_VARIANT, dexEntry.caughtAttr & DexAttr.VARIANT_2, dexEntry.caughtAttr & DexAttr.VARIANT_3 ].filter(v => v).length > 1;
       }
 
       if (dexEntry.caughtAttr && species.malePercent !== null) {

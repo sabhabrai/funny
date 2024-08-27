@@ -30,7 +30,7 @@ describe("Moves - Baton Pass", () => {
       .enemySpecies(Species.DUGTRIO)
       .startingLevel(1)
       .startingWave(97)
-      .moveset([Moves.BATON_PASS, Moves.NASTY_PLOT, Moves.SPLASH])
+      .moveset([ Moves.BATON_PASS, Moves.NASTY_PLOT, Moves.SPLASH ])
       .enemyMoveset(SPLASH_ONLY)
       .disableCrits();
   });
@@ -62,7 +62,7 @@ describe("Moves - Baton Pass", () => {
     // arrange
     game.override
       .startingWave(5)
-      .enemyMoveset(new Array(4).fill([Moves.NASTY_PLOT]));
+      .enemyMoveset(new Array(4).fill([ Moves.NASTY_PLOT ]));
     await game.startBattle([
       Species.RAICHU,
       Species.SHUCKLE

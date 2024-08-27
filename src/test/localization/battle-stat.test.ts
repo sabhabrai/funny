@@ -58,28 +58,28 @@ describe("Test for BattleStat Localization", () => {
   beforeAll(() => {
     initI18n();
 
-    battleStatUnits.push({stat: BattleStat.ATK, key: "Stat.ATK"});
-    battleStatUnits.push({stat: BattleStat.DEF, key: "Stat.DEF"});
-    battleStatUnits.push({stat: BattleStat.SPATK, key: "Stat.SPATK"});
-    battleStatUnits.push({stat: BattleStat.SPDEF, key: "Stat.SPDEF"});
-    battleStatUnits.push({stat: BattleStat.SPD, key: "Stat.SPD"});
-    battleStatUnits.push({stat: BattleStat.ACC, key: "Stat.ACC"});
-    battleStatUnits.push({stat: BattleStat.EVA, key: "Stat.EVA"});
+    battleStatUnits.push({ stat: BattleStat.ATK, key: "Stat.ATK" });
+    battleStatUnits.push({ stat: BattleStat.DEF, key: "Stat.DEF" });
+    battleStatUnits.push({ stat: BattleStat.SPATK, key: "Stat.SPATK" });
+    battleStatUnits.push({ stat: BattleStat.SPDEF, key: "Stat.SPDEF" });
+    battleStatUnits.push({ stat: BattleStat.SPD, key: "Stat.SPD" });
+    battleStatUnits.push({ stat: BattleStat.ACC, key: "Stat.ACC" });
+    battleStatUnits.push({ stat: BattleStat.EVA, key: "Stat.EVA" });
 
-    battleStatLevelUnits.push({levels: 1, up: true, key: "statRose_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 2, up: true, key: "statSharplyRose_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 3, up: true, key: "statRoseDrastically_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 4, up: true, key: "statRoseDrastically_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 5, up: true, key: "statRoseDrastically_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 6, up: true, key: "statRoseDrastically_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 7, up: true, key: "statWontGoAnyHigher_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 1, up: false, key: "statFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 2, up: false, key: "statHarshlyFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 3, up: false, key: "statSeverelyFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 4, up: false, key: "statSeverelyFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 5, up: false, key: "statSeverelyFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 6, up: false, key: "statSeverelyFell_one", changedStats: 1});
-    battleStatLevelUnits.push({levels: 7, up: false, key: "statWontGoAnyLower_one", changedStats: 1});
+    battleStatLevelUnits.push({ levels: 1, up: true, key: "statRose_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 2, up: true, key: "statSharplyRose_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 3, up: true, key: "statRoseDrastically_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 4, up: true, key: "statRoseDrastically_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 5, up: true, key: "statRoseDrastically_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 6, up: true, key: "statRoseDrastically_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 7, up: true, key: "statWontGoAnyHigher_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 1, up: false, key: "statFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 2, up: false, key: "statHarshlyFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 3, up: false, key: "statSeverelyFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 4, up: false, key: "statSeverelyFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 5, up: false, key: "statSeverelyFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 6, up: false, key: "statSeverelyFell_one", changedStats: 1 });
+    battleStatLevelUnits.push({ levels: 7, up: false, key: "statWontGoAnyLower_one", changedStats: 1 });
   });
 
   it("Test getBattleStatName() in English", async () => {

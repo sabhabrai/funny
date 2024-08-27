@@ -63,7 +63,7 @@ export class EnemyCommandPhase extends FieldPhase {
             const index = trainer.getNextSummonIndex(enemyPokemon.trainerSlot, partyMemberScores);
 
             battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] =
-                { command: Command.POKEMON, cursor: index, args: [false] };
+                { command: Command.POKEMON, cursor: index, args: [ false ]};
 
             battle.enemySwitchCounter++;
 

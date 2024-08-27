@@ -28,8 +28,8 @@ describe("Abilities - BATTLE BOND", () => {
     const moveToUse = Moves.SPLASH;
     game.override.battleType("single");
     game.override.ability(Abilities.BATTLE_BOND);
-    game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ moveToUse ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
   });
 
   test(
@@ -42,7 +42,7 @@ describe("Abilities - BATTLE BOND", () => {
         [Species.GRENINJA]: ashForm,
       });
 
-      await game.startBattle([Species.MAGIKARP, Species.GRENINJA]);
+      await game.startBattle([ Species.MAGIKARP, Species.GRENINJA ]);
 
       const greninja = game.scene.getParty().find((p) => p.species.speciesId === Species.GRENINJA);
       expect(greninja).toBeDefined();

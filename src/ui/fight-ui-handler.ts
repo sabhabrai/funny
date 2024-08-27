@@ -7,7 +7,7 @@ import UiHandler from "./ui-handler";
 import * as Utils from "../utils";
 import { MoveCategory } from "#app/data/move.js";
 import i18next from "i18next";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import Pokemon, { PokemonMove } from "#app/field/pokemon.js";
 import { CommandPhase } from "#app/phases/command-phase.js";
 

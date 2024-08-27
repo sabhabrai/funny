@@ -78,7 +78,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerActionButton = new Phaser.GameObjects.Sprite(this.scene, 0, 0, "keyboard", "SPACE.png");
     this.headerActionButton.setOrigin(0, 0);
     this.headerActionButton.setPositionRelative(this.headerBg, 236, 6);
-    this.headerActionText = addTextObject(this.scene, 0, 0, "", TextStyle.WINDOW, {fontSize:"60px"});
+    this.headerActionText = addTextObject(this.scene, 0, 0, "", TextStyle.WINDOW, { fontSize:"60px" });
     this.headerActionText.setOrigin(0, 0);
     this.headerActionText.setPositionRelative(this.headerBg, 264, 8);
 

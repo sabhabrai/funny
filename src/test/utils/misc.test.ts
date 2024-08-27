@@ -30,7 +30,7 @@ describe("Test misc", () => {
       return response.json();
     }).then(data => {
       spy(); // Call the spy function
-      expect(data).toEqual({"username":"greenlamp", "lastSessionSlot":0});
+      expect(data).toEqual({ "username":"greenlamp", "lastSessionSlot":0 });
     });
     expect(spy).toHaveBeenCalled();
   });
@@ -43,7 +43,7 @@ describe("Test misc", () => {
       return response.json();
     }).then(data => {
       spy(); // Call the spy function
-      expect(data).toEqual({"username":"greenlamp", "lastSessionSlot":0});
+      expect(data).toEqual({ "username":"greenlamp", "lastSessionSlot":0 });
     });
     expect(spy).toHaveBeenCalled();
   });
@@ -54,7 +54,7 @@ describe("Test misc", () => {
 
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
-    expect(data).toEqual({"username":"greenlamp", "lastSessionSlot":0});
+    expect(data).toEqual({ "username":"greenlamp", "lastSessionSlot":0 });
   });
 
   it("test apifetch mock sync", async () => {
@@ -64,7 +64,7 @@ describe("Test misc", () => {
 
   it("testing wait phase queue", async () => {
     const fakeScene = {
-      phaseQueue: [1, 2, 3] // Initially not empty
+      phaseQueue: [ 1, 2, 3 ] // Initially not empty
     };
     setTimeout(() => {
       fakeScene.phaseQueue = [];

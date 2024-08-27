@@ -29,10 +29,10 @@ describe("Abilities - Sand Veil", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([Moves.SPLASH]);
+    game.override.moveset([ Moves.SPLASH ]);
     game.override.enemySpecies(Species.MEOWSCARADA);
     game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset([Moves.TWISTER, Moves.TWISTER, Moves.TWISTER, Moves.TWISTER]);
+    game.override.enemyMoveset([ Moves.TWISTER, Moves.TWISTER, Moves.TWISTER, Moves.TWISTER ]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
     game.override
@@ -43,7 +43,7 @@ describe("Abilities - Sand Veil", () => {
   test(
     "ability should increase the evasiveness of the source",
     async () => {
-      await game.startBattle([Species.SNORLAX, Species.BLISSEY]);
+      await game.startBattle([ Species.SNORLAX, Species.BLISSEY ]);
 
       const leadPokemon = game.scene.getPlayerField();
 

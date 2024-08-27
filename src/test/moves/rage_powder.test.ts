@@ -30,16 +30,16 @@ describe("Moves - Rage Powder", () => {
     game.override.enemySpecies(Species.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
-    game.override.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.moveset([ Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK ]);
+    game.override.enemyMoveset([ Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE ]);
   });
 
   test(
     "move effect should be bypassed by Grass type",
     async () => {
-      game.override.enemyMoveset([Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER]);
+      game.override.enemyMoveset([ Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER ]);
 
-      await game.startBattle([Species.AMOONGUSS, Species.VENUSAUR]);
+      await game.startBattle([ Species.AMOONGUSS, Species.VENUSAUR ]);
 
       const enemyPokemon = game.scene.getEnemyField();
 
@@ -59,10 +59,10 @@ describe("Moves - Rage Powder", () => {
     "move effect should be bypassed by Overcoat",
     async () => {
       game.override.ability(Abilities.OVERCOAT);
-      game.override.enemyMoveset([Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER]);
+      game.override.enemyMoveset([ Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER, Moves.RAGE_POWDER ]);
 
       // Test with two non-Grass type player Pokemon
-      await game.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
+      await game.startBattle([ Species.BLASTOISE, Species.CHARIZARD ]);
 
       const enemyPokemon = game.scene.getEnemyField();
 

@@ -33,7 +33,7 @@ describe("Moves - Glaive Rush", () => {
     game.override.starterSpecies(Species.KLINK);
     game.override.ability(Abilities.UNNERVE);
     game.override.passiveAbility(Abilities.FUR_COAT);
-    game.override.moveset([Moves.SHADOW_SNEAK, Moves.AVALANCHE, Moves.SPLASH, Moves.GLAIVE_RUSH]);
+    game.override.moveset([ Moves.SHADOW_SNEAK, Moves.AVALANCHE, Moves.SPLASH, Moves.GLAIVE_RUSH ]);
   });
 
   it("takes double damage from attacks", async () => {
@@ -111,7 +111,7 @@ describe("Moves - Glaive Rush", () => {
   it("secondary effects are removed upon switching", async () => {
     game.override.enemyMoveset(Array(4).fill(Moves.SHADOW_SNEAK));
     game.override.starterSpecies(0);
-    await game.startBattle([Species.KLINK, Species.FEEBAS]);
+    await game.startBattle([ Species.KLINK, Species.FEEBAS ]);
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 1000;
@@ -130,7 +130,7 @@ describe("Moves - Glaive Rush", () => {
   }, 20000);
 
   it("secondary effects don't activate if move fails", async () => {
-    game.override.moveset([Moves.SHADOW_SNEAK, Moves.PROTECT, Moves.SPLASH, Moves.GLAIVE_RUSH]);
+    game.override.moveset([ Moves.SHADOW_SNEAK, Moves.PROTECT, Moves.SPLASH, Moves.GLAIVE_RUSH ]);
     await game.startBattle();
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

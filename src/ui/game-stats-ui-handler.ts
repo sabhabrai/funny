@@ -7,7 +7,7 @@ import { addWindow } from "./ui-theme";
 import * as Utils from "../utils";
 import { DexAttr, GameData } from "../system/game-data";
 import { speciesStarters } from "../data/pokemon-species";
-import {Button} from "#enums/buttons";
+import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { UiTheme } from "#app/enums/ui-theme";
 

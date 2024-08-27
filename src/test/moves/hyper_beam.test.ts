@@ -35,14 +35,14 @@ describe("Moves - Hyper Beam", () => {
     game.override.enemyMoveset(Array(4).fill(Moves.SPLASH));
     game.override.enemyLevel(100);
 
-    game.override.moveset([Moves.HYPER_BEAM, Moves.TACKLE]);
+    game.override.moveset([ Moves.HYPER_BEAM, Moves.TACKLE ]);
     vi.spyOn(allMoves[Moves.HYPER_BEAM], "accuracy", "get").mockReturnValue(100);
   });
 
   it(
     "should force the user to recharge on the next turn (and only that turn)",
     async () => {
-      await game.startBattle([Species.MAGIKARP]);
+      await game.startBattle([ Species.MAGIKARP ]);
 
       const leadPokemon = game.scene.getPlayerPokemon()!;
       const enemyPokemon = game.scene.getEnemyPokemon()!;

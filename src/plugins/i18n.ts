@@ -2,7 +2,7 @@ import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import processor, { KoreanPostpositionProcessor } from "i18next-korean-postposition-processor";
 
-import { caEsConfig} from "#app/locales/ca_ES/config.js";
+import { caEsConfig } from "#app/locales/ca_ES/config.js";
 import { deConfig } from "#app/locales/de/config.js";
 import { enConfig } from "#app/locales/en/config.js";
 import { esConfig } from "#app/locales/es/config.js";
@@ -29,9 +29,9 @@ const unicodeRanges = {
   specialCharacters: "U+266A,U+2605,U+2665,U+2663" //♪.★,♥,♣
 };
 const rangesByLanguage = {
-  korean: [unicodeRanges.CJKCommon, unicodeRanges.hangul].join(","),
-  chinese: [unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.CJKIdeograph].join(","),
-  japanese: [unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph].join(",")
+  korean: [ unicodeRanges.CJKCommon, unicodeRanges.hangul ].join(","),
+  chinese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.CJKIdeograph ].join(","),
+  japanese: [ unicodeRanges.CJKCommon, unicodeRanges.fullwidth, unicodeRanges.kana, unicodeRanges.CJKIdeograph ].join(",")
 };
 
 const fonts: Array<LoadingFontFaceProperty> = [
@@ -119,7 +119,7 @@ export async function initI18n(): Promise<void> {
   await i18next.init({
     nonExplicitSupportedLngs: true,
     fallbackLng: "en",
-    supportedLngs: ["en", "es", "fr", "it", "de", "zh", "pt", "ko", "ja", "ca"],
+    supportedLngs: [ "en", "es", "fr", "it", "de", "zh", "pt", "ko", "ja", "ca" ],
     defaultNS: "menu",
     ns: Object.keys(enConfig),
     detection: {
@@ -164,7 +164,7 @@ export async function initI18n(): Promise<void> {
         ...caEsConfig
       }
     },
-    postProcess: ["korean-postposition"],
+    postProcess: [ "korean-postposition" ],
   });
 
   await initFonts(localStorage.getItem("prLang") ?? undefined);

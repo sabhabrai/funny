@@ -147,7 +147,7 @@ export class WeakenMoveScreenTag extends ArenaTag {
  */
 class ReflectTag extends WeakenMoveScreenTag {
   constructor(turnCount: integer, sourceId: integer, side: ArenaTagSide) {
-    super(ArenaTagType.REFLECT, turnCount, Moves.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
+    super(ArenaTagType.REFLECT, turnCount, Moves.REFLECT, sourceId, side, [ MoveCategory.PHYSICAL ]);
   }
 
   onAdd(arena: Arena, quiet: boolean = false): void {
@@ -163,7 +163,7 @@ class ReflectTag extends WeakenMoveScreenTag {
  */
 class LightScreenTag extends WeakenMoveScreenTag {
   constructor(turnCount: integer, sourceId: integer, side: ArenaTagSide) {
-    super(ArenaTagType.LIGHT_SCREEN, turnCount, Moves.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
+    super(ArenaTagType.LIGHT_SCREEN, turnCount, Moves.LIGHT_SCREEN, sourceId, side, [ MoveCategory.SPECIAL ]);
   }
 
   onAdd(arena: Arena, quiet: boolean = false): void {
@@ -179,7 +179,7 @@ class LightScreenTag extends WeakenMoveScreenTag {
  */
 class AuroraVeilTag extends WeakenMoveScreenTag {
   constructor(turnCount: integer, sourceId: integer, side: ArenaTagSide) {
-    super(ArenaTagType.AURORA_VEIL, turnCount, Moves.AURORA_VEIL, sourceId, side, [MoveCategory.SPECIAL, MoveCategory.PHYSICAL]);
+    super(ArenaTagType.AURORA_VEIL, turnCount, Moves.AURORA_VEIL, sourceId, side, [ MoveCategory.SPECIAL, MoveCategory.PHYSICAL ]);
   }
 
   onAdd(arena: Arena, quiet: boolean = false): void {
@@ -787,7 +787,7 @@ class StickyWebTag extends ArenaTrapTag {
       if (!cancelled.value) {
         pokemon.scene.queueMessage(i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }));
         const statLevels = new Utils.NumberHolder(-1);
-        pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), false, [BattleStat.SPD], statLevels.value));
+        pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), false, [ BattleStat.SPD ], statLevels.value));
       }
     }
 
@@ -875,7 +875,7 @@ class TailwindTag extends ArenaTag {
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
         pokemon.scene.unshiftPhase(new ShowAbilityPhase(pokemon.scene, pokemon.getBattlerIndex()));
-        pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [BattleStat.ATK], 1, true));
+        pokemon.scene.unshiftPhase(new StatChangePhase(pokemon.scene, pokemon.getBattlerIndex(), true, [ BattleStat.ATK ], 1, true));
       }
     }
   }

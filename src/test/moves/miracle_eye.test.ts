@@ -29,7 +29,7 @@ describe("Moves - Miracle Eye", () => {
       .enemyMoveset(SPLASH_ONLY)
       .enemyLevel(5)
       .starterSpecies(Species.MAGIKARP)
-      .moveset([Moves.MIRACLE_EYE, Moves.CONFUSION]);
+      .moveset([ Moves.MIRACLE_EYE, Moves.CONFUSION ]);
   });
 
   it("should allow Psychic moves to hit Dark types", async () => {
@@ -38,7 +38,7 @@ describe("Moves - Miracle Eye", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(Moves.CONFUSION);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.setTurnOrder([ BattlerIndex.PLAYER, BattlerIndex.ENEMY ]);
     await game.toNextTurn();
     expect(enemy.hp).toBe(enemy.getMaxHp());
 

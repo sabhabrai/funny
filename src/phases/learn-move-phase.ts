@@ -42,7 +42,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     if (emptyMoveIndex > -1) {
       pokemon.setMove(emptyMoveIndex, this.moveId);
       initMoveAnim(this.scene, this.moveId).then(() => {
-        loadMoveAnimAssets(this.scene, [this.moveId], true)
+        loadMoveAnimAssets(this.scene, [ this.moveId ], true)
           .then(() => {
             this.scene.ui.setMode(messageMode).then(() => {
               // Sound loaded into game as is

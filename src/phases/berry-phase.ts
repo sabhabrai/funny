@@ -15,7 +15,7 @@ export class BerryPhase extends FieldPhase {
 
     this.executeForAll((pokemon) => {
       const hasUsableBerry = !!this.scene.findModifier((m) => {
-        return m instanceof BerryModifier && m.shouldApply([pokemon]);
+        return m instanceof BerryModifier && m.shouldApply([ pokemon ]);
       }, pokemon.isPlayer());
 
       if (hasUsableBerry) {
