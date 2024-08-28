@@ -42,6 +42,7 @@ export default class PokemonData {
   public luck: integer;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
+  public evoCounter: integer;
 
   public fusionSpecies: Species;
   public fusionFormIndex: integer;
@@ -90,6 +91,8 @@ export default class PokemonData {
       this.pauseEvolutions = !!source.pauseEvolutions;
     }
     this.pokerus = !!source.pokerus;
+
+    this.evoCounter = source.evoCounter ?? 0;
 
     this.fusionSpecies = sourcePokemon ? sourcePokemon.fusionSpecies?.speciesId : source.fusionSpecies;
     this.fusionFormIndex = source.fusionFormIndex;
