@@ -61,5 +61,7 @@
   "suppressAbilities": "A habilidade de {{pokemonName}}\nfoi suprimida!",
   "revivalBlessing": "{{pokemonName}} foi reanimado!",
   "swapArenaTags": "{{pokemonName}} trocou os efeitos de batalha que afetam cada lado do campo!",
+  "trickOnSwap": "{{pokemonNameWithAffix}} trocou de itens com seu alvo!",
+  "trickFoeNewItem": "{{pokemonNameWithAffix}} obteve um(a) {{itemName}}.",
   "exposedMove": "{{pokemonName}} identificou\n{{targetPokemonName}}!"
 }
