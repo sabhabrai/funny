@@ -1,6 +1,6 @@
 import BattleScene from "#app/battle-scene.js";
 import { BattlerIndex, BattleType } from "#app/battle.js";
-import { applyPostFaintAbAttrs, PostFaintAbAttr, applyPostKnockOutAbAttrs, PostKnockOutAbAttr, applyPostVictoryAbAttrs, PostVictoryAbAttr } from "#app/data/ability.js";
+import { applyPostFaintAbAttrs, PostFaintAbAttr, applyPostKnockOutAbAttrs, PostKnockOutAbAttr, applyPostVictoryAbAttrs, PostVictoryAbAttr, PostFaintClearWeatherAbAttr } from "#app/data/ability.js";
 import { BattlerTagLapseType } from "#app/data/battler-tags.js";
 import { battleSpecDialogue } from "#app/data/dialogue.js";
 import { allMoves, PostVictoryStatChangeAttr } from "#app/data/move.js";
@@ -62,7 +62,12 @@ export class FaintPhase extends PokemonPhase {
 
     if (pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyPostFaintAbAttrs(PostFaintAbAttr, pokemon, this.scene.getPokemonById(lastAttack.sourceId)!, new PokemonMove(lastAttack.move).getMove(), lastAttack.result); // TODO: is this bang correct?
+      if (pokemon.hasAbilityWithAttr(PostFaintClearWeatherAbAttr)) {
+        applyPostFaintAbAttrs(PostFaintClearWeatherAbAttr, pokemon, this.scene.getPokemonById(lastAttack.sourceId)!, new PokemonMove(lastAttack.move).getMove(), lastAttack.result);
+      }
+      if (lastAttack.sourceId !== pokemon.id) { // prevent applying faint abilities to self unless its clear weather
+        applyPostFaintAbAttrs(PostFaintAbAttr, pokemon, this.scene.getPokemonById(lastAttack.sourceId)!, new PokemonMove(lastAttack.move).getMove(), lastAttack.result);
+      }
     }
 
     const alivePlayField = this.scene.getField(true);
