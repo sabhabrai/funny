@@ -1,4 +1,6 @@
-{
+import { SimpleTranslationEntries } from "#app/interfaces/locales";
+
+export const battlerTags: SimpleTranslationEntries = {
   "trappedDesc": "trapping",
   "flinchedDesc": "flinching",
   "confusedDesc": "confusion",
@@ -68,6 +70,6 @@
   "cursedOnAdd": "{{pokemonNameWithAffix}} cut its own HP and put a curse on the {{pokemonName}}!",
   "cursedLapse": "{{pokemonNameWithAffix}} is afflicted by the Curse!",
   "stockpilingOnAdd": "{{pokemonNameWithAffix}} stockpiled {{stockpiledCount}}!",
-  "rageOnAdd": "{{pokemonNameWithAffix}}'s rage is starting to build.",
-  "rageOnHit": "{{pokemonNameWithAffix}}'s rage is building."
-}
+  "rageOnAdd": "¡La furia de {{pokemonNameWithAffix}} comienza a crecer!",
+  "rageOnHit": "¡La furia de {{pokemonNameWithAffix}} está aumentando!",
+} as const;
