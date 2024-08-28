@@ -84,7 +84,7 @@ export function getDataTypeKey(dataType: GameDataType, slotId: integer = 0): str
 export function encrypt(data: string, bypassLogin: boolean): string {
   return (bypassLogin
     ? (data: string) => btoa(data)
-    : (data: string) => AES.encrypt(data, saveKey))(data) as unknown as string; // TODO: is this correct?
+    : (data: string) => AES.encrypt(data, saveKey))(data) as string as unknown as string;
 }
 
 export function decrypt(data: string, bypassLogin: boolean): string {
