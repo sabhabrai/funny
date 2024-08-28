@@ -1,6 +1,6 @@
 import BattleScene from "#app/battle-scene.js";
 import { BattleType, BattlerIndex } from "#app/battle.js";
-import { applyAbAttrs, SyncEncounterNatureAbAttr } from "#app/data/ability.js";
+import { applyAbAttrs, applyPreSummonAbAttrs, PreSummonAbAttr, SyncEncounterNatureAbAttr } from "#app/data/ability.js";
 import { getCharVariantFromDialogue } from "#app/data/dialogue.js";
 import { TrainerSlot } from "#app/data/trainer-config.js";
 import { getRandomWeatherType } from "#app/data/weather.js";
@@ -128,6 +128,7 @@ export class EncounterPhase extends BattlePhase {
       battle.enemyParty.forEach((enemyPokemon, e) => {
         if (e < (battle.double ? 2 : 1)) {
           if (battle.battleType === BattleType.WILD) {
+            applyPreSummonAbAttrs(PreSummonAbAttr, enemyPokemon, []);
             this.scene.field.add(enemyPokemon);
             battle.seenEnemyPartyMemberIds.add(enemyPokemon.id);
             const playerPokemon = this.scene.getPlayerPokemon();
@@ -292,7 +293,7 @@ export class EncounterPhase extends BattlePhase {
     const enemyField = this.scene.getEnemyField();
 
     enemyField.forEach((enemyPokemon, e) => {
-      if (enemyPokemon.isShiny()) {
+      if (enemyPokemon.isShiny(true)) {
         this.scene.unshiftPhase(new ShinySparklePhase(this.scene, BattlerIndex.ENEMY + e));
       }
     });

@@ -1,5 +1,5 @@
 import BattleScene from "#app/battle-scene.js";
-import { applyPreSwitchOutAbAttrs, PreSwitchOutAbAttr } from "#app/data/ability.js";
+import { applyPreSummonAbAttrs, applyPreSwitchOutAbAttrs, PreSummonAbAttr, PreSwitchOutAbAttr } from "#app/data/ability.js";
 import { allMoves, ForceSwitchOutAttr } from "#app/data/move.js";
 import { getPokeballTintColor } from "#app/data/pokeball.js";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms.js";
@@ -76,7 +76,7 @@ export class SwitchSummonPhase extends SummonPhase {
     );
     this.scene.playSound("se/pb_rel");
     pokemon.hideInfo();
-    pokemon.tint(getPokeballTintColor(pokemon.pokeball), 1, 250, "Sine.easeIn");
+    pokemon.tint(getPokeballTintColor(pokemon.battleData.illusion.pokeball ?? pokemon.pokeball), 1, 250, "Sine.easeIn");
     this.scene.tweens.add({
       targets: pokemon,
       duration: 250,
@@ -93,6 +93,7 @@ export class SwitchSummonPhase extends SummonPhase {
     const party = this.player ? this.getParty() : this.scene.getEnemyParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
+    applyPreSummonAbAttrs(PreSummonAbAttr, switchedInPokemon);
     applyPreSwitchOutAbAttrs(PreSwitchOutAbAttr, this.lastPokemon);
     if (this.batonPass && switchedInPokemon) {
       (this.player ? this.scene.getEnemyField() : this.scene.getPlayerField()).forEach(enemyPokemon => enemyPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id));
@@ -117,7 +118,6 @@ export class SwitchSummonPhase extends SummonPhase {
         );
         // Ensure improperly persisted summon data (such as tags) is cleared upon switching
         if (!this.batonPass) {
-          switchedInPokemon.resetBattleData();
           switchedInPokemon.resetSummonData();
         }
         this.summon();
