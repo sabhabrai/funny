@@ -2770,28 +2770,26 @@ export class ResetStatsAttr extends MoveEffectAttr {
     super();
     this.targetAllPokemon = targetAllPokemon;
   }
-  apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
+  async apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): Promise<boolean> {
+    const promises: Promise<void>[] = [];
     if (this.targetAllPokemon) { // Target all pokemon on the field when Freezy Frost or Haze are used
       const activePokemon = user.scene.getField(true);
-      activePokemon.forEach(p => this.resetStats(p));
+      activePokemon.forEach(p => promises.push(this.resetStats(p)));
       target.scene.queueMessage(i18next.t("moveTriggers:statEliminated"));
     } else { // Affects only the single target when Clear Smog is used
-      this.resetStats(target);
+      promises.push(this.resetStats(target));
       target.scene.queueMessage(i18next.t("moveTriggers:resetStats", {pokemonName: getPokemonNameWithAffix(target)}));
     }
 
+    await Promise.all(promises);
     return true;
   }
 
-  resetStats(pokemon: Pokemon) {
+  async resetStats(pokemon: Pokemon): Promise<void> {
     for (let s = 0; s < pokemon.summonData.battleStats.length; s++) {
       pokemon.summonData.battleStats[s] = 0;
     }
-    pokemon.updateInfo();
+    return pokemon.updateInfo();
   }
 }
 
