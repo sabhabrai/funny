@@ -6,7 +6,7 @@ import i18next from "i18next";
 import * as Utils from "../utils";
 import { PlayerGender } from "#enums/player-gender";
 import { ParseKeys } from "i18next";
-import { Challenge, FreshStartChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge.js";
+import { Challenge, FreshStartChallenge, InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge.js";
 import { ConditionFn } from "#app/@types/common.js";
 
 export enum AchvTier {
@@ -282,6 +282,8 @@ export function getAchievementDescription(localizationKey: string): string {
     return i18next.t(`${genderPrefix}achv:MonoType.description` as ParseKeys, {"type": i18next.t(`pokemonInfo:Type.${localizationKey.slice(5)}`)});
   case "FRESH_START":
     return i18next.t(`${genderPrefix}achv:FRESH_START.description` as ParseKeys);
+  case "INVERSE_BATTLE":
+    return i18next.t(`${genderPrefix}achv:INVERSE_BATTLE.description` as ParseKeys);
   default:
     return "";
   }
@@ -358,6 +360,7 @@ export const achvs = {
   MONO_DARK: new ChallengeAchv("MONO_DARK", "", "MONO_DARK.description", "black_glasses", 100, c => c instanceof SingleTypeChallenge && c.value === 17),
   MONO_FAIRY: new ChallengeAchv("MONO_FAIRY", "", "MONO_FAIRY.description", "fairy_feather", 100, c => c instanceof SingleTypeChallenge && c.value === 18),
   FRESH_START: new ChallengeAchv("FRESH_START", "", "FRESH_START.description", "reviver_seed", 100, c => c instanceof FreshStartChallenge && c.value === 1),
+  INVERSE_BATTLE: new ChallengeAchv("INVERSE_BATTLE", "", "INVERSE_BATTLE.description", "inverse", 100, c => c instanceof InverseBattleChallenge && c.value === 1),
 };
 
 export function initAchievements() {
