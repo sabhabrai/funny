@@ -23,6 +23,7 @@ import { MovePhase } from "#app/phases/move-phase.js";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase.js";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase.js";
 import { StatChangePhase, StatChangeCallback } from "#app/phases/stat-change-phase.js";
+import { PokemonAnimType } from "#app/enums/pokemon-anim-type.js";
 
 export enum BattlerTagLapseType {
   FAINT,
@@ -31,6 +32,7 @@ export enum BattlerTagLapseType {
   AFTER_MOVE,
   MOVE_EFFECT,
   TURN_END,
+  HIT,
   CUSTOM
 }
 
@@ -151,9 +153,11 @@ export class BeakBlastChargingTag extends BattlerTag {
   lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.CUSTOM) {
       const effectPhase = pokemon.scene.getCurrentPhase();
-      if (effectPhase instanceof MoveEffectPhase && effectPhase.move.getMove().hasFlag(MoveFlags.MAKES_CONTACT)) {
+      if (effectPhase instanceof MoveEffectPhase) {
         const attacker = effectPhase.getPokemon();
-        attacker.trySetStatus(StatusEffect.BURN, true, pokemon);
+        if (effectPhase.move.getMove().checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
+          attacker.trySetStatus(StatusEffect.BURN, true, pokemon);
+        }
       }
       return true;
     }
@@ -211,10 +215,14 @@ export class TrappedTag extends BattlerTag {
   }
 
   canAdd(pokemon: Pokemon): boolean {
+    const source = pokemon.scene.getPokemonById(this.sourceId!)!;
+    const move = allMoves[this.sourceMove];
+
     const isGhost = pokemon.isOfType(Type.GHOST);
     const isTrapped = pokemon.getTag(BattlerTagType.TRAPPED);
+    const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
-    return !isTrapped && !isGhost;
+    return !isTrapped && !isGhost && !hasSubstitute;
   }
 
   onAdd(pokemon: Pokemon): void {
@@ -864,7 +872,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.isOfType(Type.GHOST) && !pokemon.findTag(t => t instanceof DamagingTrapTag);
+    return !pokemon.isOfType(Type.GHOST) && !pokemon.findTag(t => t instanceof DamagingTrapTag) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
   }
 
   lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -1646,7 +1654,6 @@ export class FormBlockDamageTag extends BattlerTag {
     pokemon.scene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);
   }
 }
-
 /** Provides the additional weather-based effects of the Ice Face ability */
 export class IceFaceBlockDamageTag extends FormBlockDamageTag {
   constructor(tagType: BattlerTagType) {
@@ -1694,7 +1701,6 @@ export class StockpilingTag extends BattlerTag {
     if (defChange) {
       this.statChangeCounts[BattleStat.DEF]++;
     }
-
     if (spDefChange) {
       this.statChangeCounts[BattleStat.SPDEF]++;
     }
@@ -1827,6 +1833,93 @@ export class ExposedTag extends BattlerTag {
   }
 }
 
+
+export class SubstituteTag extends BattlerTag {
+  /** The substitute's remaining HP. If HP is depleted, the Substitute fades. */
+  public hp: number;
+  /** A reference to the sprite representing the Substitute doll */
+  public sprite: Phaser.GameObjects.Sprite;
+  /** Is the source Pokemon "in focus," i.e. is it fully visible on the field? */
+  public sourceInFocus: boolean;
+
+  constructor(sourceMove: Moves, sourceId: integer) {
+    super(BattlerTagType.SUBSTITUTE, [BattlerTagLapseType.PRE_MOVE, BattlerTagLapseType.AFTER_MOVE, BattlerTagLapseType.HIT], 0, sourceMove, sourceId);
+  }
+
+  /** Sets the Substitute's HP and queues an on-add battle animation that initializes the Substitute's sprite. */
+  onAdd(pokemon: Pokemon): void {
+    this.hp = Math.floor(pokemon.scene.getPokemonById(this.sourceId!)!.getMaxHp() / 4);
+    this.sourceInFocus = false;
+
+    // Queue battle animation and message
+    pokemon.scene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_ADD);
+    pokemon.scene.queueMessage(i18next.t("battlerTags:substituteOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }), 1500);
+
+    // Remove any trapping effects from the user
+    pokemon.findAndRemoveTags(tag => tag instanceof TrappedTag);
+  }
+
+  /** Queues an on-remove battle animation that removes the Substitute's sprite. */
+  onRemove(pokemon: Pokemon): void {
+    // Only play the animation if the cause of removal isn't from the source's own move
+    if (!this.sourceInFocus) {
+      pokemon.scene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_REMOVE, [this.sprite]);
+    } else {
+      this.sprite.destroy();
+    }
+    pokemon.scene.queueMessage(i18next.t("battlerTags:substituteOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }));
+  }
+
+  lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    switch (lapseType) {
+    case BattlerTagLapseType.PRE_MOVE:
+      this.onPreMove(pokemon);
+      break;
+    case BattlerTagLapseType.AFTER_MOVE:
+      this.onAfterMove(pokemon);
+      break;
+    case BattlerTagLapseType.HIT:
+      this.onHit(pokemon);
+      break;
+    }
+    return lapseType !== BattlerTagLapseType.CUSTOM; // only remove this tag on custom lapse
+  }
+
+  /** Triggers an animation that brings the Pokemon into focus before it uses a move */
+  onPreMove(pokemon: Pokemon): void {
+    pokemon.scene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_PRE_MOVE, [this.sprite]);
+    this.sourceInFocus = true;
+  }
+
+  /** Triggers an animation that brings the Pokemon out of focus after it uses a move */
+  onAfterMove(pokemon: Pokemon): void {
+    pokemon.scene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.SUBSTITUTE_POST_MOVE, [this.sprite]);
+    this.sourceInFocus = false;
+  }
+
+  /** If the Substitute redirects damage, queue a message to indicate it. */
+  onHit(pokemon: Pokemon): void {
+    const moveEffectPhase = pokemon.scene.getCurrentPhase();
+    if (moveEffectPhase instanceof MoveEffectPhase) {
+      const attacker = moveEffectPhase.getUserPokemon()!;
+      const move = moveEffectPhase.move.getMove();
+      const firstHit = (attacker.turnData.hitCount === attacker.turnData.hitsLeft);
+
+      if (firstHit && move.hitsSubstitute(attacker, pokemon)) {
+        pokemon.scene.queueMessage(i18next.t("battlerTags:substituteOnHit", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }));
+      }
+    }
+  }
+
+  /**
+  * When given a battler tag or json representing one, load the data for it.
+  * @param {BattlerTag | any} source A battler tag
+  */
+  loadTag(source: BattlerTag | any): void {
+    super.loadTag(source);
+    this.hp = source.hp;
+  }
+}
 
 export function getBattlerTag(tagType: BattlerTagType, turnCount: number, sourceMove: Moves, sourceId: number): BattlerTag {
   switch (tagType) {
@@ -1962,6 +2055,8 @@ export function getBattlerTag(tagType: BattlerTagType, turnCount: number, source
   case BattlerTagType.GULP_MISSILE_ARROKUDA:
   case BattlerTagType.GULP_MISSILE_PIKACHU:
     return new GulpMissileTag(tagType, sourceMove);
+  case BattlerTagType.SUBSTITUTE:
+    return new SubstituteTag(sourceMove, sourceId);
   case BattlerTagType.NONE:
   default:
     return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMove, sourceId);

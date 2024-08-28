@@ -18,7 +18,7 @@ import { Status, StatusEffect, getRandomStatus } from "../data/status-effect";
 import { pokemonEvolutions, pokemonPrevolutions, SpeciesFormEvolution, SpeciesEvolutionCondition, FusionSpeciesFormEvolution } from "../data/pokemon-evolutions";
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "../data/tms";
 import { BattleStat } from "../data/battle-stat";
-import { BattlerTag, BattlerTagLapseType, EncoreTag, GroundedTag, HighestStatBoostTag, TypeImmuneTag, getBattlerTag, SemiInvulnerableTag, TypeBoostTag, ExposedTag } from "../data/battler-tags";
+import { BattlerTag, BattlerTagLapseType, EncoreTag, GroundedTag, HighestStatBoostTag, SubstituteTag, TypeImmuneTag, getBattlerTag, SemiInvulnerableTag, TypeBoostTag, ExposedTag } from "../data/battler-tags";
 import { WeatherType } from "../data/weather";
 import { TempBattleStat } from "../data/temp-battle-stat";
 import { ArenaTagSide, NoCritTag, WeakenMoveScreenTag } from "../data/arena-tag";
@@ -59,6 +59,7 @@ import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase.
 import { StatChangePhase } from "#app/phases/stat-change-phase.js";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase.js";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase.js";
+import { PokemonAnimType } from "#app/enums/pokemon-anim-type.js";
 
 export enum FieldPosition {
   CENTER,
@@ -562,6 +563,23 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     return 1;
   }
 
+  /** Resets the pokemon's field sprite properties, including position, alpha, and scale */
+  resetSprite(): void {
+    // Resetting properties should not be shown on the field
+    this.setVisible(false);
+
+    // Reset field position
+    this.setFieldPosition(FieldPosition.CENTER);
+    if (this.isOffsetBySubstitute()) {
+      this.x -= this.getSubstituteOffset()[0];
+      this.y -= this.getSubstituteOffset()[1];
+    }
+
+    // Reset sprite display properties
+    this.setAlpha(1);
+    this.setScale(this.getSpriteScale());
+  }
+
   getHeldItems(): PokemonHeldItemModifier[] {
     if (!this.scene) {
       return [];
@@ -633,6 +651,47 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       return [ -32, -8 ];
     case FieldPosition.RIGHT:
       return [ 32, 0 ];
+    }
+  }
+
+  /**
+   * Returns the Pokemon's offset from its current field position in the event that
+   * it has a Substitute doll in effect. The offset is returned in `[ x, y ]` format.
+   * @see {@linkcode SubstituteTag}
+   * @see {@linkcode getFieldPositionOffset}
+   */
+  getSubstituteOffset(): [ number, number ] {
+    return this.isPlayer() ? [-30, 10] : [30, -10];
+  }
+
+  /**
+   * Returns whether or not the Pokemon's position on the field is offset because
+   * the Pokemon has a Substitute active.
+   * @see {@linkcode SubstituteTag}
+   */
+  isOffsetBySubstitute(): boolean {
+    const substitute = this.getTag(SubstituteTag);
+    if (!!substitute) {
+      if (substitute.sprite === undefined) {
+        return false;
+      }
+
+      // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
+      const currentPhase = this.scene.getCurrentPhase();
+      if (currentPhase instanceof MoveEffectPhase && currentPhase.getPokemon() === this) {
+        return false;
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /** If this Pokemon has a Substitute on the field, removes its sprite from the field. */
+  destroySubstitute(): void {
+    const substitute = this.getTag(SubstituteTag);
+    if (!!substitute && !!substitute.sprite) {
+      substitute.sprite.destroy();
     }
   }
 
@@ -1271,6 +1330,10 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         typeMultiplier.value = 0;
         break;
       }
+    }
+
+    if (move.category === MoveCategory.STATUS && move.hitsSubstitute(source, this)) {
+      typeMultiplier.value = 0;
     }
 
     return (!cancelledHolder.value ? typeMultiplier.value : 0) as TypeDamageMultiplier;
@@ -2204,6 +2267,13 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
         const destinyTag = this.getTag(BattlerTagType.DESTINY_BOND);
 
         if (damage.value) {
+          this.lapseTags(BattlerTagLapseType.HIT);
+
+          const substitute = this.getTag(SubstituteTag);
+          if (substitute && move.hitsSubstitute(source, this)) {
+            substitute.hp -= damage.value;
+            damage.value = 0;
+          }
           if (this.isFullHp()) {
             applyPreDefendAbAttrs(PreDefendFullHpEndureAbAttr, this, source, move, cancelled, false, damage);
           } else if (!this.isPlayer() && damage.value >= this.hp) {
@@ -2226,13 +2296,17 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
               this.scene.gameData.gameStats.highestDamage = damage.value;
             }
           }
-          source.turnData.damageDealt += damage.value;
-          source.turnData.currDamageDealt = damage.value;
-          this.battleData.hitCount++;
-          const attackResult = { move: move.id, result: result as DamageResult, damage: damage.value, critical: isCritical, sourceId: source.id, sourceBattlerIndex: source.getBattlerIndex() };
-          this.turnData.attacksReceived.unshift(attackResult);
-          if (source.isPlayer() && !this.isPlayer()) {
-            this.scene.applyModifiers(DamageMoneyRewardModifier, true, source, damage);
+
+          if (damage.value > 0) {
+            source.turnData.damageDealt += damage.value;
+            source.turnData.currDamageDealt = damage.value;
+            this.battleData.hitCount++;
+            const attackResult = { move: move.id, result: result as DamageResult, damage: damage.value, critical: isCritical, sourceId: source.id, sourceBattlerIndex: source.getBattlerIndex() };
+            this.turnData.attacksReceived.unshift(attackResult);
+
+            if (source.isPlayer() && !this.isPlayer()) {
+              this.scene.applyModifiers(DamageMoneyRewardModifier, true, source, damage);
+            }
           }
         }
 
@@ -2259,6 +2333,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           // set splice index here, so future scene queues happen before FaintedPhase
           this.scene.setPhaseQueueSplice();
           this.scene.unshiftPhase(new FaintPhase(this.scene, this.getBattlerIndex(), isOneHitKo));
+          this.destroySubstitute();
           this.resetSummonData();
         }
 
@@ -2271,7 +2346,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
       if (!cancelled.value && typeMultiplier === 0) {
         this.scene.queueMessage(i18next.t("battle:hitResultNoEffect", { pokemonName: getPokemonNameWithAffix(this) }));
       }
-      result = (typeMultiplier === 0) ? HitResult.NO_EFFECT : HitResult.STATUS;
+      result = (cancelled.value || typeMultiplier === 0) ? HitResult.NO_EFFECT : HitResult.STATUS;
       break;
     }
 
@@ -2318,6 +2393,7 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
        */
       this.scene.setPhaseQueueSplice();
       this.scene.unshiftPhase(new FaintPhase(this.scene, this.getBattlerIndex(), preventEndure));
+      this.destroySubstitute();
       this.resetSummonData();
     }
 
@@ -2912,6 +2988,11 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
           this.summonData[k] = this.summonDataPrimer[k];
         }
       }
+      // If this Pokemon has a Substitute when loading in, play an animation to add its sprite
+      if (!!this.getTag(SubstituteTag)) {
+        this.scene.triggerPokemonBattleAnim(this, PokemonAnimType.SUBSTITUTE_ADD);
+        this.getTag(SubstituteTag)!.sourceInFocus = false;
+      }
       this.summonDataPrimer = null;
     }
     this.updateInfo();
@@ -3281,13 +3362,14 @@ export default abstract class Pokemon extends Phaser.GameObjects.Container {
     if (hideInfo) {
       this.hideInfo();
     }
-    this.setVisible(false);
+    this.resetSprite();
     this.scene.field.remove(this);
     this.scene.triggerPokemonFormChange(this, SpeciesFormChangeActiveTrigger, true);
   }
 
   destroy(): void {
     this.battleInfo?.destroy();
+    this.destroySubstitute();
     super.destroy();
   }
 
