@@ -29,6 +29,7 @@ import { type ModifierOverride } from "./modifier/modifier-type";
  * }
  * ```
  */
+
 const overrides = {} satisfies Partial<InstanceType<typeof DefaultOverrides>>;
 
 /**
