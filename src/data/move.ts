@@ -27,7 +27,6 @@ import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import { PartyStatusCurePhase } from "#app/phases/party-status-cure-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
@@ -37,6 +36,7 @@ import { StatChangePhase } from "#app/phases/stat-change-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "./pokemon-forms";
+import { ShowAbilityPhase } from "#app/phases/show-ability-phase.js";
 
 export enum MoveCategory {
   PHYSICAL,
@@ -1511,12 +1511,26 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
     if (!this.canApply(user, target, move, args)) {
       return false;
     }
-    this.addPartyCurePhase(user);
+    const partyPokemon = user.isPlayer() ? user.scene.getParty() : user.scene.getEnemyParty();
+    partyPokemon.forEach(p => this.cureStatus(p, user.id));
+
+    if (this.message) {
+      user.scene.queueMessage(this.message);
+    }
+
     return true;
   }
 
-  addPartyCurePhase(user: Pokemon) {
-    user.scene.unshiftPhase(new PartyStatusCurePhase(user.scene, user, this.message, this.abilityCondition));
+  cureStatus(pokemon: Pokemon, userId: number) {
+    if (!pokemon.isOnField() || pokemon.id === userId) { // user always cures its own status, regardless of ability
+      pokemon.resetStatus(false);
+      pokemon.updateInfo();
+    } else if (!pokemon.hasAbility(this.abilityCondition)) {
+      pokemon.resetStatus();
+      pokemon.updateInfo();
+    } else {
+      pokemon.scene.unshiftPhase(new ShowAbilityPhase(pokemon.scene, pokemon.id, pokemon.getPassiveAbility()?.id === this.abilityCondition));
+    }
   }
 }
 
